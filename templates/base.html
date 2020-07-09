@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--Import Google Icon Font-->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <!-- Compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <!--My css link-------------->
+    <link
+      rel="stylesheet"
+      href="{{url_for('static', filename='css/style.css')}}"
+      type="text/css"
+    />
+
+    <title>Document</title>
+  </head>
+
+  <body>
+    <nav>
+      <div class="nav-wrapper">
+        <div class="container">
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger"
+            ><i class="material-icons">menu</i></a
+          >
+
+          <ul class="right hide-on-med-and-down">
+            <li><a href="{{url_for('index')}}">Home</a></li>
+            <li><a href="{{url_for('update_data')}}">Update data</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <ul class="sidenav" id="mobile-demo">
+      <li><a href="{{url_for('index')}}">Home</a></li>
+      <li><a href="{{url_for('update_data')}}">Update data</a></li>
+    </ul>
+    <header>
+      <h1 class="center-align">
+        <img
+          class="responsive-img"
+          src="{{url_for('static', filename='images/EskerCrest.JPG')}}"
+          alt="Esker Celtic FC Crest"
+        />ESKER <span>CELTIC</span> U13's
+      </h1>
+    </header>
+
+    {% block content %} {% endblock %}
+
+    <!--jQuery-->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+      integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function () {
+        console.log("Document ready!");
+        $(".sidenav").sidenav();
+      });
+    </script>
+  </body>
+</html>

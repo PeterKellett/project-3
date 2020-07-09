@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Home page</h1>
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('index') }}">Home</a></li>
-            <li><a href="{{ url_for('update_data') }}">Update data</a></li>
-        </ul>
-    </nav>
+  {% extends 'base.html' %} {% block content %}
 
-</body>
+  <section class="container">
+    <div class="center-align">
+      <p class="intro">"Give a kid a ball and they will find a goal."</p>
+      <p>Kids love to see how they're doing and how they compare to each other. Select a name and/or an
+			opponent from
+			the drop down
+			menus or click on an area of a graph and see how their stats refocus.</p>
+
+    </div>
+  </section>
+
+  {% endblock %}
 </html>

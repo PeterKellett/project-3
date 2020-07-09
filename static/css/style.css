@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css?family=Bowlby+One|Rubik&display=swap');
+
+body {
+    background-color: lightblue;   
+}
+
+.nav-wrapper {
+    background-color: #3b89cf;
+}
+
+h1 {
+    font-family: 'Bowlby One', cursive;
+    background-color: #3b89cf;
+    color: #fff;
+    padding: 0 1.25rem 1.25rem;
+    margin-top: 0;
+}
+
+h1 span {
+    color: #ab8b4d;
+}
+
+.intro {
+    font-family: cursive;
+    text-align: center;
+}
+
+p {
+    text-align: center;
+    margin: 1.25rem;
+    font-family: 'Rubik', sans-serif;
+}
