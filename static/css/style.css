@@ -30,3 +30,48 @@ p {
     margin: 1.25rem;
     font-family: 'Rubik', sans-serif;
 }
+
+#select1,
+#select2
+ {
+    width: 100%;
+    margin: auto;
+}
+
+.dc-select-menu, a {
+    width: 140px;
+    margin-bottom: 10px;
+    background-color: #3b89cf;
+    color: #fff;
+    border: 1px solid white;
+    border-radius: 5px;
+}
+
+.dc-data-count {
+    padding-bottom: 10px;
+}
+
+.main-reset {
+    padding: 0 0.5rem;
+}
+
+.chart {    
+    border: 3px solid #3b89cf;
+    border-radius: 25px;
+}
+
+.chart p {
+    font-family: cursive;
+    text-align: center;
+    padding-top: 0.5rem;
+}
+
+hr {
+    height: 3px;
+    background-color: #3b89cf;
+    border: none;
+}
+
+.disclaimer {
+    text-align: right;
+}
