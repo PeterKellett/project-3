@@ -35,6 +35,9 @@
         Select a name and/or an opponent from the drop down menus or click on an
         area of a graph and see how their stats refocus.
       </p>
+      {% for stat in stats %}
+      {{stat.name}}
+      {% endfor %}
     </div>
   </section>
   <section class="container">
@@ -248,7 +251,7 @@
     </div>
   </section>
 
-  <section>
+  <section class="container">
     <div class="row">
       <div class="col s12">
         <h4 class="center-align">Active Data</h4>
