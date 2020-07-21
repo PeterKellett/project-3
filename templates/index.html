@@ -35,8 +35,8 @@
         Select a name and/or an opponent from the drop down menus or click on an
         area of a graph and see how their stats refocus.
       </p>
-      {% for stat in stats %}
-      {{stat.name}}
+      {% for stat in json_data %}
+      {{stat}}
       {% endfor %}
     </div>
   </section>
@@ -292,7 +292,9 @@
     const visTable = dc.dataTable(".dc-data-table"); //Declare object for data table
 
     //Get data
-    d3.json("{{url_for('static', filename='data/stats.json')}}").then(function (data) {
+    //stats = [{{"stats"}}];
+    //console.log({{data}});
+    d3.json("{{url_for('get_data')}}").then(function (data) {
       //Parse the date
       const dateFormatSpecifier = "%d/%m/%Y";
       const dateFormatParser = d3.timeParse(dateFormatSpecifier);

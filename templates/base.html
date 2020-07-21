@@ -51,8 +51,8 @@
         />ESKER <span>CELTIC</span> U13's
       </h1>
     </header>
-
     {% block content %} {% endblock %}
+    
 
     <!--jQuery-->
     <script
@@ -68,6 +68,7 @@
       $(document).ready(function () {
         console.log("Document ready!");
         $(".sidenav").sidenav();
+        $('select').formSelect();
       });
     </script>
   </body>

@@ -1,11 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-{% extends 'base.html' %}
+  {% extends 'base.html' %} {% block content %}
+  <div class="container">
+  <div class="row">
+    <div class="col s4">
+        <a href="{{ url_for('manage_players')}}" class="waves-effect waves-light btn">manage squad
+        <i class="material-icons right">playlist_add</i>
+        </a>
+    </div>
+  </div>
+    
+    
 
-{% block content %}
+    <form action="{{ url_for('insert_data') }}" method="POST" class="col s12">
+      {% for player in players %}
 
-<h1>Update data page</h1>
+      <div class="row">
+        <div class="input-field col s4">
+          <i class="material-icons prefix">assignment_ind</i>
+          <input
+            id="name"
+            name="player_name"
+            type="text"
+            class="validate"
+            value="{{ player.player_name.title() }}"
+            readonly
+          />
+          <label for="icon_prefix">Player Name</label>
+        </div>
 
-{% endblock %}
+        <div class="input-field col s2">
+          <select id="start" name="start">
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+          </select>
+          <label>Start yes/no</label>
+        </div>
 
+        <div class="input-field col s2">
+          <select id="goals" name="goals">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="1">4</option>
+            <option value="2">5</option>
+            <option value="3">6</option>
+            <option value="1">7</option>
+            <option value="2">8</option>
+            <option value="3">9</option>
+            <option value="3">10</option>
+          </select>
+          <label>Goals</label>
+        </div>
+
+        <div class="input-field col s2">
+          <select id="assists" name="assists">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="1">4</option>
+            <option value="2">5</option>
+            <option value="3">6</option>
+            <option value="1">7</option>
+            <option value="2">8</option>
+            <option value="3">9</option>
+            <option value="3">10</option>
+          </select>
+          <label>Assists</label>
+        </div>
+
+        <div class="input-field col s2">
+          <select id="rating" name="rating">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="1">4</option>
+            <option value="2" selected>5</option>
+            <option value="3">6</option>
+            <option value="1">7</option>
+            <option value="2">8</option>
+            <option value="3">9</option>
+            <option value="3">10</option>
+          </select>
+          <label>Rating</label>
+        </div>
+      </div>
+      {% endfor %}
+      <div id="" class="row">
+        <button
+          class="btn waves-effect waves-light"
+          type="submit"
+          name="action"
+        >
+          Submit
+          <i class="material-icons right">playlist_add</i>
+        </button>
+      </div>
+    </form>
+  </div>
+  {% endblock %}
 </html>
