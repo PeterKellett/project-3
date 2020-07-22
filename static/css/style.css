@@ -20,6 +20,12 @@ h1 span {
     color: #ab8b4d;
 }
 
+h3 {
+    font-family: 'Bowlby One', cursive;
+    color: #3b89cf;
+
+}
+
 .intro {
     font-family: cursive;
     text-align: center;

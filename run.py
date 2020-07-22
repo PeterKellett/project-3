@@ -71,14 +71,19 @@ def update_player(player_id):
 
 @app.route("/delete_player/<player_id>")
 def delete_player(player_id):
-    mongo.db.players.remove({'_id': ObjectId(player_id)})
+    mongo.db.players.delete_one({'_id': ObjectId(player_id)})
     return redirect(url_for('manage_players'))
 
 
 @app.route("/insert_data", methods=['POST'])
 def insert_data():
+    mongo_doc = []
+    print('mongo_doc')
+    print(mongo_doc)   
+    mongo_doc.append(request.form.to_dict())
+    print(mongo_doc)
     stats = mongo.db.match_stats
-    stats.insert(request.form.to_dict())
+    stats.insert_many(mongo_doc)
     return redirect(url_for('index'))
 
 

@@ -2,7 +2,7 @@
 <html lang="en">
   {% extends 'base.html' %} {% block content %}
   <div class="container">
-    <h3>Edit Player</h3>
+    <h3 class="center-align">Edit Player</h3>
     <div class="row">
       <form
         action="{{ url_for('update_player', player_id=player._id) }}"
@@ -25,7 +25,7 @@
 
         <div id="" class="row">
           <button
-            class="btn waves-effect waves-light"
+            class="btn #1e88e5 blue darken-1"
             type="submit"
             name="action"
           >

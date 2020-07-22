@@ -4,7 +4,7 @@
   <div class="container">
   <div class="row">
     <div class="col s4">
-        <a href="{{ url_for('manage_players')}}" class="waves-effect waves-light btn">manage squad
+        <a href="{{ url_for('manage_players')}}" class="#1e88e5 blue darken-1 btn">manage squad
         <i class="material-icons right">playlist_add</i>
         </a>
     </div>
@@ -77,13 +77,13 @@
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
-            <option value="1">4</option>
-            <option value="2" selected>5</option>
-            <option value="3">6</option>
-            <option value="1">7</option>
-            <option value="2">8</option>
-            <option value="3">9</option>
-            <option value="3">10</option>
+            <option value="4">4</option>
+            <option value="5" selected>5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
           </select>
           <label>Rating</label>
         </div>
@@ -91,11 +91,11 @@
       {% endfor %}
       <div id="" class="row">
         <button
-          class="btn waves-effect waves-light"
+          class="btn #1e88e5 blue darken-1"
           type="submit"
           name="action"
         >
-          Submit
+          Submit stats
           <i class="material-icons right">playlist_add</i>
         </button>
       </div>
