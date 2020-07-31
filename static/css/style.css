@@ -1,18 +1,23 @@
 @import url('https://fonts.googleapis.com/css?family=Bowlby+One|Rubik&display=swap');
 
 body {
-    background-color: lightblue;   
+    background-color: #f3e3ae;   
 }
 
 .nav-wrapper {
-    background-color: #3b89cf;
+    background-color: #f1d785;
+    color: #000;
+}
+
+nav ul a {
+    color: #000;
 }
 
 h1 {
     font-family: 'Bowlby One', cursive;
-    background-color: #3b89cf;
+    background-color: #f1d785;
     color: #fff;
-    padding: 0 1.25rem 1.25rem;
+    padding: 1.25rem;
     margin-top: 0;
 }
 
@@ -35,41 +40,6 @@ p {
     text-align: center;
     margin: 1.25rem;
     font-family: 'Rubik', sans-serif;
-}
-
-#select1,
-#select2
- {
-    width: 100%;
-    margin: auto;
-}
-
-.main-reset {
-    width: 140px;
-    margin-bottom: 10px;
-    background-color: #3b89cf;
-    color: #fff;
-    border: 1px solid white;
-    border-radius: 5px;
-}
-
-.dc-data-count {
-    padding-bottom: 10px;
-}
-
-.main-reset {
-    padding: 0 0.5rem;
-}
-
-.chart {    
-    border: 3px solid #3b89cf;
-    border-radius: 25px;
-}
-
-.chart p {
-    font-family: cursive;
-    text-align: center;
-    padding-top: 0.5rem;
 }
 
 hr {

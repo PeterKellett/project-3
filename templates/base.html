@@ -13,14 +13,16 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
+
     <!--My css link-------------->
     <link
       rel="stylesheet"
       href="{{url_for('static', filename='css/style.css')}}"
       type="text/css"
     />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon(1).ico')}}" type="image/x-icon">
 
-    <title>Document</title>
+    <title>Picture puzzles</title>
   </head>
 
   <body>
@@ -33,22 +35,19 @@
 
           <ul class="right hide-on-med-and-down">
             <li><a href="{{url_for('index')}}">Home</a></li>
-            <li><a href="{{url_for('update_data')}}">Update data</a></li>
+            <li><a href="{{url_for('register')}}">Register</a></li>
+            <li><a href="{{url_for('login')}}">Login</a></li>
           </ul>
         </div>
       </div>
     </nav>
     <ul class="sidenav" id="mobile-demo">
       <li><a href="{{url_for('index')}}">Home</a></li>
-      <li><a href="{{url_for('update_data')}}">Update data</a></li>
+      <li><a href="{{url_for('register')}}">Register</a></li>
+      <li><a href="{{url_for('login')}}">Login</a></li>
     </ul>
     <header>
-      <h1 class="center-align">
-        <img
-          class="responsive-img"
-          src="{{url_for('static', filename='images/EskerCrest.JPG')}}"
-          alt="Esker Celtic FC Crest"
-        />ESKER <span>CELTIC</span> U13's
+      <h1 class="center-align">Picture <span>Puzzles</span>
       </h1>
     </header>
     {% block content %} {% endblock %}

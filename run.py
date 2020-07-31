@@ -10,7 +10,7 @@ from bson.objectid import ObjectId
 app = Flask(__name__)
 
 
-app.config["MONGO_DBNAME"] = 'esker-cel-u13'
+app.config["MONGO_DBNAME"] = 'picture_puzzles'
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 
 mongo = PyMongo(app)
@@ -19,20 +19,16 @@ mongo = PyMongo(app)
 @app.route("/")
 def index():
     return render_template("index.html",
-                           stats=mongo.db.match_stats.find())
+                           puzzles=list(mongo.db.puzzles.find()))
 
 
-@app.route("/get_data")
-def get_data():
-    stats = mongo.db.players.find()
-    json_data = []
-    for stat in stats:
-        json_data.append(stat)
-    return json_data
+@app.route("/register")
+def register():
+    return render_template("register.html")
 
 
-@app.route("/update_data")
-def update_data():
+@app.route("/login")
+def login():
     return render_template("update-data.html",
                            players=mongo.db.players.find())
 
@@ -79,7 +75,7 @@ def delete_player(player_id):
 def insert_data():
     mongo_doc = []
     print('mongo_doc')
-    print(mongo_doc)   
+    print(mongo_doc)
     mongo_doc.append(request.form.to_dict())
     print(mongo_doc)
     stats = mongo.db.match_stats
