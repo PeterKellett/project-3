@@ -4,17 +4,46 @@
 
   <section class="container">
     <div class="center-align">
-      <p class="intro">"Welcome to Picture Puzzles"</p>
-      <p>Feel free to browse our puzzles, you can even upload your own ideas to add to the collection.</p>
-      
-      <!--TEST-->
-      {% for puzzle in puzzles %}
-      {{puzzle}}
-      {% endfor %}
-      <!--END TEST-->
+      <h3 class="intro">"Welcome to Picture Puzzles"</h3>
+      <p>
+        Feel free to browse our puzzles, you can even upload your own ideas to
+        add to the collection.
+      </p>
+      <div class="row">
+        <!--TEST-->
+        {% for puzzle in puzzles %} 
+        <!--END TEST-->
+
+        <div class="col s6 m4">
+          <div class="card small">
+            <div class="card-image waves-effect waves-block waves-light">
+              <img
+                class="activator"
+                src="{{url_for('static', filename='images/EskerCrest.JPG')}}"
+              />
+            </div>
+            <div class="card-content">
+              <span class="card-title activator grey-text text-darken-4"
+                >Difficulty: {{puzzle.difficulty.capitalize()}}<i class="material-icons right">more_vert</i></span
+              >
+              <p>Contributer: {{puzzle.added_by.title()}}</p>
+            </div>
+            <div class="card-reveal">
+              <span class="card-title grey-text text-darken-4"
+                >Answer<i class="material-icons right">close</i></span
+              >
+              <p>
+                {{puzzle.answer.title()}}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {% endfor %}
+      </div>
     </div>
   </section>
-  <br>
+  <br />
   <section class="container">
     <div class="row">
       <div class="col s12">
@@ -25,8 +54,6 @@
 
   <script>
     // jshint esversion: 6
-
-    
   </script>
   {% endblock %}
 </html>
