@@ -27,10 +27,23 @@ def register():
     return render_template("register.html")
 
 
+@app.route("/register_user", methods=['POST'])
+def register_user():
+    users = mongo.db.users
+    users.insert_one(request.form.to_dict())
+    return redirect(url_for('index'))
+
+
 @app.route("/login")
 def login():
-    return render_template("update-data.html",
-                           players=mongo.db.players.find())
+    return render_template("login.html")
+
+
+@app.route("/login_user", methods=['POST'])
+def login_user():
+    user_credentials = request.form.to_dict()
+    user = mongo.db.users.find(user_credentials)
+    return render_template('logged-in.html', user=user)
 
 
 @app.route('/manage_players')

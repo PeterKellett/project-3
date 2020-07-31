@@ -11,7 +11,7 @@
       </p>
       <div class="row">   
         {% for puzzle in puzzles %} 
-        <div class="col s6 m3">
+        <div class="col s6 m4 l2">
           <div class="card small">
             <div class="card-image waves-effect waves-block waves-light">
               <img
@@ -21,7 +21,7 @@
             </div>
             <div class="card-content">
               <span class="card-title activator grey-text text-darken-4"
-                >Difficulty: {{puzzle.difficulty.capitalize()}}<i class="material-icons right">more_vert</i></span
+                >{{puzzle.difficulty.capitalize()}}<i class="material-icons right">more_vert</i></span
               >
               <p>Contributer: {{puzzle.added_by.title()}}</p>
             </div>
