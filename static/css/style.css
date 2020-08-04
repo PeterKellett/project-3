@@ -48,6 +48,14 @@ hr {
     border: none;
 }
 
+.card, .card-reveal {
+    background-color: #f0f2bf5c;
+}
+
+.card-image img {
+    height: 175px;
+}
+
 .disclaimer {
     text-align: right;
 }

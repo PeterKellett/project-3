@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, session, flash
 
 from flask_pymongo import PyMongo
 if os.path.exists("env.py"):
@@ -8,7 +8,7 @@ if os.path.exists("env.py"):
 from bson.objectid import ObjectId
 
 app = Flask(__name__)
-
+app.secret_key = os.getenv("SECRET", "randomstring123")
 
 app.config["MONGO_DBNAME"] = 'picture_puzzles'
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
@@ -22,79 +22,108 @@ def index():
                            puzzles=list(mongo.db.puzzles.find()))
 
 
-@app.route("/register")
+@app.route("/browse/<search_category>")
+def search(search_category):
+    print("search")
+    alphabet_array = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
+                      'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+                      'W', 'X', 'Y', 'Z', 'all']
+    print(search_category)
+    if search_category == 'all':
+        print("if")
+        return render_template('browse.html',
+                               puzzles=mongo.db.puzzles.find(),
+                               difficulty=mongo.db.
+                               difficulty_categories.find(),
+                               alphabet_array=alphabet_array)
+
+    if search_category == 'easy' or 'medium' or 'hard':
+        print("elif")
+        return render_template('browse.html',
+                               puzzles=mongo.db.
+                               puzzles.find
+                               ({"difficulty": search_category.lower()}),
+                               difficulty=mongo.db.
+                               difficulty_categories.find(),
+                               alphabet_array=alphabet_array)
+
+    else:
+        print("else")
+        my_letter = "^" + search_category
+        print(my_letter)
+        return render_template('browse.html',
+                               puzzles=mongo.db.
+                               puzzles.find
+                               ({"answer": {"$regex": my_letter.lower()}}),
+                               difficulty=mongo.db.
+                               difficulty_categories.find(),
+                               alphabet_array=alphabet_array)
+
+
+@app.route("/register", methods=['POST', 'GET'])
 def register():
-    return render_template("register.html")
+    if request.method == 'POST':
+        user = request.form['first_name']
+        users = mongo.db.users
+        existing_user = users.find_one({'email': request.form.get('email')})
+        if existing_user:
+            flash('This email is already taken!!')
+            return redirect(url_for('register'))
+        else:
+            users.insert_one(request.form.to_dict())
+            flash('Registered Success!!')
+            session["user"] = user
+            return redirect(url_for('user'))
+    else:
+        return render_template("register.html")
 
 
-@app.route("/register_user", methods=['POST'])
-def register_user():
-    users = mongo.db.users
-    users.insert_one(request.form.to_dict())
-    return redirect(url_for('index'))
-
-
-@app.route("/login")
+@app.route("/login", methods=["POST", "GET"])
 def login():
-    return render_template("login.html")
+    if request.method == "POST":
+        users = mongo.db.users
+        user_login = users.find_one({'email': request.form.get('email')})
+        print(user_login)
+        password = request.form["password"]
+        print(user_login['password'])
+        if user_login['password'] == password:
+            session["user"] = user_login['first_name']
+            flash("Login successful!")
+            return redirect(url_for("user"))
+        else:
+            flash("Login unsuccessful!")
+            return redirect(url_for('login'))
+    else:
+        if "user" in session:
+            return redirect(url_for("user"))
+        return render_template("login.html")
 
 
+@app.route("/user")
+def user():
+    if "user" in session:
+        # user = session["user"]
+        flash("You are already logged in.")
+        return redirect(url_for("index", user=session["user"]))
+    else:
+        flash("You are not logged in.")
+        return redirect(url_for("login"))
+
+
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    flash("You have been logged out", "info")
+    return redirect(url_for("login"))
+
+
+"""
 @app.route("/login_user", methods=['POST'])
 def login_user():
     user_credentials = request.form.to_dict()
     user = mongo.db.users.find(user_credentials)
     return render_template('logged-in.html', user=user)
-
-
-@app.route('/manage_players')
-def manage_players():
-    return render_template('players.html',
-                           players=list(mongo.db.players.find()))
-
-
-@app.route("/add_player")
-def add_player():
-    return render_template('add-player.html')
-
-
-@app.route("/insert_player", methods=['POST'])
-def insert_player():
-    players = mongo.db.players
-    player_doc = {'player_name': request.form.get('player_name')}
-    players.insert_one(player_doc)
-    return redirect(url_for('update_data'))
-
-
-@app.route("/edit_player/<player_id>")
-def edit_player(player_id):
-    return render_template('edit-player.html', player=mongo.db.players.find_one({'_id': ObjectId(player_id)}))
-
-
-@app.route("/update_player/<player_id>", methods=["POST"])
-def update_player(player_id):
-    mongo.db.players.update(
-        {'_id': ObjectId(player_id)},
-        {'player_name': request.form.get('player_name')})
-    return redirect(url_for('manage_players'))
-
-
-@app.route("/delete_player/<player_id>")
-def delete_player(player_id):
-    mongo.db.players.delete_one({'_id': ObjectId(player_id)})
-    return redirect(url_for('manage_players'))
-
-
-@app.route("/insert_data", methods=['POST'])
-def insert_data():
-    mongo_doc = []
-    print('mongo_doc')
-    print(mongo_doc)
-    mongo_doc.append(request.form.to_dict())
-    print(mongo_doc)
-    stats = mongo.db.match_stats
-    stats.insert_many(mongo_doc)
-    return redirect(url_for('index'))
-
+"""
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),

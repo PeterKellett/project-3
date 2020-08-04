@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-  {% extends 'base.html' %} {% block content %}
+  {% extends 'base.html' %} {% block title %}Login{% endblock %}  {% block content %}
     <div class="container">
     <div class="row">
-      <form action="{{ url_for('login_user') }}" method="POST" class="col s12">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{message}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+      <form action="{{ url_for('login') }}" method="POST" class="col s12">
         <div class="row">
           <div class="input-field col s12 m6">
             <input id="email" name="email" type="email" class="validate" />

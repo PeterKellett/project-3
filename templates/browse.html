@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% extends 'base.html' %} {% block title %}Browse{% endblock %}  {% block content %}
+  <div class="container">
+    <div class="row center-align">
+      {% for letter in alphabet_array %}
+      <a href="{{url_for('search', search_category=letter)}}"
+        >{{letter.capitalize()}} |
+      </a>
+      {% endfor %}
+    </div>
+    <div class="row center-align">
+      <div class="col s6">
+        <!-- Dropdown Trigger -->
+        <a class="dropdown-trigger btn" href="#" data-target="dropdown1"
+          >Difficulty</a
+        >
+        <!-- Dropdown Structure -->
+        <ul id="dropdown1" class="dropdown-content">
+          {% for diff in difficulty %}
+          <li>
+            <a href="{{url_for('search', search_category=diff.difficulty)}}"
+              >{{diff.difficulty.capitalize()}}</a
+            >
+          </li>
+          {% endfor%}
+        </ul>
+      </div>
+
+      <div class="col s6">
+        <!-- Dropdown Trigger -->
+        <a class="dropdown-trigger btn" href="#" data-target="dropdown2"
+          >Contributer</a
+        >
+        <!-- Dropdown Structure -->
+        <ul id="dropdown2" class="dropdown-content">
+          {% for diff in difficulty %}
+          <li><a href="#!">{{diff.difficulty.capitalize()}}</a></li>
+          {% endfor%}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      {% for puzzle in puzzles %}
+      <div class="col s6 m4 l2">
+        <div class="card medium">
+          <div class="card-image waves-effect waves-block waves-light">
+            <img class="activator" src="{{puzzle.image}}" />
+          </div>
+          <div class="card-content">
+            <span class="card-title activator grey-text text-darken-4"
+              >Answer<i class="material-icons right">more_vert</i></span
+            >
+            <p class="left-align">
+              Difficulty: {{puzzle.difficulty.capitalize()}}
+            </p>
+            <p class="left-align">Contributer:</p>
+            <p class="left-align">{{puzzle.added_by.title()}}</p>
+          </div>
+          <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4"
+              >Answer<i class="material-icons right">close</i></span
+            >
+            <p class="left-align">
+              {{puzzle.answer.title()}}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {% endfor %}
+    </div>
+  </div>
+  {% endblock %}
+</html>
