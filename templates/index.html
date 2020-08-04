@@ -4,7 +4,7 @@
 
   <section class="container">
     <div class="center-align">
-      <h3 class="intro">"Welcome {{session.user}} to Picture Puzzles"</h3>
+      <h3 class="intro">"Welcome{% if 'user' in session %} <span>{{session.user.title()}}</span>{% endif %} to Picture Puzzles"</h3>
       <p>
         Feel free to browse our puzzles, you can even upload your own ideas to
         add to the collection.

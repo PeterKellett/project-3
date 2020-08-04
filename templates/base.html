@@ -40,13 +40,11 @@
           <ul class="right hide-on-med-and-down">
             <li><a href="{{url_for('index')}}">Home</a></li>
             {% if 'user' in session %}
-            
+            <li><a href="#">My Puzzles</a></li>
             <li><a href="{{url_for('logout')}}">Logout</a></li>
-
             {% else %}
             <li><a href="{{url_for('register')}}">Join</a></li>
             <li><a href="{{url_for('login')}}">Login</a></li>
-
             {% endif %}
           </ul>
         </div>
@@ -54,18 +52,25 @@
     </nav>
     <ul class="sidenav" id="mobile-demo">
       <li><a href="{{url_for('index')}}">Home</a></li>
+      {% if 'user' in session %}
+      <li><a href="#">My Puzzles</a></li>
+      <li><a href="{{url_for('logout')}}">Logout</a></li>
+      {% else %}
       <li><a href="{{url_for('register')}}">Join</a></li>
       <li><a href="{{url_for('login')}}">Login</a></li>
+      {% endif %}
     </ul>
     <header>
       <h1 class="center-align">Picture <span>Puzzles</span></h1>
     </header>
     {% with messages = get_flashed_messages() %} {% if messages %}
-    <ul class="flashes">
-      {% for message in messages %}
-      <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
+    <div class="container center-align">
+      <ul class="flashes">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    </div>
     {% endif %} {% endwith %} {% block content %} {% endblock %}
 
     <!--jQuery-->

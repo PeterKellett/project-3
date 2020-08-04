@@ -12,6 +12,7 @@ app.secret_key = os.getenv("SECRET", "randomstring123")
 
 app.config["MONGO_DBNAME"] = 'picture_puzzles'
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
+# app.config["secret_key"] = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
 
@@ -67,7 +68,7 @@ def register():
         users = mongo.db.users
         existing_user = users.find_one({'email': request.form.get('email')})
         if existing_user:
-            flash('This email is already taken!!')
+            flash("This email is already taken!!", "info")
             return redirect(url_for('register'))
         else:
             users.insert_one(request.form.to_dict())
@@ -83,9 +84,7 @@ def login():
     if request.method == "POST":
         users = mongo.db.users
         user_login = users.find_one({'email': request.form.get('email')})
-        print(user_login)
         password = request.form["password"]
-        print(user_login['password'])
         if user_login['password'] == password:
             session["user"] = user_login['first_name']
             flash("Login successful!")
@@ -114,15 +113,13 @@ def user():
 def logout():
     session.pop("user", None)
     flash("You have been logged out", "info")
-    return redirect(url_for("login"))
+    return redirect(url_for("index"))
 
 
 """
-@app.route("/login_user", methods=['POST'])
-def login_user():
-    user_credentials = request.form.to_dict()
-    user = mongo.db.users.find(user_credentials)
-    return render_template('logged-in.html', user=user)
+@app.route("/mypuzzles")
+def my_puzzles():
+
 """
 
 if __name__ == "__main__":

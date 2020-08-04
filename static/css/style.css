@@ -36,6 +36,10 @@ h3 {
     text-align: center;
 }
 
+.intro span {
+    color: red;
+}
+
 p {
     text-align: center;
     margin: 1.25rem;
@@ -54,6 +58,11 @@ hr {
 
 .card-image img {
     height: 175px;
+}
+
+.flashes {
+    color: white;
+    background-color: green;
 }
 
 .disclaimer {
