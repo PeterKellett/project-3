@@ -101,8 +101,6 @@ def login():
 @app.route("/user")
 def user():
     if "user" in session:
-        # user = session["user"]
-        flash("You are already logged in.")
         return redirect(url_for("index", user=session["user"]))
     else:
         flash("You are not logged in.")
