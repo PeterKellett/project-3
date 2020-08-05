@@ -55,9 +55,9 @@ def search(search_category):
 @app.route("/register", methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
-        user = request.form['username']
+        user = request.form['first_name'] + " " + request.form['last_name']
         users = mongo.db.users
-        existing_user = users.find_one({'username': request.form.get('username')})
+        existing_user = users.find_one({'email': request.form.get('email')})
         if existing_user:
             flash("This name is already taken!!", "info")
             return redirect(url_for('register'))
@@ -74,12 +74,13 @@ def register():
 def login():
     if request.method == "POST":
         users = mongo.db.users
-        user_login = users.find_one({'username': request.form.get('username')})
+        user_login = users.find_one({'email': request.form.get('email')})
         print(user_login)
         if user_login:
             password = request.form["password"]
             if user_login['password'] == password:
-                session["user"] = user_login['username']
+                user = user_login['first_name'] + " " + user_login['last_name']
+                session["user"] = user
                 flash("Login successful!")
                 return redirect(url_for("user"))
             else:
@@ -92,6 +93,16 @@ def login():
         if "user" in session:
             return redirect(url_for("user"))
         return render_template("login.html")
+
+
+@app.route("/forgot_password", methods=["POST", "GET"])
+def forgot_password():
+    if request.method == "POST":
+        print("if POST")
+        return redirect(url_for('forgot_password'))
+    else:
+        print("else")
+        return render_template('forgot-password.html')
 
 
 @app.route("/user")
