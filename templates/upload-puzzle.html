@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% extends 'base.html' %} {% block title %}Upload{% endblock %} {% block
+  content %}
+  <div class="container form-surround center-align">
+    <h2>Upload a puzzle</h2>
+
+    <div class="row">
+      <form
+        action="{{ url_for('upload_puzzle') }}"
+        method="POST"
+        class="col s12"
+      >
+        <div class="row">
+          <div class="input-field col s12 m6">
+            <input
+              id="added_by"
+              name="added_by"
+              type="text"
+              class="validate"
+              value="{{session.user}}"
+              readonly
+            />
+            <label for="added_by">Name</label>
+          </div>
+
+          <div class="input-field col s12 m6">
+            <select id="difficulty" name="difficulty" type="text" class="validate" required>
+              <option disabled selected>Difficulty</option>
+              {% for category in difficulty %}
+              <option
+                value="{{category.difficulty}}"
+                >{{category.difficulty.title()}}</option
+              >
+              {% endfor %}
+            </select>
+            <label for="difficulty">Difficulty</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12 m6">
+            <input id="image" name="image" type="text" class="validate" required/>
+            <label for="image">Image URL</label>
+          </div>
+          <div class="input-field col s12 m6">
+            <input id="answer" name="answer" type="text" class="validate" required/>
+            <label for="answer">Answer</label>
+          </div>
+        </div>
+        <button
+          class="btn waves-effect waves-light"
+          type="submit"
+          name="action"
+        >
+          Upload
+          <i class="material-icons right">send</i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  {% endblock %}
+</html>

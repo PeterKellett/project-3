@@ -40,7 +40,7 @@
           <ul class="right hide-on-med-and-down">
             <li><a href="{{url_for('index')}}">Home</a></li>
             {% if 'user' in session %}
-            <li><a href="#">My Puzzles</a></li>
+            <li><a href="{{url_for('my_puzzles')}}">My Puzzles</a></li>
             <li><a href="{{url_for('logout')}}">Logout</a></li>
             {% else %}
             <li><a href="{{url_for('register')}}">Join</a></li>
@@ -72,6 +72,14 @@
       </ul>
     </div>
     {% endif %} {% endwith %} {% block content %} {% endblock %}
+    <br />
+    <section class="container">
+      <div class="row">
+        <div class="col s12">
+          <p class="disclaimer"><em>(For demonstration purposes only)</em></p>
+        </div>
+      </div>
+    </section>
 
     <!--jQuery-->
     <script

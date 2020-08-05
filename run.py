@@ -68,7 +68,7 @@ def register():
         users = mongo.db.users
         existing_user = users.find_one({'username': request.form.get('username')})
         if existing_user:
-            flash("This email is already taken!!", "info")
+            flash("This name is already taken!!", "info")
             return redirect(url_for('register'))
         else:
             users.insert_one(request.form.to_dict())
@@ -112,18 +112,33 @@ def user():
         return redirect(url_for("login"))
 
 
+@app.route("/my_puzzles")
+def my_puzzles():
+    user = session["user"]
+    print(user)
+    return render_template("my-puzzles.html",
+                           user=session["user"],
+                           puzzles=list(mongo.db.puzzles.find({"added_by": user})))
+
+
+@app.route("/upload_puzzle", methods=["POST", "GET"])
+def upload_puzzle():
+    if request.method == "POST":
+        puzzles = mongo.db.puzzles
+        puzzles.insert_one(request.form.to_dict())
+        flash('Upload Success!!')
+        return redirect(url_for('my_puzzles'))
+    else:
+        return render_template("upload-puzzle.html",
+                               difficulty=list(mongo.db.difficulty_categories.find()))
+
+
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     flash("You have been logged out", "info")
     return redirect(url_for("index"))
 
-
-"""
-@app.route("/mypuzzles")
-def my_puzzles():
-
-"""
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
