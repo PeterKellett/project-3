@@ -64,9 +64,9 @@ def search(search_category):
 @app.route("/register", methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
-        user = request.form['first_name']
+        user = request.form['username']
         users = mongo.db.users
-        existing_user = users.find_one({'email': request.form.get('email')})
+        existing_user = users.find_one({'username': request.form.get('username')})
         if existing_user:
             flash("This email is already taken!!", "info")
             return redirect(url_for('register'))
@@ -83,14 +83,19 @@ def register():
 def login():
     if request.method == "POST":
         users = mongo.db.users
-        user_login = users.find_one({'email': request.form.get('email')})
-        password = request.form["password"]
-        if user_login['password'] == password:
-            session["user"] = user_login['first_name']
-            flash("Login successful!")
-            return redirect(url_for("user"))
+        user_login = users.find_one({'username': request.form.get('username')})
+        print(user_login)
+        if user_login:
+            password = request.form["password"]
+            if user_login['password'] == password:
+                session["user"] = user_login['username']
+                flash("Login successful!")
+                return redirect(url_for("user"))
+            else:
+                flash("Login unsuccessful!")
+                return redirect(url_for('login'))
         else:
-            flash("Login unsuccessful!")
+            flash("Sorry, we have no users by that name")
             return redirect(url_for('login'))
     else:
         if "user" in session:

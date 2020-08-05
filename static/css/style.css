@@ -25,6 +25,11 @@ h1 span {
     color: #ab8b4d;
 }
 
+h2 {
+    font-family: 'Bowlby One', cursive;
+    color: #ab8b4d;
+}
+
 h3 {
     font-family: 'Bowlby One', cursive;
     color: #000;
@@ -65,6 +70,10 @@ hr {
     background-color: green;
 }
 
+.form-surround {
+    border: 2px solid #ab8b4d;
+    border-radius: 10px;
+}
 .disclaimer {
     text-align: right;
 }

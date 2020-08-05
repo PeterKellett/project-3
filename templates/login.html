@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-  {% extends 'base.html' %} {% block title %}Login{% endblock %}  {% block content %}
-    <div class="container">
+  {% extends 'base.html' %} {% block title %}Login{% endblock %} {% block
+  content %}
+  <div class="container form-surround center-align">
+    <h2>Login</h2>
+    <p>Welcome back :-)</p>
     <div class="row">
       <form action="{{ url_for('login') }}" method="POST" class="col s12">
         <div class="row">
           <div class="input-field col s12 m6">
-            <input id="email" name="email" type="email" class="validate" />
-            <label for="email">Email</label>
+            <input id="username" name="username" type="text" class="validate" />
+            <label for="username">Name</label>
           </div>
           <div class="input-field col s12 m6">
-            <input id="password" name="password" type="password" class="validate" />
+            <input
+              id="password"
+              name="password"
+              type="password"
+              class="validate"
+            />
             <label for="password">Password</label>
           </div>
         </div>
@@ -25,5 +33,6 @@
       </form>
     </div>
   </div>
+ 
   {% endblock %}
 </html>
