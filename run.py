@@ -26,24 +26,15 @@ def index():
 @app.route("/browse/<search_category>")
 def search(search_category):
     print("search")
+    print(search_category)
     alphabet_array = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
                       'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
                       'W', 'X', 'Y', 'Z', 'all']
-    print(search_category)
+
     if search_category == 'all':
         print("if")
         return render_template('browse.html',
                                puzzles=mongo.db.puzzles.find(),
-                               difficulty=mongo.db.
-                               difficulty_categories.find(),
-                               alphabet_array=alphabet_array)
-
-    if search_category == 'easy' or 'medium' or 'hard':
-        print("elif")
-        return render_template('browse.html',
-                               puzzles=mongo.db.
-                               puzzles.find
-                               ({"difficulty": search_category.lower()}),
                                difficulty=mongo.db.
                                difficulty_categories.find(),
                                alphabet_array=alphabet_array)
@@ -125,7 +116,10 @@ def my_puzzles():
 def upload_puzzle():
     if request.method == "POST":
         puzzles = mongo.db.puzzles
-        puzzles.insert_one(request.form.to_dict())
+        puzzles.insert_one({'added_by': request.form.get('added_by'),
+                            'difficulty': request.form.get('difficulty'),
+                            'image': request.form.get('image'),
+                            'answer': request.form.get('answer')})
         flash('Upload Success!!')
         return redirect(url_for('my_puzzles'))
     else:
