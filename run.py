@@ -1,6 +1,9 @@
 import os
 from flask import Flask, render_template, redirect, request, url_for, session, flash
 
+from wtforms import Form, BooleanField, TextField, PasswordField, validators
+from passlib.hash import sha256_crypt
+
 from flask_pymongo import PyMongo
 if os.path.exists("env.py"):
     import env as config
@@ -51,7 +54,7 @@ def search(search_category):
                                difficulty_categories.find(),
                                alphabet_array=alphabet_array)
 
-
+"""
 @app.route("/register", methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
@@ -68,6 +71,45 @@ def register():
             return redirect(url_for('user'))
     else:
         return render_template("register.html")
+"""
+
+class RegistrationForm(Form):
+    username = TextField('Username', [validators.Length(min=4, max=20)])
+    email = TextField('Email Address', [validators.Length(min=6, max=50)])
+    password = PasswordField('New Password', [
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message='Passwords must match')
+    ])
+    confirm = PasswordField('Repeat Password')
+
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    try:
+        form = RegistrationForm(request.form)
+        print("Try")
+        if request.method == "POST":
+            print("POST")
+            username = form.username.data
+            email = form.email.data
+            password = sha256_crypt.hash((str(form.password.data)))
+            users = mongo.db.users
+            existing_user = users.find_one({'email': email})
+            if existing_user:
+                flash("This name is already taken!!", "info")
+                return render_template("register.html", form=form)
+            else:
+                users.insert_one({'username': username,
+                                  'email': email,
+                                  'password': password})
+                flash('Registered Success!!')
+                session['logged_in'] = True
+                session["user"] = username
+                return redirect(url_for('user'))
+        else:
+            return render_template("register.html", form=form)
+    except Exception as e:
+        return(str(e))
 
 
 @app.route("/login", methods=["POST", "GET"])
@@ -99,10 +141,26 @@ def login():
 def forgot_password():
     if request.method == "POST":
         print("if POST")
-        return redirect(url_for('forgot_password'))
+        return render_template("password-request-landing.html")
     else:
         print("else")
         return render_template('forgot-password.html')
+
+
+@app.route("/reset_password", methods=["POST", "GET"])
+def reset_password():
+    if request.method == "POST":
+        print("if POST")
+        users = mongo.db.users
+        user_login = users.find_one({'email': request.form.get('email')})
+        print(user_login)
+        new_password = {"$set": {"password": request.form.get('password')}}
+        print(new_password)
+        users.update_one(user_login, new_password)
+        return redirect(url_for('reset_password'))
+    else:
+        print("else")
+        return render_template("reset-password.html")
 
 
 @app.route("/user")

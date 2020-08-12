@@ -3,7 +3,8 @@ Welcome PeterKellett,
 pip3 install flask
 pip3 install flask-pymongo
 pip3 install dnspython
-
+pip3 install flask-wtf
+pip3 install passlib
 
 
 ## Gitpod Reminders
