@@ -94,11 +94,18 @@ def register():
         return(str(e))
 
 
+class LoginForm(Form):
+    email = TextField('Email', [validators.Length(min=6, max=50)])
+    password = PasswordField('Password', [
+        validators.DataRequired()
+    ])
+
+
 @app.route('/login', methods=["GET", "POST"])
 def login():
     try:
-        print("TRY")
-        form = RegistrationForm(request.form)
+        print(session)
+        form = LoginForm(request.form)
         if request.method == "POST":
             users = mongo.db.users
             user_login = users.find_one({'email': request.form.get('email')})
@@ -106,8 +113,12 @@ def login():
                 if sha256_crypt.verify(request.form['password'],
                                        user_login['password']):
                     username = user_login['username']
+                    user_id = user_login['_id']
+                    print(user_id)
+                    # session['user_id'] = user_id
                     session['logged_in'] = True
                     session['user'] = username
+                    print(session)
                     flash("You are now logged in")
                     return redirect(url_for("user"))
                 else:
@@ -134,8 +145,19 @@ def forgot_password():
         return render_template('forgot-password.html')
 
 
+class MyAccountForm(Form):
+    username = TextField('Username', [validators.Length(min=4, max=20)])
+    email = TextField('Email Address', [validators.Length(min=6, max=50)])
+    password = PasswordField('Password', [
+        validators.DataRequired(),
+        validators.EqualTo('confirm', message='Passwords must match')
+    ])
+    confirm = PasswordField('Repeat Password')
+
+
 @app.route("/my_account", methods=["POST", "GET"])
 def my_account():
+    form = MyAccountForm(request.form)
     if request.method == "POST":
         print("if POST")
         users = mongo.db.users
@@ -147,7 +169,7 @@ def my_account():
         return redirect(url_for('reset_password'))
     else:
         print("else")
-        return render_template("my-account.html")
+        return render_template("my-account.html", form=form)
 
 
 @app.route("/reset_password", methods=["POST", "GET"])
@@ -202,7 +224,8 @@ def upload_puzzle():
 
 @app.route("/logout")
 def logout():
-    session.pop("user", None)
+    session.pop("user", "logged_in")
+    print(session)
     flash("You have been logged out", "info")
     return redirect(url_for("index"))
 

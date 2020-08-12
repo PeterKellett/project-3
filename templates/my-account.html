@@ -4,6 +4,39 @@
   content %}
   <div class="container form-surround center-align">
     <h2>My Account</h2>
+    <br />
+    {% from "_formhelpers.html" import render_field %}
+    <form method="POST" action="/register">
+      <dl>
+        <div class="row">
+          <div class="col s12 m6">
+            {{render_field(form.username)}}
+          </div>
+          <div class="col s12 m6">
+            {{render_field(form.email)}}
+          </div>
+        </div>       
+      </dl>
+      <div class="row">
+        <div class="col s6">
+            <a
+                href="{{url_for('my_puzzles')}}"
+                class="waves-effect waves-light btn">
+                <i class="material-icons left">chevron_left</i>
+                My Puzzles
+            </a>           
+        </div>
+
+        <div class="col s6">
+            <a
+                href="{{url_for('reset_password')}}"
+                class="waves-effect waves-light btn">
+                <i class="material-icons right">chevron_right</i>
+                Reset Password
+            </a>
+        </div>
+      </div>       
+    </form>
   </div>
   {% endblock %}
 </html>
