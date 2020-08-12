@@ -54,29 +54,11 @@ def search(search_category):
                                difficulty_categories.find(),
                                alphabet_array=alphabet_array)
 
-"""
-@app.route("/register", methods=['POST', 'GET'])
-def register():
-    if request.method == 'POST':
-        user = request.form['first_name'] + " " + request.form['last_name']
-        users = mongo.db.users
-        existing_user = users.find_one({'email': request.form.get('email')})
-        if existing_user:
-            flash("This name is already taken!!", "info")
-            return redirect(url_for('register'))
-        else:
-            users.insert_one(request.form.to_dict())
-            flash('Registered Success!!')
-            session["user"] = user
-            return redirect(url_for('user'))
-    else:
-        return render_template("register.html")
-"""
 
 class RegistrationForm(Form):
     username = TextField('Username', [validators.Length(min=4, max=20)])
     email = TextField('Email Address', [validators.Length(min=6, max=50)])
-    password = PasswordField('New Password', [
+    password = PasswordField('Password', [
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords must match')
     ])
@@ -112,29 +94,34 @@ def register():
         return(str(e))
 
 
-@app.route("/login", methods=["POST", "GET"])
+@app.route('/login', methods=["GET", "POST"])
 def login():
-    if request.method == "POST":
-        users = mongo.db.users
-        user_login = users.find_one({'email': request.form.get('email')})
-        print(user_login)
-        if user_login:
-            password = request.form["password"]
-            if user_login['password'] == password:
-                user = user_login['first_name'] + " " + user_login['last_name']
-                session["user"] = user
-                flash("Login successful!")
-                return redirect(url_for("user"))
+    try:
+        print("TRY")
+        form = RegistrationForm(request.form)
+        if request.method == "POST":
+            users = mongo.db.users
+            user_login = users.find_one({'email': request.form.get('email')})
+            if user_login:
+                if sha256_crypt.verify(request.form['password'],
+                                       user_login['password']):
+                    username = user_login['username']
+                    session['logged_in'] = True
+                    session['user'] = username
+                    flash("You are now logged in")
+                    return redirect(url_for("user"))
+                else:
+                    flash("Invalid credentials, try again.")
+                    return render_template("login.html", form=form)
             else:
-                flash("Login unsuccessful!")
-                return redirect(url_for('login'))
+                flash("Sorry. We have no users by that email.")
+                return render_template("login.html", form=form)
         else:
-            flash("Sorry, we have no users by that name")
-            return redirect(url_for('login'))
-    else:
-        if "user" in session:
-            return redirect(url_for("user"))
-        return render_template("login.html")
+            return render_template("login.html", form=form)
+
+    except Exception as e:
+        error = "Invalid credentials, try again."
+        return render_template("login.html", form=form, error=error)
 
 
 @app.route("/forgot_password", methods=["POST", "GET"])
@@ -145,6 +132,22 @@ def forgot_password():
     else:
         print("else")
         return render_template('forgot-password.html')
+
+
+@app.route("/my_account", methods=["POST", "GET"])
+def my_account():
+    if request.method == "POST":
+        print("if POST")
+        users = mongo.db.users
+        user_login = users.find_one({'email': request.form.get('email')})
+        print(user_login)
+        new_password = {"$set": {"password": request.form.get('password')}}
+        print(new_password)
+        users.update_one(user_login, new_password)
+        return redirect(url_for('reset_password'))
+    else:
+        print("else")
+        return render_template("my-account.html")
 
 
 @app.route("/reset_password", methods=["POST", "GET"])
@@ -165,6 +168,7 @@ def reset_password():
 
 @app.route("/user")
 def user():
+    print("user function")
     if "user" in session:
         return redirect(url_for("index", user=session["user"]))
     else:

@@ -43,6 +43,7 @@
             <li><a href="{{url_for('index')}}">Home</a></li>
             {% if 'user' in session %}
             <li><a href="{{url_for('my_puzzles')}}">My Puzzles</a></li>
+            <li><a href="{{url_for('my_account')}}">My Account</a></li>
             <li><a href="{{url_for('logout')}}">Logout</a></li>
             {% else %}
             <li><a href="{{url_for('register')}}">Join</a></li>
@@ -55,7 +56,8 @@
     <ul class="sidenav" id="mobile-demo">
       <li><a href="{{url_for('index')}}">Home</a></li>
       {% if 'user' in session %}
-      <li><a href="#">My Puzzles</a></li>
+      <li><a href="{{url_for('my_puzzles')}}">My Puzzles</a></li>
+      <li><a href="{{url_for('my_account')}}">My Account</a></li>
       <li><a href="{{url_for('logout')}}">Logout</a></li>
       {% else %}
       <li><a href="{{url_for('register')}}">Join</a></li>
