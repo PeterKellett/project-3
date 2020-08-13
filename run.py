@@ -56,13 +56,21 @@ def search(search_category):
 
 
 class RegistrationForm(Form):
-    username = TextField('Username', [validators.Length(min=4, max=20)])
-    email = TextField('Email Address', [validators.Length(min=6, max=50)])
-    password = PasswordField('Password', [
-        validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords must match')
-    ])
-    confirm = PasswordField('Repeat Password')
+    username = TextField('Username',
+                         validators=[validators.Length(min=4,
+                                                       max=20,
+                                                       message='Username must be at least 4 characters long.'
+                                                       )])
+    email = TextField('Email Address',
+                      validators=[validators.Length(min=6,
+                                                    max=50,
+                                                    message='Email address not correct'
+                                                    )])
+    password = PasswordField('Password',)
+    confirm = PasswordField('Repeat Password',
+                            validators=[validators.DataRequired(),
+                                        validators.EqualTo('password',
+                                        message='Passwords must match')])
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -70,7 +78,7 @@ def register():
     try:
         form = RegistrationForm(request.form)
         print("Try")
-        if request.method == "POST":
+        if request.method == "POST" and form.validate():
             print("POST")
             username = form.username.data
             email = form.email.data
@@ -85,20 +93,29 @@ def register():
                                   'email': email,
                                   'password': password})
                 flash('Registered Success!!')
+                session["user_email"] = email
                 session['logged_in'] = True
                 session["user"] = username
                 return redirect(url_for('user'))
         else:
+            # flash("Validation fail")
             return render_template("register.html", form=form)
     except Exception as e:
         return(str(e))
 
 
 class LoginForm(Form):
-    email = TextField('Email', [validators.Length(min=6, max=50)])
-    password = PasswordField('Password', [
-        validators.DataRequired()
-    ])
+    email = TextField('Email',
+                      validators=[validators
+                                  .Length(min=6,
+                                          max=50,
+                                          message='Incorrect email format')])
+    password = PasswordField('Password',
+                             validators=[validators
+                                         .DataRequired
+                                         (message='Please enter your password')
+                                         ]
+                             )
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -115,7 +132,7 @@ def login():
                     username = user_login['username']
                     user_id = user_login['_id']
                     print(user_id)
-                    # session['user_id'] = user_id
+                    session['user_email'] = user_login['email']
                     session['logged_in'] = True
                     session['user'] = username
                     print(session)
@@ -145,54 +162,49 @@ def forgot_password():
         return render_template('forgot-password.html')
 
 
-class MyAccountForm(Form):
-    username = TextField('Username', [validators.Length(min=4, max=20)])
-    email = TextField('Email Address', [validators.Length(min=6, max=50)])
-    password = PasswordField('Password', [
-        validators.DataRequired(),
-        validators.EqualTo('confirm', message='Passwords must match')
-    ])
-    confirm = PasswordField('Repeat Password')
-
-
-@app.route("/my_account", methods=["POST", "GET"])
+@app.route("/my_account")
 def my_account():
-    form = MyAccountForm(request.form)
-    if request.method == "POST":
-        print("if POST")
-        users = mongo.db.users
-        user_login = users.find_one({'email': request.form.get('email')})
-        print(user_login)
-        new_password = {"$set": {"password": request.form.get('password')}}
-        print(new_password)
-        users.update_one(user_login, new_password)
-        return redirect(url_for('reset_password'))
-    else:
-        print("else")
-        return render_template("my-account.html", form=form)
+    return render_template("my-account.html")
+
+
+class ResetPasswordForm(Form):
+    password = PasswordField('Password',
+                             validators=[validators.DataRequired(),
+                                         validators.EqualTo('confirm',
+                                                            message='Passwords must match')
+                                        ]
+                             )
+    confirm = PasswordField('Repeat Password')
 
 
 @app.route("/reset_password", methods=["POST", "GET"])
 def reset_password():
-    if request.method == "POST":
+    form = ResetPasswordForm(request.form)
+    email = session['user_email']
+    print(email)
+    if request.method == "POST" and form.validate():
         print("if POST")
+        email = session['user_email']
+        print(email)
         users = mongo.db.users
-        user_login = users.find_one({'email': request.form.get('email')})
+        user_login = users.find_one({'email': email})
         print(user_login)
-        new_password = {"$set": {"password": request.form.get('password')}}
+        password = sha256_crypt.hash((str(form.password.data)))
+        new_password = {"$set": {"password": password}}
         print(new_password)
         users.update_one(user_login, new_password)
-        return redirect(url_for('reset_password'))
+        flash("Changed password success!")
+        return redirect(url_for('my_account'))
     else:
         print("else")
-        return render_template("reset-password.html")
+        return render_template("reset-password.html", form=form)
 
 
 @app.route("/user")
 def user():
     print("user function")
     if "user" in session:
-        return redirect(url_for("index", user=session["user"]))
+        return redirect(url_for("index"))
     else:
         flash("You are not logged in.")
         return redirect(url_for("login"))
@@ -224,7 +236,9 @@ def upload_puzzle():
 
 @app.route("/logout")
 def logout():
-    session.pop("user", "logged_in")
+    session.pop("user", None)
+    session.pop("logged_in", None)
+    session.pop("user_email", None)
     print(session)
     flash("You have been logged out", "info")
     return redirect(url_for("index"))

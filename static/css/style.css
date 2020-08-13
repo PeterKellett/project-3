@@ -52,7 +52,7 @@ p {
 }
 
 hr {
-    height: 3px;
+    height: 0.2rem;
     background-color: #3b89cf;
     border: none;
 }
@@ -68,12 +68,28 @@ hr {
 .flashes {
     color: white;
     background-color: green;
+    height: 2.5rem;
+    padding-top: 0.5rem;
+    border-radius: 10px;
 }
 
 .form-surround {
     border: 2px solid #ab8b4d;
     border-radius: 10px;
 }
+
+table {
+    width: 100%;
+    margin: 10px;
+}
+
+.errors {
+    background-color: red;
+    color: #fafafa;
+    height: 2.5rem;
+    padding-top: 0.5rem;
+}
+
 .disclaimer {
     text-align: right;
 }
