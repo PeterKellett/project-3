@@ -57,10 +57,13 @@ def search(search_category):
 
 class RegistrationForm(Form):
     username = TextField('Username',
-                         validators=[validators.Length(min=4,
-                                                       max=20,
-                                                       message='Username must be at least 4 characters long.'
-                                                       )])
+                         validators=[validators
+                                     .Length(min=4,
+                                             max=20,
+                                             message='Username must be at least 4 characters long.'
+                                             )
+                                     ]
+                         )
     email = TextField('Email Address',
                       validators=[validators.Length(min=6,
                                                     max=50,
@@ -78,28 +81,32 @@ def register():
     try:
         form = RegistrationForm(request.form)
         print("Try")
-        if request.method == "POST" and form.validate():
-            print("POST")
-            username = form.username.data
-            email = form.email.data
-            password = sha256_crypt.hash((str(form.password.data)))
-            users = mongo.db.users
-            existing_user = users.find_one({'email': email})
-            if existing_user:
-                flash("This name is already taken!!", "info")
-                return render_template("register.html", form=form)
-            else:
-                users.insert_one({'username': username,
-                                  'email': email,
-                                  'password': password})
-                flash('Registered Success!!')
-                session["user_email"] = email
-                session['logged_in'] = True
-                session["user"] = username
-                return redirect(url_for('user'))
+        if "user" in session:
+            flash("You are already registered")
+            return redirect(url_for('index'))
         else:
-            # flash("Validation fail")
-            return render_template("register.html", form=form)
+            if request.method == "POST" and form.validate():
+                print("POST")
+                username = form.username.data
+                email = form.email.data
+                password = sha256_crypt.hash((str(form.password.data)))
+                users = mongo.db.users
+                existing_user = users.find_one({'email': email})
+                if existing_user:
+                    flash("This name is already taken!!", "info")
+                    return render_template("register.html", form=form)
+                else:
+                    users.insert_one({'username': username,
+                                      'email': email,
+                                      'password': password})
+                    flash('Registered Success!!')
+                    session["user_email"] = email
+                    session['logged_in'] = True
+                    session["user"] = username
+                    return redirect(url_for('user'))
+            else:
+                # flash("Validation fail")
+                return render_template("register.html", form=form)
     except Exception as e:
         return(str(e))
 
@@ -123,29 +130,33 @@ def login():
     try:
         print(session)
         form = LoginForm(request.form)
-        if request.method == "POST":
-            users = mongo.db.users
-            user_login = users.find_one({'email': request.form.get('email')})
-            if user_login:
-                if sha256_crypt.verify(request.form['password'],
-                                       user_login['password']):
-                    username = user_login['username']
-                    user_id = user_login['_id']
-                    print(user_id)
-                    session['user_email'] = user_login['email']
-                    session['logged_in'] = True
-                    session['user'] = username
-                    print(session)
-                    flash("You are now logged in")
-                    return redirect(url_for("user"))
+        if "user" in session:
+            flash("You are already registered")
+            return redirect(url_for('index'))
+        else:
+            if request.method == "POST":
+                users = mongo.db.users
+                user_login = users.find_one({'email': request.form.get('email')})
+                if user_login:
+                    if sha256_crypt.verify(request.form['password'],
+                                           user_login['password']):
+                        username = user_login['username']
+                        user_id = user_login['_id']
+                        print(user_id)
+                        session['user_email'] = user_login['email']
+                        session['logged_in'] = True
+                        session['user'] = username
+                        print(session)
+                        flash("You are now logged in")
+                        return redirect(url_for("user"))
+                    else:
+                        flash("Invalid credentials, try again.")
+                        return render_template("login.html", form=form)
                 else:
-                    flash("Invalid credentials, try again.")
+                    flash("Sorry. We have no users by that email.")
                     return render_template("login.html", form=form)
             else:
-                flash("Sorry. We have no users by that email.")
                 return render_template("login.html", form=form)
-        else:
-            return render_template("login.html", form=form)
 
     except Exception as e:
         error = "Invalid credentials, try again."
@@ -164,7 +175,11 @@ def forgot_password():
 
 @app.route("/my_account")
 def my_account():
-    return render_template("my-account.html")
+    if "user" in session:
+        return render_template("my-account.html")
+    else:
+        flash("You are not logged in")
+        return redirect(url_for('index'))
 
 
 class ResetPasswordForm(Form):
@@ -179,25 +194,29 @@ class ResetPasswordForm(Form):
 
 @app.route("/reset_password", methods=["POST", "GET"])
 def reset_password():
-    form = ResetPasswordForm(request.form)
-    email = session['user_email']
-    print(email)
-    if request.method == "POST" and form.validate():
-        print("if POST")
+    if "user" in session:
+        form = ResetPasswordForm(request.form)
         email = session['user_email']
         print(email)
-        users = mongo.db.users
-        user_login = users.find_one({'email': email})
-        print(user_login)
-        password = sha256_crypt.hash((str(form.password.data)))
-        new_password = {"$set": {"password": password}}
-        print(new_password)
-        users.update_one(user_login, new_password)
-        flash("Changed password success!")
-        return redirect(url_for('my_account'))
+        if request.method == "POST" and form.validate():
+            print("if POST")
+            email = session['user_email']
+            print(email)
+            users = mongo.db.users
+            user_login = users.find_one({'email': email})
+            print(user_login)
+            password = sha256_crypt.hash((str(form.password.data)))
+            new_password = {"$set": {"password": password}}
+            print(new_password)
+            users.update_one(user_login, new_password)
+            flash("Changed password success!")
+            return redirect(url_for('my_account'))
+        else:
+            print("else")
+            return render_template("reset-password.html", form=form)
     else:
-        print("else")
-        return render_template("reset-password.html", form=form)
+        flash("You are not logged in")
+        return redirect(url_for('index'))
 
 
 @app.route("/user")
@@ -212,26 +231,34 @@ def user():
 
 @app.route("/my_puzzles")
 def my_puzzles():
-    user = session["user"]
-    print(user)
-    return render_template("my-puzzles.html",
-                           user=session["user"],
-                           puzzles=list(mongo.db.puzzles.find({"added_by": user})))
+    if "user" in session:
+        user = session["user"]
+        print(user)
+        return render_template("my-puzzles.html",
+                            user=session["user"],
+                            puzzles=list(mongo.db.puzzles.find({"added_by": user})))
+    else:
+        flash("You are not logged in")
+        return redirect(url_for('index'))
 
 
 @app.route("/upload_puzzle", methods=["POST", "GET"])
 def upload_puzzle():
-    if request.method == "POST":
-        puzzles = mongo.db.puzzles
-        puzzles.insert_one({'added_by': request.form.get('added_by'),
-                            'difficulty': request.form.get('difficulty'),
-                            'image': request.form.get('image'),
-                            'answer': request.form.get('answer')})
-        flash('Upload Success!!')
-        return redirect(url_for('my_puzzles'))
+    if "user" in session:
+        if request.method == "POST":
+            puzzles = mongo.db.puzzles
+            puzzles.insert_one({'added_by': request.form.get('added_by'),
+                                'difficulty': request.form.get('difficulty'),
+                                'image': request.form.get('image'),
+                                'answer': request.form.get('answer')})
+            flash('Upload Success!!')
+            return redirect(url_for('my_puzzles'))
+        else:
+            return render_template("upload-puzzle.html",
+                                difficulty=list(mongo.db.difficulty_categories.find()))
     else:
-        return render_template("upload-puzzle.html",
-                               difficulty=list(mongo.db.difficulty_categories.find()))
+        flash("You are not logged in")
+        return redirect(url_for('index'))
 
 
 @app.route("/logout")
