@@ -167,7 +167,8 @@ def login():
 def forgot_password():
     if request.method == "POST":
         print("if POST")
-        return render_template("password-request-landing.html")
+        flash("An email has been sent. Check your email inbox for details.")
+        return redirect(url_for('index'))
     else:
         print("else")
         return render_template('forgot-password.html')
@@ -187,7 +188,7 @@ class ResetPasswordForm(Form):
                              validators=[validators.DataRequired(),
                                          validators.EqualTo('confirm',
                                                             message='Passwords must match')
-                                        ]
+                                         ]
                              )
     confirm = PasswordField('Repeat Password')
 
@@ -235,8 +236,8 @@ def my_puzzles():
         user = session["user"]
         print(user)
         return render_template("my-puzzles.html",
-                            user=session["user"],
-                            puzzles=list(mongo.db.puzzles.find({"added_by": user})))
+                               user=session["user"],
+                               puzzles=list(mongo.db.puzzles.find({"added_by": user})))
     else:
         flash("You are not logged in")
         return redirect(url_for('index'))
@@ -255,7 +256,7 @@ def upload_puzzle():
             return redirect(url_for('my_puzzles'))
         else:
             return render_template("upload-puzzle.html",
-                                difficulty=list(mongo.db.difficulty_categories.find()))
+                                   difficulty=list(mongo.db.difficulty_categories.find()))
     else:
         flash("You are not logged in")
         return redirect(url_for('index'))

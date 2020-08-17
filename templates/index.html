@@ -9,11 +9,12 @@
         "Welcome{% if 'user' in session %}
         <span>{{session.user.title()}}</span>{% endif %} to Picture Puzzles"
       </h3>
-      
+      <p>Can you guess the phrase by the images or have you got some good ones yourself?</p>
       <p>
-        Feel free to browse our puzzles, you can even upload your own ideas to
+        Feel free to browse our puzzles, you can even join us and upload your own ideas to
         add to the collection.
       </p>
+      
       <a
         href="{{url_for('search', search_category='all')}}"
         class="waves-effect waves-light btn-large"
@@ -22,36 +23,7 @@
     </div>
   </section>
   <section class="container">
-    <div class="row">
-      {% for puzzle in puzzles %}
-      <div class="col s6 m4 l2">
-        <div class="card medium">
-          <div class="card-image waves-effect waves-block waves-light">
-            <img class="activator" src="{{puzzle.image}}" />
-          </div>
-          <div class="card-content">
-            <span class="card-title activator grey-text text-darken-4"
-              >Answer<i class="material-icons right">more_vert</i></span
-            >
-            <p class="left-align">
-              Difficulty: {{puzzle.difficulty.capitalize()}}
-            </p>
-            <p class="left-align">Contributer:</p>
-            <p class="left-align">{{puzzle.added_by.title()}}</p>
-          </div>
-          <div class="card-reveal">
-            <span class="card-title grey-text text-darken-4"
-              >Answer<i class="material-icons right">close</i></span
-            >
-            <h5 class="left-align">
-              {{puzzle.answer.title()}}
-            </h5>
-          </div>
-        </div>
-      </div>
-
-      {% endfor %}
-    </div>
+    <img class="home-image" src="https://res.cloudinary.com/dfboxofas/image/upload/v1597497835/Project-3/home-image_bqfvqk.jpg" alt="Home image">
   </section>
 
   <script>

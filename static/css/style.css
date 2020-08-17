@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Bowlby+One|Rubik&display=swap');
 
 body {
-    background-color: #f5edd3;   
+    background-color: #f5edd3;
 }
 
 .nav-wrapper {
@@ -47,7 +47,7 @@ h3 {
 
 p {
     text-align: center;
-    margin: 1.25rem;
+    
     font-family: 'Rubik', sans-serif;
 }
 
@@ -57,12 +57,35 @@ hr {
     border: none;
 }
 
+.home-image {
+    margin-top: 1rem;
+    width: 100%;
+}
+
+
+/*.card {
+    border: 2px solid #ab8b4d;
+}*/
+
 .card, .card-reveal {
     background-color: #f0f2bf5c;
 }
 
 .card-image img {
+    border: 3px solid #ab8b4d;
     height: 175px;
+}
+
+.thumb-icons {
+    margin: 0 5px;
+}
+
+.thumb-icons .like {
+    color: green;
+}
+
+.thumb-icons .dislike {
+    color: red;
 }
 
 .flashes {

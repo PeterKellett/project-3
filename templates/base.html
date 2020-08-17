@@ -41,6 +41,7 @@
 
           <ul class="right hide-on-med-and-down">
             <li><a href="{{url_for('index')}}">Home</a></li>
+            <li><a href="{{url_for('search', search_category='all')}}">Puzzles</a></li>
             {% if 'user' in session %}
             <li><a href="{{url_for('my_puzzles')}}">My Puzzles</a></li>
             <li><a href="{{url_for('my_account')}}">My Account</a></li>
@@ -55,6 +56,7 @@
     </nav>
     <ul class="sidenav" id="mobile-demo">
       <li><a href="{{url_for('index')}}">Home</a></li>
+      <li><a href="{{url_for('search', search_category='all')}}">Puzzles</a></li>
       {% if 'user' in session %}
       <li><a href="{{url_for('my_puzzles')}}">My Puzzles</a></li>
       <li><a href="{{url_for('my_account')}}">My Account</a></li>
