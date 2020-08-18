@@ -57,19 +57,22 @@ def search(search_category):
 
 class RegistrationForm(Form):
     username = TextField('Username',
-                         validators=[validators
-                                     .Length(min=4,
-                                             max=20,
-                                             message='Username must be at least 4 characters long.'
-                                             )
+                         validators=[validators.DataRequired(),
+                                     validators.Length(min=4,
+                                                       max=20,
+                                                       message='Username must be at least 4          characters long.'
+                                                       )
                                      ]
                          )
     email = TextField('Email Address',
-                      validators=[validators.Length(min=6,
-                                                    max=50,
-                                                    message='Email address not correct'
-                                                    )])
-    password = PasswordField('Password',)
+                      validators=[validators.DataRequired(),
+                                  validators.Email(message='Email supplied is not                    of the correct format.')
+                                  ])
+    password = PasswordField('Password',
+                             validators=[validators.DataRequired(),
+                                         validators.EqualTo('confirm',
+                                                            message='Passwords must match')
+                                         ])
     confirm = PasswordField('Repeat Password',
                             validators=[validators.DataRequired(),
                                         validators.EqualTo('password',
@@ -113,16 +116,11 @@ def register():
 
 class LoginForm(Form):
     email = TextField('Email',
-                      validators=[validators
-                                  .Length(min=6,
-                                          max=50,
-                                          message='Incorrect email format')])
+                      validators=[validators.DataRequired()
+                                  ])
     password = PasswordField('Password',
                              validators=[validators
-                                         .DataRequired
-                                         (message='Please enter your password')
-                                         ]
-                             )
+                                         .DataRequired()])
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -163,15 +161,14 @@ def login():
         return render_template("login.html", form=form, error=error)
 
 
-@app.route("/forgot_password", methods=["POST", "GET"])
+@app.route("/forgot_password")
 def forgot_password():
-    if request.method == "POST":
-        print("if POST")
-        flash("An email has been sent. Check your email inbox for details.")
-        return redirect(url_for('index'))
-    else:
-        print("else")
-        return render_template('forgot-password.html')
+    return render_template('forgot-password.html')
+
+
+@app.route("/email_sent")
+def email_sent():
+    return render_template('password-request-landing.html')
 
 
 @app.route("/my_account")

@@ -2,7 +2,14 @@
 
 body {
     background-color: #f5edd3;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
 }
+
+main {
+    flex: 1 0 auto;
+  }
 
 .nav-wrapper {
     background-color: #f1d785;
@@ -11,6 +18,10 @@ body {
 
 nav ul a {
     color: #000;
+}
+
+.sidenav {
+    background-color: #f5edd3;
 }
 
 h1 {
@@ -99,6 +110,7 @@ hr {
 .form-surround {
     border: 2px solid #ab8b4d;
     border-radius: 10px;
+    margin-bottom: 1rem;
 }
 
 table {
