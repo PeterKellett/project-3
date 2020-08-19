@@ -92,11 +92,15 @@ hr {
 }
 
 .thumb-icons .like {
-    color: green;
+    color: green;   
 }
 
 .thumb-icons .dislike {
     color: red;
+}
+
+.icon-large {
+    font-size: 35px;
 }
 
 .flashes {

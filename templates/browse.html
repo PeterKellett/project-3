@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  {% extends 'base.html' %} {% block title %}Browse{% endblock %}  {% block content %}
+  {% extends 'base.html' %} {% block title %}Browse{% endblock %} {% block
+  content %}
   <div class="container">
     <div class="row center-align">
       {% for letter in alphabet_array %}
@@ -34,9 +35,7 @@
         >
         <!-- Dropdown Structure -->
         <ul id="dropdown2" class="dropdown-content">
-          
           <li><a href="#!"></a></li>
-          
         </ul>
       </div>
     </div>
@@ -60,7 +59,6 @@
             <p class="left-align">{{puzzle.added_by.title()}}</p>
           </div>
           <div class="div thumb-icons">
-            
             <i class="material-icons right dislike">thumb_down</i>
             <i class="material-icons right like">thumb_up</i>
           </div>
@@ -78,5 +76,33 @@
       {% endfor %}
     </div>
   </div>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      console.log("Browse document ready!");
+      $("i").click(function () {
+          console.log("icon clicked");
+
+          if ($(this).prev().hasClass("icon-large")) {
+              console.log("if=true");
+              $(this).toggleClass("icon-large");
+              $(this).prev().removeClass("icon-large");
+          }
+          else if ($(this).next().hasClass("icon-large")) {
+              console.log("else if=true");
+              $(this).toggleClass("icon-large");
+              $(this).next().removeClass("icon-large");
+          }
+
+          else {
+              console.log("else=true");
+              $(this).toggleClass("icon-large");
+          }
+
+
+        //$(this).toggleClass("icon-large");
+        //$(this).css("font-size", "35px");
+      });
+    });
+  </script>
   {% endblock %}
 </html>
