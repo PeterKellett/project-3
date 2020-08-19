@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, redirect, request, url_for, session, flash
 
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
+
 from passlib.hash import sha256_crypt
 
 from flask_pymongo import PyMongo
@@ -9,6 +10,7 @@ if os.path.exists("env.py"):
     import env as config
 
 from bson.objectid import ObjectId
+
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET", "randomstring123")

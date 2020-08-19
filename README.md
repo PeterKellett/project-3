@@ -5,7 +5,8 @@ pip3 install flask-pymongo
 pip3 install dnspython
 pip3 install flask-wtf
 pip3 install passlib
-pip install wtforms[email]
+pip3 install wtforms[email]
+pip3 install cloudinary
 
 ## Gitpod Reminders
 
