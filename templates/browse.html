@@ -59,6 +59,7 @@
             <p class="left-align">{{puzzle.added_by.title()}}</p>
           </div>
           <div class="div thumb-icons">
+            <p hidden>{{puzzle._id}}</p>
             <i class="material-icons right dislike">thumb_down</i>
             <i class="material-icons right like">thumb_up</i>
           </div>
@@ -76,31 +77,49 @@
       {% endfor %}
     </div>
   </div>
+  <!--This script toggles the like and dislike visual fx-->
   <script type="text/javascript">
     $(document).ready(function () {
       console.log("Browse document ready!");
+      likes = [];
+      dislikes = [];
+      console.log("Likes = ", likes);
+      console.log("Dislikes = ", dislikes);
+
       $("i").click(function () {
-          console.log("icon clicked");
-
-          if ($(this).prev().hasClass("icon-large")) {
-              console.log("if=true");
+        id = $(this).siblings("p").text();
+        if ($(this).prev().hasClass("icon-large")) {
+          console.log("if");
+          dislikes.pop({ key: id });
+          likes.push({ key: id, value: 1 });
+          $(this).toggleClass("icon-large");
+          $(this).prev().toggleClass("icon-large");
+        } else if ($(this).next().hasClass("icon-large")) {
+          likes.pop({ key: id });
+          dislikes.push({ key: id, value: 1 });
+          $(this).toggleClass("icon-large");
+          $(this).next().toggleClass("icon-large");
+        } else {
+          if ($(this).hasClass("like")) {
+            if ($(this).hasClass("icon-large")) {
+              likes.pop({ key: id });
               $(this).toggleClass("icon-large");
-              $(this).prev().removeClass("icon-large");
-          }
-          else if ($(this).next().hasClass("icon-large")) {
-              console.log("else if=true");
+            } else {
+              likes.push({ key: id, value: 1 });
               $(this).toggleClass("icon-large");
-              $(this).next().removeClass("icon-large");
-          }
-
-          else {
-              console.log("else=true");
+            }
+          } else {
+            if ($(this).hasClass("icon-large")) {
+              dislikes.pop({ key: id });
               $(this).toggleClass("icon-large");
+            } else {
+              dislikes.push({ key: id, value: 1 });
+              $(this).toggleClass("icon-large");
+            }
           }
-
-
-        //$(this).toggleClass("icon-large");
-        //$(this).css("font-size", "35px");
+        }
+        console.log("Likes = ", likes);
+        console.log("Dislikes = ", dislikes);
       });
     });
   </script>
