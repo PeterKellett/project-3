@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  {% extends 'base.html' %} {% block title %}Browse{% endblock %} {% block
+  content %}
+  <div class="container">
+    <div>
+      <h3>Which is the best programming language?</h3>
+      <form>
+        <input type="text" size="5" name="proglang" />
+        <a href="#" id="process_input"><button>Submit</button></a>
+      </form>
+      <p id="result"></p>
+    </div>
+  </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+      console.log("Interactive document ready!");
+      $(function() {
+          $('a#process_input').bind('click', function() {
+              $.getJSON('/background_process', {
+                  proglang: $('input[name="proglang"]').val(),
+              }, function(data) {
+                  $("#result").text(data.result);
+              });
+              return false;
+          });
+      });
+    });
+    </script>
+
+  {% endblock %}
+
+</html>

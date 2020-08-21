@@ -1,7 +1,9 @@
 import os
-from flask import Flask, render_template, redirect, request, url_for, session, flash
+from flask import Flask, render_template, \
+    redirect, request, url_for, session, flash, jsonify
 
-from wtforms import Form, BooleanField, TextField, PasswordField, validators
+from wtforms import Form, BooleanField, \
+    TextField, PasswordField, validators
 
 from passlib.hash import sha256_crypt
 
@@ -28,10 +30,31 @@ def index():
                            puzzles=list(mongo.db.puzzles.find()))
 
 
+@app.route("/interactive/")
+def interactive():
+    return render_template('interactive.html')
+
+
+@app.route("/background_process2")
+def background_process2():
+    print("background_process2")
+    return redirect(url_for('index'))
+
+
+@app.route("/background_process")
+def background_process():
+    lang = request.args.get('proglang')
+    if str(lang).lower() == 'python':
+        return jsonify(result='Correct')
+    else:
+        return jsonify(result='Wrong!!')
+
+
 @app.route("/browse/<search_category>")
 def search(search_category):
     print("search")
     print(search_category)
+    # print(likes)
     alphabet_array = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
                       'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
                       'W', 'X', 'Y', 'Z', 'all']
@@ -62,18 +85,26 @@ class RegistrationForm(Form):
                          validators=[validators.DataRequired(),
                                      validators.Length(min=4,
                                                        max=20,
-                                                       message='Username must be at least 4          characters long.'
+                                                       message='Username must be at \
+                                                                least 4 \
+                                                                characters \
+                                                                long.'
                                                        )
                                      ]
                          )
     email = TextField('Email Address',
                       validators=[validators.DataRequired(),
-                                  validators.Email(message='Email supplied is not                    of the correct format.')
+                                  validators.Email(message='Email supplied \
+                                                            is not of the \
+                                                            correct format.')
                                   ])
     password = PasswordField('Password',
                              validators=[validators.DataRequired(),
                                          validators.EqualTo('confirm',
-                                                            message='Passwords must match')
+                                                            message='Passwords \
+                                                                     must \
+                                                                     match'
+                                                            )
                                          ])
     confirm = PasswordField('Repeat Password',
                             validators=[validators.DataRequired(),
@@ -136,7 +167,8 @@ def login():
         else:
             if request.method == "POST":
                 users = mongo.db.users
-                user_login = users.find_one({'email': request.form.get('email')})
+                user_login = users.find_one({'email': request.form.
+                                             get('email')})
                 if user_login:
                     if sha256_crypt.verify(request.form['password'],
                                            user_login['password']):
@@ -186,7 +218,10 @@ class ResetPasswordForm(Form):
     password = PasswordField('Password',
                              validators=[validators.DataRequired(),
                                          validators.EqualTo('confirm',
-                                                            message='Passwords must match')
+                                                            message='Passwords \
+                                                                     must \
+                                                                     match'
+                                                            )
                                          ]
                              )
     confirm = PasswordField('Repeat Password')
@@ -236,7 +271,8 @@ def my_puzzles():
         print(user)
         return render_template("my-puzzles.html",
                                user=session["user"],
-                               puzzles=list(mongo.db.puzzles.find({"added_by": user})))
+                               puzzles=list(mongo.db.puzzles
+                                            .find({"added_by": user})))
     else:
         flash("You are not logged in")
         return redirect(url_for('index'))
@@ -255,7 +291,9 @@ def upload_puzzle():
             return redirect(url_for('my_puzzles'))
         else:
             return render_template("upload-puzzle.html",
-                                   difficulty=list(mongo.db.difficulty_categories.find()))
+                                   difficulty=list(mongo.db
+                                                   .difficulty_categories
+                                                   .find()))
     else:
         flash("You are not logged in")
         return redirect(url_for('index'))
