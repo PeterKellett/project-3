@@ -87,6 +87,10 @@ hr {
     height: 175px;
 }
 
+.card a {
+    width: 100%;
+}
+
 .thumb-icons {
     margin: 0 5px;
 }
