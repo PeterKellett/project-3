@@ -283,9 +283,9 @@ def upload_puzzle():
     if "user" in session:
         if request.method == "POST":
             puzzles = mongo.db.puzzles
-            puzzles.insert_one({'added_by': request.form.get('added_by'),
+            puzzles.insert_one({'added_by': session["user"],
                                 'difficulty': request.form.get('difficulty'),
-                                'image': request.form.get('image'),
+                                'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
                                 'answer': request.form.get('answer')})
             flash('Upload Success!!')
             return redirect(url_for('my_puzzles'))
@@ -297,6 +297,31 @@ def upload_puzzle():
     else:
         flash("You are not logged in")
         return redirect(url_for('index'))
+
+
+@app.route("/edit_puzzle/<puzzle_id>")
+def edit_puzzle(puzzle_id):
+    the_puzzle = mongo.db.puzzles.find_one({"_id": ObjectId(puzzle_id)})
+    difficulty_categories = mongo.db.difficulty_categories.find()
+    return render_template('edit-puzzle.html', puzzle=the_puzzle,difficulty=difficulty_categories)
+
+
+@app.route("/update_puzzle/<puzzle_id>", methods=["POST"])
+def update_puzzle(puzzle_id):
+    puzzles = mongo.db.puzzles
+    puzzles.update({'_id': ObjectId(puzzle_id)},
+                   {
+                    'added_by': session["user"],
+                    'difficulty': request.form.get('difficulty'),
+                    'answer': request.form.get('answer')
+    })
+    return redirect(url_for('my_puzzles'))
+
+
+@app.route("/delete_puzzle/<puzzle_id>")
+def delete_puzzle(puzzle_id):
+    mongo.db.puzzles.remove({'_id': ObjectId(puzzle_id)})
+    return redirect(url_for('my_puzzles'))
 
 
 @app.route("/logout")
