@@ -121,8 +121,13 @@ hr {
     margin-bottom: 1rem;
 }
 
-#thumbnail, #upload_widget {
+#thumbnail {
     display: inline;
+}
+
+#x-icon {
+    background-color: red;
+    color: white;
 }
 
 table {

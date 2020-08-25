@@ -313,6 +313,7 @@ def update_puzzle(puzzle_id):
                    {
                     'added_by': session["user"],
                     'difficulty': request.form.get('difficulty'),
+                    'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
                     'answer': request.form.get('answer')
     })
     return redirect(url_for('my_puzzles'))
