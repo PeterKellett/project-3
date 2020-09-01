@@ -35,12 +35,6 @@ def interactive():
     return render_template('interactive.html')
 
 
-@app.route("/background_process2")
-def background_process2():
-    print("background_process2")
-    return redirect(url_for('index'))
-
-
 @app.route("/background_process")
 def background_process():
     lang = request.args.get('proglang')
@@ -65,8 +59,15 @@ def search(search_category):
                                puzzles=mongo.db.puzzles.find(),
                                difficulty=mongo.db.
                                difficulty_categories.find(),
-                               alphabet_array=alphabet_array)
-
+                               alphabet_array=alphabet_array, contributers=mongo.db.users.find())
+    elif search_category == 'easy' or search_category == 'medium' or search_category == 'hard':
+        print("elif")
+        return render_template('browse.html',
+                               puzzles=mongo.db.puzzles.find({"difficulty": search_category}),
+                               difficulty=mongo.db.
+                               difficulty_categories.find(),
+                               alphabet_array=alphabet_array,
+                               contributers=mongo.db.users.find())
     else:
         print("else")
         my_letter = "^" + search_category
@@ -77,7 +78,8 @@ def search(search_category):
                                ({"answer": {"$regex": my_letter.lower()}}),
                                difficulty=mongo.db.
                                difficulty_categories.find(),
-                               alphabet_array=alphabet_array)
+                               alphabet_array=alphabet_array,
+                               contributers=mongo.db.users.find())
 
 
 class RegistrationForm(Form):
@@ -254,6 +256,18 @@ def reset_password():
         return redirect(url_for('index'))
 
 
+@app.route("/background_process2/")
+def background_process2():
+    if user in session:
+        print("background_process2")
+        id = request.args.get('id')
+        print(id)
+    else:
+        flash("Please register/login first")
+        print("else after flash")
+    return redirect(url_for('user'))
+
+
 @app.route("/user")
 def user():
     print("user function")
@@ -275,7 +289,7 @@ def my_puzzles():
                                             .find({"added_by": user})))
     else:
         flash("You are not logged in")
-        return redirect(url_for('index'))
+        return redirect(url_for('login'))
 
 
 @app.route("/upload_puzzle", methods=["POST", "GET"])
@@ -283,6 +297,7 @@ def upload_puzzle():
     if "user" in session:
         if request.method == "POST":
             puzzles = mongo.db.puzzles
+            print(request.form.get('image'))
             puzzles.insert_one({'added_by': session["user"],
                                 'difficulty': request.form.get('difficulty'),
                                 'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
@@ -303,7 +318,8 @@ def upload_puzzle():
 def edit_puzzle(puzzle_id):
     the_puzzle = mongo.db.puzzles.find_one({"_id": ObjectId(puzzle_id)})
     difficulty_categories = mongo.db.difficulty_categories.find()
-    return render_template('edit-puzzle.html', puzzle=the_puzzle,difficulty=difficulty_categories)
+    return render_template('edit-puzzle.html',
+                           puzzle=the_puzzle, difficulty=difficulty_categories)
 
 
 @app.route("/update_puzzle/<puzzle_id>", methods=["POST"])

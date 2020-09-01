@@ -18,6 +18,9 @@
         >
         <!-- Dropdown Structure -->
         <ul id="dropdown1" class="dropdown-content">
+          <li>
+            <a href="{{url_for('search', search_category='all')}}">All</a>
+          </li>
           {% for diff in difficulty %}
           <li>
             <a href="{{url_for('search', search_category=diff.difficulty)}}"
@@ -35,7 +38,17 @@
         >
         <!-- Dropdown Structure -->
         <ul id="dropdown2" class="dropdown-content">
-          <li><a href="#!"></a></li>
+          <li>
+            <a href="{{url_for('search', search_category='all')}}">All</a>
+          </li>
+          {% for contributer in contributers %}
+          <li>
+            <a
+              href="{{url_for('search', search_category=contributer.username)}}"
+              >{{ contributer.username }}</a
+            >
+          </li>
+          {% endfor %}
         </ul>
       </div>
     </div>
@@ -44,7 +57,7 @@
     <div class="row">
       {% for puzzle in puzzles %}
       <div class="col s6 m4 l2">
-        <div class="card medium">
+        <div class="card ">
           <div class="card-image waves-effect waves-block waves-light">
             <img class="activator" src="{{puzzle.image}}" />
           </div>
@@ -60,8 +73,13 @@
           </div>
           <div class="div thumb-icons">
             <p hidden>{{puzzle._id}}</p>
-            <i class="material-icons right dislike">thumb_down</i>
-            <i class="material-icons right like">thumb_up</i>
+            {% if 'user' in session %}
+                <i class="material-icons right dislike">thumb_down</i>
+                <i class="material-icons right like">thumb_up</i>
+            {% else %}
+                <i class="material-icons right">thumb_down</i>
+                <i class="material-icons right">thumb_up</i>
+            {% endif %}
           </div>
           <div class="card-reveal">
             <span class="card-title grey-text text-darken-4"
@@ -85,11 +103,11 @@
       dislikes = [];
       console.log("Likes = ", likes);
       console.log("Dislikes = ", dislikes);
-      
+
       $("i").click(function () {
         //var xhttp = new XMLHttpRequest();
         id = $(this).siblings("p").text();
-        $.get('/background_process2');
+        
         if ($(this).prev().hasClass("icon-large")) {
           console.log("if");
           dislikes.pop({ key: id });
@@ -110,7 +128,7 @@
               $(this).toggleClass("icon-large");
             } 
             else {
-              likes.push({ key: id, value: 1 });
+              likes.push(id);
               $(this).toggleClass("icon-large");
             }
           } 
@@ -127,6 +145,9 @@
         }
         console.log("Likes = ", likes);
         console.log("Dislikes = ", dislikes);
+        $.get("/background_process2/", {
+            id: id
+        });
         //xhttp.open("GET", "", true)
         //xhttp.send("likes");
         //return likes;

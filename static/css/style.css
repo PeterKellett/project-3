@@ -74,9 +74,9 @@ hr {
 }
 
 
-/*.card {
-    border: 2px solid #ab8b4d;
-}*/
+.card {
+    height: 500px;
+}
 
 .card, .card-reveal {
     background-color: #f0f2bf5c;
