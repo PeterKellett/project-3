@@ -41,16 +41,17 @@
   <body>
     <div class="navbar-fixed">
       <nav>
-        <div class="nav-wrapper ">
-          <a href="{{url_for('index')}}" class="brand-logo center"
-            >
-            <img src="https://res.cloudinary.com/dfboxofas/image/upload/v1597497835/Project-3/home-image_bqfvqk.jpg" alt="">
+        <div class="nav-wrapper">
+          <a href="{{url_for('index')}}" class="brand-logo center">
+            <img
+              src="https://res.cloudinary.com/dfboxofas/image/upload/v1597497835/Project-3/home-image_bqfvqk.jpg"
+              alt=""
+            />
             Picture <span>Puzzles</span></a
           >
           <a href="#" data-target="mobile-demo" class="sidenav-trigger"
             ><i class="material-icons">menu</i></a
           >
-
           <ul class="right hide-on-med-and-down">
             <li><a href="{{url_for('index')}}">Home</a></li>
             <li>
@@ -124,9 +125,9 @@
       {% endif %} {% endwith %} {% block content %} {% endblock %}
     </main>
 
-    <footer class="page-footer">
+    <footer class="page-footer amber lighten-3">
       <div class="footer-copyright">
-        <div class="container disclaimer">
+        <div class="container disclaimer black-text">
           © 2020 Peter Kellett
           <em>(For demonstration purposes only)</em>
         </div>
@@ -142,33 +143,7 @@
         $(".sidenav").sidenav();
         $("select").formSelect();
         $(".dropdown-trigger").dropdown();
-        /*
-        $(".cloudinary-fileupload").bind("cloudinarydone", function (e, data) {
-            console.log("cloudinarydone function triggered")
-          $(".preview").html(
-              
-            $.cloudinary.image(data.result.public_id, {
-              format: data.result.format,
-              version: data.result.version,
-              crop: "fill",
-              width: 150,
-              height: 100,
-            })
-          );
-          $(".image_public_id").val(data.result.public_id);
-          return true;
-        });
-
-        $(".cloudinary-fileupload").bind("fileuploadprogress", function (
-          e,
-          data
-        ) {
-            console.log("cloudinary fileuploadprogress function triggered")
-          $(".progress_bar").css(
-            "width",
-            Math.round((data.loaded * 100.0) / data.total) + "%"
-          );
-        });*/
+        
       });
     </script>
   </body>

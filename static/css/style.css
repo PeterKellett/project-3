@@ -11,7 +11,7 @@ main {
     flex: 1 0 auto;
   }
 
-.nav-wrapper {
+.nav-wrapper, footer {
     background-color: #f1d785;
     color: #000;
 }
@@ -59,13 +59,16 @@ h3 {
 }
 
 .intro span {
-    color: red;
+    color: #ff5722;
 }
 
 p {
-    text-align: center;
-    
+    text-align: center;   
     font-family: 'Rubik', sans-serif;
+}
+
+p a {
+    color: #ff5722;
 }
 
 hr {
@@ -79,9 +82,27 @@ hr {
     width: 100%;
 }
 
+.letter_array {
+    margin-top: 1rem;
+    color: #ff5722;
+}   
+
+.letter_array a {
+    color: #ff5722;
+}
 
 .card {
-    height: 500px;
+    height: 400px;
+}
+
+.card .card-content {
+    padding-top: 20px;
+}
+
+
+.card-content button {
+    width: 100%;
+    color: #fff;
 }
 
 .card, .card-reveal {
@@ -124,6 +145,7 @@ hr {
 .form-surround {
     border: 2px solid #ab8b4d;
     border-radius: 10px;
+    margin-top: 1rem;
     margin-bottom: 1rem;
 }
 

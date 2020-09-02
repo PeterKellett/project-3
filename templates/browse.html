@@ -3,7 +3,7 @@
   {% extends 'base.html' %} {% block title %}Browse{% endblock %} {% block
   content %}
   <div class="container">
-    <div class="row center-align">
+    <div class="row center-align letter_array">|
       {% for letter in alphabet_array %}
       <a href="{{url_for('search', search_category=letter)}}"
         >{{letter.capitalize()}} |
@@ -13,17 +13,17 @@
     <div class="row center-align">
       <div class="col s6">
         <!-- Dropdown Trigger -->
-        <a class="dropdown-trigger btn" href="#" data-target="dropdown1"
+        <a class="dropdown-trigger deep-orange btn" href="#" data-target="dropdown1"
           >Difficulty</a
         >
         <!-- Dropdown Structure -->
-        <ul id="dropdown1" class="dropdown-content">
+        <ul id="dropdown1" class="dropdown-content deep-orange">
           <li>
-            <a href="{{url_for('search', search_category='all')}}">All</a>
+            <a class="white-text" href="{{url_for('search', search_category='all')}}">All</a>
           </li>
           {% for diff in difficulty %}
           <li>
-            <a href="{{url_for('search', search_category=diff.difficulty)}}"
+            <a class="white-text" href="{{url_for('search', search_category=diff.difficulty)}}"
               >{{diff.difficulty.capitalize()}}</a
             >
           </li>
@@ -33,17 +33,17 @@
 
       <div class="col s6">
         <!-- Dropdown Trigger -->
-        <a class="dropdown-trigger btn" href="#" data-target="dropdown2"
+        <a class="dropdown-trigger deep-orange btn" href="#" data-target="dropdown2"
           >Contributer</a
         >
         <!-- Dropdown Structure -->
-        <ul id="dropdown2" class="dropdown-content">
+        <ul id="dropdown2" class="dropdown-content deep-orange">
           <li>
-            <a href="{{url_for('search', search_category='all')}}">All</a>
+            <a class="white-text" href="{{url_for('search', search_category='all')}}">All</a>
           </li>
           {% for contributer in contributers %}
           <li>
-            <a
+            <a class="white-text" 
               href="{{url_for('search', search_category=contributer.username)}}"
               >{{ contributer.username }}</a
             >
@@ -62,8 +62,8 @@
             <img class="activator" src="{{puzzle.image}}" />
           </div>
           <div class="card-content">
-            <span class="card-title activator grey-text text-darken-4"
-              >Answer<i class="material-icons right">more_vert</i></span
+            <div class="card-title grey-text text-lighten-4"
+              ><button class="activator deep-orange text-lighten-1 btn-small btn-flat">See Answer</button></div
             >
             <p class="left-align">
               Difficulty: {{puzzle.difficulty.capitalize()}}
