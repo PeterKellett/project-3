@@ -24,16 +24,22 @@ nav ul a {
     background-color: #f5edd3;
 }
 
-h1 {
+.brand-logo {
     font-family: 'Bowlby One', cursive;
     background-color: #f1d785;
     color: #fff;
-    padding: 1.25rem;
+    /*padding: 1.25rem;*/
     margin-top: 0;
 }
 
-h1 span {
+.brand-logo span {
     color: #ab8b4d;
+}
+
+.brand-logo img {
+    vertical-align: middle;
+    height: 55px;
+    width: auto;
 }
 
 h2 {

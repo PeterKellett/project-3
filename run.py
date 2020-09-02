@@ -13,8 +13,15 @@ if os.path.exists("env.py"):
 
 from bson.objectid import ObjectId
 
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
+app.config.update(
+    MAIL_USERNAME='peterprivate7@gmail.com',
+    MAIL_PASSWORD='Blackhills1'
+)
+mail = Mail(app)
+
 app.secret_key = os.getenv("SECRET", "randomstring123")
 
 app.config["MONGO_DBNAME"] = 'picture_puzzles'
@@ -30,11 +37,16 @@ def index():
                            puzzles=list(mongo.db.puzzles.find()))
 
 
-@app.route("/interactive/")
-def interactive():
+@app.route("/flask_email")
+def flask_email():
+    msg = Message("Hello",
+                  sender="peterprivate7@gmail.com",
+                  recipients=["peterwkellett@gmail.com"])
+    mail.send(msg)
     return render_template('interactive.html')
 
 
+"""
 @app.route("/background_process")
 def background_process():
     lang = request.args.get('proglang')
@@ -42,6 +54,7 @@ def background_process():
         return jsonify(result='Correct')
     else:
         return jsonify(result='Wrong!!')
+"""
 
 
 @app.route("/browse/<search_category>")
@@ -59,11 +72,15 @@ def search(search_category):
                                puzzles=mongo.db.puzzles.find(),
                                difficulty=mongo.db.
                                difficulty_categories.find(),
-                               alphabet_array=alphabet_array, contributers=mongo.db.users.find())
-    elif search_category == 'easy' or search_category == 'medium' or search_category == 'hard':
+                               alphabet_array=alphabet_array,
+                               contributers=mongo.db.users.find())
+    elif search_category == 'easy' \
+        or search_category == 'medium' \
+            or search_category == 'hard':
         print("elif")
         return render_template('browse.html',
-                               puzzles=mongo.db.puzzles.find({"difficulty": search_category}),
+                               puzzles=mongo.db.
+                               puzzles.find({"difficulty": search_category}),
                                difficulty=mongo.db.
                                difficulty_categories.find(),
                                alphabet_array=alphabet_array,
@@ -161,12 +178,13 @@ class LoginForm(Form):
 @app.route('/login', methods=["GET", "POST"])
 def login():
     try:
-        print(session)
+        print("login function")
         form = LoginForm(request.form)
         if "user" in session:
             flash("You are already registered")
             return redirect(url_for('index'))
         else:
+            print("login else")
             if request.method == "POST":
                 users = mongo.db.users
                 user_login = users.find_one({'email': request.form.
@@ -190,6 +208,7 @@ def login():
                     flash("Sorry. We have no users by that email.")
                     return render_template("login.html", form=form)
             else:
+                print("login else else")
                 return render_template("login.html", form=form)
 
     except Exception as e:
@@ -258,13 +277,14 @@ def reset_password():
 
 @app.route("/background_process2/")
 def background_process2():
-    if user in session:
-        print("background_process2")
+    print("background_process2")
+    if "user" in session:
+        print("background_process2 if")
         id = request.args.get('id')
         print(id)
     else:
         flash("Please register/login first")
-        print("else after flash")
+        print("background_process2 else")
     return redirect(url_for('user'))
 
 
@@ -272,10 +292,12 @@ def background_process2():
 def user():
     print("user function")
     if "user" in session:
-        return redirect(url_for("index"))
+        print("user if")
+        return redirect(url_for('index'))
     else:
+        print("user else")
         flash("You are not logged in.")
-        return redirect(url_for("login"))
+        return redirect(url_for('login'))
 
 
 @app.route("/my_puzzles")
@@ -300,7 +322,8 @@ def upload_puzzle():
             print(request.form.get('image'))
             puzzles.insert_one({'added_by': session["user"],
                                 'difficulty': request.form.get('difficulty'),
-                                'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
+                                'image': 'https://res.cloudinary.com \
+                                /dfboxofas/' + request.form.get('image'),
                                 'answer': request.form.get('answer')})
             flash('Upload Success!!')
             return redirect(url_for('my_puzzles'))
@@ -329,7 +352,8 @@ def update_puzzle(puzzle_id):
                    {
                     'added_by': session["user"],
                     'difficulty': request.form.get('difficulty'),
-                    'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
+                    'image': 'https://res.cloudinary.com \
+                    /dfboxofas/' + request.form.get('image'),
                     'answer': request.form.get('answer')
     })
     return redirect(url_for('my_puzzles'))

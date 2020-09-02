@@ -28,20 +28,25 @@
       href="{{ url_for('static', filename='images/favicon(1).ico')}}"
       type="image/x-icon"
     />
-<!--jQuery-->
+    <!--jQuery-->
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
       integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
       crossorigin="anonymous"
     ></script>
-    
+
     <title>{% block title %} {% endblock %}</title>
   </head>
 
   <body>
-    <nav>
-      <div class="nav-wrapper">
-        <div class="container">
+    <div class="navbar-fixed">
+      <nav>
+        <div class="nav-wrapper ">
+          <a href="{{url_for('index')}}" class="brand-logo center"
+            >
+            <img src="https://res.cloudinary.com/dfboxofas/image/upload/v1597497835/Project-3/home-image_bqfvqk.jpg" alt="">
+            Picture <span>Puzzles</span></a
+          >
           <a href="#" data-target="mobile-demo" class="sidenav-trigger"
             ><i class="material-icons">menu</i></a
           >
@@ -49,7 +54,10 @@
           <ul class="right hide-on-med-and-down">
             <li><a href="{{url_for('index')}}">Home</a></li>
             <li>
-              <a href="{{url_for('search', search_category='all', likes=None, dislikes=None)}}">Puzzles</a>
+              <a
+                href="{{url_for('search', search_category='all', likes=None, dislikes=None)}}"
+                >Puzzles</a
+              >
             </li>
             {% if 'user' in session %}
             <li><a href="{{url_for('my_puzzles')}}">My Puzzles</a></li>
@@ -61,8 +69,8 @@
             {% endif %}
           </ul>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
     <ul class="sidenav" id="mobile-demo">
       <li>
         <a href="{{url_for('index')}}"
@@ -70,7 +78,8 @@
         >
       </li>
       <li>
-        <a href="{{url_for('search', search_category='all', likes=None, dislikes=None)}}"
+        <a
+          href="{{url_for('search', search_category='all', likes=None, dislikes=None)}}"
           ><i class="material-icons left">school</i>Puzzles</a
         >
       </li>
@@ -104,9 +113,6 @@
       {% endif %}
     </ul>
     <main>
-      <header>
-        <h1 class="center-align">Picture <span>Puzzles</span></h1>
-      </header>
       {% with messages = get_flashed_messages() %} {% if messages %}
       <div class="container center-align">
         <ul class="flashes">
@@ -127,8 +133,6 @@
       </div>
     </footer>
 
-    
-
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
@@ -138,7 +142,7 @@
         $(".sidenav").sidenav();
         $("select").formSelect();
         $(".dropdown-trigger").dropdown();
-/*
+        /*
         $(".cloudinary-fileupload").bind("cloudinarydone", function (e, data) {
             console.log("cloudinarydone function triggered")
           $(".preview").html(

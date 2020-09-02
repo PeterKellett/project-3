@@ -7,6 +7,7 @@ pip3 install flask-wtf
 pip3 install passlib
 pip3 install wtforms[email]
 pip3 install cloudinary
+pip3 install Flask-Mail
 
 ## Gitpod Reminders
 
