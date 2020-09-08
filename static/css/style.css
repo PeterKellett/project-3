@@ -92,11 +92,11 @@ hr {
 }
 
 .card {
-    height: 400px;
+    height: 410px;
 }
 
 .card .card-content {
-    padding-top: 20px;
+    padding: 10px 10px 0;
 }
 
 
@@ -119,11 +119,11 @@ hr {
 }
 
 .thumb-icons {
-    margin: 0 5px;
+    margin: 0 15px;
 }
 
 .thumb-icons .like {
-    color: green;   
+    color: green; 
 }
 
 .thumb-icons .dislike {

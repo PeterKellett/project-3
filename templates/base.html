@@ -43,9 +43,9 @@
       <nav>
         <div class="nav-wrapper">
           <a href="{{url_for('index')}}" class="brand-logo center">
-            <img
+            <img class="hide-on-small-only"
               src="https://res.cloudinary.com/dfboxofas/image/upload/v1597497835/Project-3/home-image_bqfvqk.jpg"
-              alt=""
+              alt="Navbar logo"
             />
             Picture <span>Puzzles</span></a
           >
@@ -53,20 +53,20 @@
             ><i class="material-icons">menu</i></a
           >
           <ul class="right hide-on-med-and-down">
-            <li><a href="{{url_for('index')}}">Home</a></li>
+            <li><a href="{{url_for('index')}}"><i class="material-icons left">home</i>Home</a></li>
             <li>
               <a
                 href="{{url_for('search', search_category='all', likes=None, dislikes=None)}}"
-                >Puzzles</a
+                ><i class="material-icons left">school</i>Puzzles</a
               >
             </li>
             {% if 'user' in session %}
-            <li><a href="{{url_for('my_puzzles')}}">My Puzzles</a></li>
-            <li><a href="{{url_for('my_account')}}">My Account</a></li>
-            <li><a href="{{url_for('logout')}}">Logout</a></li>
+            <li><a href="{{url_for('my_puzzles')}}"><i class="material-icons left">playlist_add</i>My Puzzles</a></li>
+            <li><a href="{{url_for('my_account')}}"><i class="material-icons left">settings</i>My Account</a></li>
+            <li><a href="{{url_for('logout')}}"><i class="material-icons left">exit_to_app </i>Logout</a></li>
             {% else %}
-            <li><a href="{{url_for('register')}}">Join</a></li>
-            <li><a href="{{url_for('login')}}">Login</a></li>
+            <li><a href="{{url_for('register')}}"><i class="material-icons left">person_add</i>Join</a></li>
+            <li><a href="{{url_for('login')}}"><i class="material-icons left">person</i>Login</a></li>
             {% endif %}
           </ul>
         </div>
@@ -143,7 +143,6 @@
         $(".sidenav").sidenav();
         $("select").formSelect();
         $(".dropdown-trigger").dropdown();
-        
       });
     </script>
   </body>

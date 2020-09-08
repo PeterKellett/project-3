@@ -61,6 +61,7 @@ def background_process():
 def search(search_category):
     print("search")
     print(search_category)
+    print(session)
     # print(likes)
     alphabet_array = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
                       'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
@@ -189,15 +190,16 @@ def login():
                 users = mongo.db.users
                 user_login = users.find_one({'email': request.form.
                                              get('email')})
+                print("1 ", user_login['_id'])
+                userid2 = str(user_login['_id'])
+                print("2 ", userid2)
                 if user_login:
                     if sha256_crypt.verify(request.form['password'],
                                            user_login['password']):
-                        username = user_login['username']
-                        user_id = user_login['_id']
-                        print(user_id)
+                        session['id'] = userid2
+                        session['user'] = user_login['username']
                         session['user_email'] = user_login['email']
                         session['logged_in'] = True
-                        session['user'] = username
                         print(session)
                         flash("You are now logged in")
                         return redirect(url_for("user"))
@@ -253,17 +255,13 @@ def reset_password():
     if "user" in session:
         form = ResetPasswordForm(request.form)
         email = session['user_email']
-        print(email)
         if request.method == "POST" and form.validate():
-            print("if POST")
             email = session['user_email']
             print(email)
             users = mongo.db.users
             user_login = users.find_one({'email': email})
-            print(user_login)
             password = sha256_crypt.hash((str(form.password.data)))
             new_password = {"$set": {"password": password}}
-            print(new_password)
             users.update_one(user_login, new_password)
             flash("Changed password success!")
             return redirect(url_for('my_account'))
@@ -275,17 +273,62 @@ def reset_password():
         return redirect(url_for('index'))
 
 
-@app.route("/background_process2/")
-def background_process2():
-    print("background_process2")
+@app.route("/like/<puzzle_id>")
+def like(puzzle_id):
     if "user" in session:
-        print("background_process2 if")
-        id = request.args.get('id')
-        print(id)
+        puzzles = mongo.db.puzzles
+        puzzle = mongo.db.puzzles.find_one({
+            '_id': ObjectId(puzzle_id)
+        })
+        puzzles.update_one(puzzle, {"$push": {"likes": session['id']}})
+        puzzles.update_one(puzzle, {"$pull": {"dislikes": session['id']}})
     else:
         flash("Please register/login first")
-        print("background_process2 else")
-    return redirect(url_for('user'))
+        print("like else")
+    return redirect(url_for('search', search_category='all'))
+
+
+@app.route("/unlike/<puzzle_id>")
+def unlike(puzzle_id):
+    if "user" in session:
+        puzzles = mongo.db.puzzles
+        puzzle = mongo.db.puzzles.find_one({
+            '_id': ObjectId(puzzle_id)
+        })
+        puzzles.update_one(puzzle, {"$pull": {"likes": session['id']}})
+    else:
+        flash("Please register/login first")
+        print("unlike else")
+    return redirect(url_for('search', search_category='all'))
+
+
+@app.route("/dislike/<puzzle_id>")
+def dislike(puzzle_id):
+    if "user" in session:
+        puzzles = mongo.db.puzzles
+        puzzle = mongo.db.puzzles.find_one({
+            '_id': ObjectId(puzzle_id)
+        })
+        puzzles.update_one(puzzle, {"$push": {"dislikes": session['id']}})
+        # puzzles.update_one(puzzle, {"$push": {"dislikes": session['id']}})
+    else:
+        flash("Please register/login first")
+        print("dislike else")
+    return redirect(url_for('search', search_category='all'))
+
+
+@app.route("/undislike/<puzzle_id>")
+def undislike(puzzle_id):
+    if "user" in session:
+        puzzles = mongo.db.puzzles
+        puzzle = mongo.db.puzzles.find_one({
+            '_id': ObjectId(puzzle_id)
+        })
+        puzzles.update_one(puzzle, {"$pull": {"dislikes": session['id']}})
+    else:
+        flash("Please register/login first")
+        print("undislike else")
+    return redirect(url_for('search', search_category='all'))
 
 
 @app.route("/user")
@@ -322,8 +365,7 @@ def upload_puzzle():
             print(request.form.get('image'))
             puzzles.insert_one({'added_by': session["user"],
                                 'difficulty': request.form.get('difficulty'),
-                                'image': 'https://res.cloudinary.com \
-                                /dfboxofas/' + request.form.get('image'),
+                                'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
                                 'answer': request.form.get('answer')})
             flash('Upload Success!!')
             return redirect(url_for('my_puzzles'))
@@ -352,8 +394,7 @@ def update_puzzle(puzzle_id):
                    {
                     'added_by': session["user"],
                     'difficulty': request.form.get('difficulty'),
-                    'image': 'https://res.cloudinary.com \
-                    /dfboxofas/' + request.form.get('image'),
+                    'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
                     'answer': request.form.get('answer')
     })
     return redirect(url_for('my_puzzles'))
@@ -367,6 +408,7 @@ def delete_puzzle(puzzle_id):
 
 @app.route("/logout")
 def logout():
+    session.pop("id", None)
     session.pop("user", None)
     session.pop("logged_in", None)
     session.pop("user_email", None)
