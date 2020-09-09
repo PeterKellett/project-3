@@ -134,9 +134,25 @@ hr {
     font-size: 35px;
 }
 
-.flashes {
-    color: white;
+.flashes .success {
     background-color: green;
+    color: white;
+    height: 2.5rem;
+    padding-top: 0.5rem;
+    border-radius: 10px;
+}
+
+.flashes .warning {
+    background-color: orange;
+    color: white;
+    height: 2.5rem;
+    padding-top: 0.5rem;
+    border-radius: 10px;
+}
+
+.flashes .error {
+    background-color: red;
+    color: white;
     height: 2.5rem;
     padding-top: 0.5rem;
     border-radius: 10px;

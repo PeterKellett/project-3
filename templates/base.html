@@ -43,7 +43,8 @@
       <nav>
         <div class="nav-wrapper">
           <a href="{{url_for('index')}}" class="brand-logo center">
-            <img class="hide-on-small-only"
+            <img
+              class="hide-on-small-only"
               src="https://res.cloudinary.com/dfboxofas/image/upload/v1597497835/Project-3/home-image_bqfvqk.jpg"
               alt="Navbar logo"
             />
@@ -53,7 +54,11 @@
             ><i class="material-icons">menu</i></a
           >
           <ul class="right hide-on-med-and-down">
-            <li><a href="{{url_for('index')}}"><i class="material-icons left">home</i>Home</a></li>
+            <li>
+              <a href="{{url_for('index')}}"
+                ><i class="material-icons left">home</i>Home</a
+              >
+            </li>
             <li>
               <a
                 href="{{url_for('search', search_category='all', likes=None, dislikes=None)}}"
@@ -61,12 +66,32 @@
               >
             </li>
             {% if 'user' in session %}
-            <li><a href="{{url_for('my_puzzles')}}"><i class="material-icons left">playlist_add</i>My Puzzles</a></li>
-            <li><a href="{{url_for('my_account')}}"><i class="material-icons left">settings</i>My Account</a></li>
-            <li><a href="{{url_for('logout')}}"><i class="material-icons left">exit_to_app </i>Logout</a></li>
+            <li>
+              <a href="{{url_for('my_puzzles')}}"
+                ><i class="material-icons left">playlist_add</i>My Puzzles</a
+              >
+            </li>
+            <li>
+              <a href="{{url_for('my_account')}}"
+                ><i class="material-icons left">settings</i>My Account</a
+              >
+            </li>
+            <li>
+              <a href="{{url_for('logout')}}"
+                ><i class="material-icons left">exit_to_app </i>Logout</a
+              >
+            </li>
             {% else %}
-            <li><a href="{{url_for('register')}}"><i class="material-icons left">person_add</i>Join</a></li>
-            <li><a href="{{url_for('login')}}"><i class="material-icons left">person</i>Login</a></li>
+            <li>
+              <a href="{{url_for('register')}}"
+                ><i class="material-icons left">person_add</i>Join</a
+              >
+            </li>
+            <li>
+              <a href="{{url_for('login')}}"
+                ><i class="material-icons left">person</i>Login</a
+              >
+            </li>
             {% endif %}
           </ul>
         </div>
@@ -114,11 +139,18 @@
       {% endif %}
     </ul>
     <main>
-      {% with messages = get_flashed_messages() %} {% if messages %}
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %}
       <div class="container center-align">
         <ul class="flashes">
-          {% for message in messages %}
-          <li>{{ message }}</li>
+          {% for category, message in messages %}
+          <li class="{{ category }}">
+            {{ message }}<i
+              class="material-icons right"
+              onclick="delete_flash(this)"
+              >close</i
+            >
+          </li>
           {% endfor %}
         </ul>
       </div>
@@ -144,6 +176,11 @@
         $("select").formSelect();
         $(".dropdown-trigger").dropdown();
       });
+    </script>
+    <script type="text/javascript">
+      function delete_flash(flash) {
+        $(flash).parent().remove();
+      }
     </script>
   </body>
 </html>

@@ -89,7 +89,7 @@
                     <i class="material-icons left like">thumb_up</i>
                     </a>     
                 {% endif %}                                 
-                <p class="like">{{ puzzle.likes|count }}</p>
+                <p class="like left-align">{{ puzzle.likes|count }}</p>
 
                 {% set ns = namespace(disliked=false) %}
                 {% for item in puzzle.dislikes %} 
@@ -104,12 +104,16 @@
                     <a href="{{ url_for('dislike', puzzle_id=puzzle._id)}}">
                     <i class="material-icons left dislike">thumb_down</i></a>
                 {% endif %}
-                <p class="dislike">{{ puzzle.dislikes|count }}</p>                 
+                <p class="dislike left-align">{{ puzzle.dislikes|count }}</p>                 
             {% else %}
+                <a href="{{ url_for('like', puzzle_id=puzzle._id)}}">
                 <i class="material-icons left">thumb_up</i>
-                <p class="like">{{ puzzle.likes|count }}</p>
+                </a>
+                <p class="like left-align">{{ puzzle.likes|count }}</p>
+                <a href="{{ url_for('dislike', puzzle_id=puzzle._id)}}">
                 <i class="material-icons left">thumb_down</i>
-                <p class="dislike">{{ puzzle.dislikes|count }}</p>               
+                </a>
+                <p class="dislike left-align">{{ puzzle.dislikes|count }}</p>               
             {% endif %}
           </div>
           <div class="card-reveal">

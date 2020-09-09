@@ -32,9 +32,9 @@
           </div>
           <div class="div thumb-icons">  
             <i class="material-icons left like">thumb_up</i>
-            <p class="like">{{ puzzle.likes|count }}</p>
+            <p class="like left-align">{{ puzzle.likes|count }}</p>
             <i class="material-icons left dislike">thumb_down</i>
-            <p class="dislike">{{ puzzle.dislikes|count }}</p>
+            <p class="dislike left-align">{{ puzzle.dislikes|count }}</p>
         </div>
           <div>          
             <a href="{{url_for('edit_puzzle', puzzle_id=puzzle._id)}}" class="btn btn_small blue">Edit</a>

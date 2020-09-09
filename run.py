@@ -138,7 +138,7 @@ def register():
         form = RegistrationForm(request.form)
         print("Try")
         if "user" in session:
-            flash("You are already registered")
+            flash('You are already registered', 'warning')
             return redirect(url_for('index'))
         else:
             if request.method == "POST" and form.validate():
@@ -149,19 +149,18 @@ def register():
                 users = mongo.db.users
                 existing_user = users.find_one({'email': email})
                 if existing_user:
-                    flash("This name is already taken!!", "info")
+                    flash("This email is already taken!!", "warning")
                     return render_template("register.html", form=form)
                 else:
                     users.insert_one({'username': username,
                                       'email': email,
                                       'password': password})
-                    flash('Registered Success!!')
+                    flash('Registered Success!!', 'success')
                     session["user_email"] = email
                     session['logged_in'] = True
                     session["user"] = username
                     return redirect(url_for('user'))
             else:
-                # flash("Validation fail")
                 return render_template("register.html", form=form)
     except Exception as e:
         return(str(e))
@@ -182,7 +181,7 @@ def login():
         print("login function")
         form = LoginForm(request.form)
         if "user" in session:
-            flash("You are already registered")
+            flash("You are already registered", "warning")
             return redirect(url_for('index'))
         else:
             print("login else")
@@ -201,13 +200,13 @@ def login():
                         session['user_email'] = user_login['email']
                         session['logged_in'] = True
                         print(session)
-                        flash("You are now logged in")
+                        flash("You are now logged in", "success")
                         return redirect(url_for("user"))
                     else:
-                        flash("Invalid credentials, try again.")
+                        flash("Invalid credentials, try again.", "error")
                         return render_template("login.html", form=form)
                 else:
-                    flash("Sorry. We have no users by that email.")
+                    flash("Sorry. We have no users by that email.", "warning")
                     return render_template("login.html", form=form)
             else:
                 print("login else else")
@@ -233,7 +232,7 @@ def my_account():
     if "user" in session:
         return render_template("my-account.html")
     else:
-        flash("You are not logged in")
+        flash("You are not logged in", "warning")
         return redirect(url_for('index'))
 
 
@@ -263,13 +262,13 @@ def reset_password():
             password = sha256_crypt.hash((str(form.password.data)))
             new_password = {"$set": {"password": password}}
             users.update_one(user_login, new_password)
-            flash("Changed password success!")
+            flash("Changed password success!", "success")
             return redirect(url_for('my_account'))
         else:
             print("else")
             return render_template("reset-password.html", form=form)
     else:
-        flash("You are not logged in")
+        flash("You are not logged in", "warning")
         return redirect(url_for('index'))
 
 
@@ -283,7 +282,7 @@ def like(puzzle_id):
         puzzles.update_one(puzzle, {"$push": {"likes": session['id']}})
         puzzles.update_one(puzzle, {"$pull": {"dislikes": session['id']}})
     else:
-        flash("Please register/login first")
+        flash("Please register/login first", "warning")
         print("like else")
     return redirect(url_for('search', search_category='all'))
 
@@ -296,9 +295,6 @@ def unlike(puzzle_id):
             '_id': ObjectId(puzzle_id)
         })
         puzzles.update_one(puzzle, {"$pull": {"likes": session['id']}})
-    else:
-        flash("Please register/login first")
-        print("unlike else")
     return redirect(url_for('search', search_category='all'))
 
 
@@ -311,9 +307,6 @@ def dislike(puzzle_id):
         })
         puzzles.update_one(puzzle, {"$push": {"dislikes": session['id']}})
         # puzzles.update_one(puzzle, {"$push": {"dislikes": session['id']}})
-    else:
-        flash("Please register/login first")
-        print("dislike else")
     return redirect(url_for('search', search_category='all'))
 
 
@@ -325,9 +318,6 @@ def undislike(puzzle_id):
             '_id': ObjectId(puzzle_id)
         })
         puzzles.update_one(puzzle, {"$pull": {"dislikes": session['id']}})
-    else:
-        flash("Please register/login first")
-        print("undislike else")
     return redirect(url_for('search', search_category='all'))
 
 
@@ -339,7 +329,7 @@ def user():
         return redirect(url_for('index'))
     else:
         print("user else")
-        flash("You are not logged in.")
+        flash("You are not logged in.", "warning")
         return redirect(url_for('login'))
 
 
@@ -353,7 +343,7 @@ def my_puzzles():
                                puzzles=list(mongo.db.puzzles
                                             .find({"added_by": user})))
     else:
-        flash("You are not logged in")
+        flash("You are not logged in", "warning")
         return redirect(url_for('login'))
 
 
@@ -367,7 +357,7 @@ def upload_puzzle():
                                 'difficulty': request.form.get('difficulty'),
                                 'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
                                 'answer': request.form.get('answer')})
-            flash('Upload Success!!')
+            flash('Upload Success!!', 'success')
             return redirect(url_for('my_puzzles'))
         else:
             return render_template("upload-puzzle.html",
@@ -375,7 +365,7 @@ def upload_puzzle():
                                                    .difficulty_categories
                                                    .find()))
     else:
-        flash("You are not logged in")
+        flash("You are not logged in", "warning")
         return redirect(url_for('index'))
 
 
@@ -413,7 +403,7 @@ def logout():
     session.pop("logged_in", None)
     session.pop("user_email", None)
     print(session)
-    flash("You have been logged out", "info")
+    flash("You have been logged out", "success")
     return redirect(url_for("index"))
 
 
