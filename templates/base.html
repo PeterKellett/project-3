@@ -61,13 +61,13 @@
             </li>
             <li>
               <a
-                href="{{url_for('search', search_category='all', likes=None, dislikes=None)}}"
+                href="{{url_for('search', search_category='All')}}"
                 ><i class="material-icons left">school</i>Puzzles</a
               >
             </li>
             {% if 'user' in session %}
             <li>
-              <a href="{{url_for('my_puzzles')}}"
+              <a href="{{url_for('my_puzzles', id=session['id'])}}"
                 ><i class="material-icons left">playlist_add</i>My Puzzles</a
               >
             </li>
@@ -105,13 +105,13 @@
       </li>
       <li>
         <a
-          href="{{url_for('search', search_category='all', likes=None, dislikes=None)}}"
+          href="{{url_for('search', search_category='All')}}"
           ><i class="material-icons left">school</i>Puzzles</a
         >
       </li>
       {% if 'user' in session %}
       <li>
-        <a href="{{url_for('my_puzzles')}}"
+        <a href="{{url_for('my_puzzles', id=session['id'])}}"
           ><i class="material-icons left">playlist_add</i>My Puzzles</a
         >
       </li>

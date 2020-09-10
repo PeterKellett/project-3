@@ -3,14 +3,18 @@
   {% extends 'base.html' %} {% block content %}
   <section class="container">
     <div class="center-align">
-      <h3 class="intro">
-        {% if 'user' in session %}<span>"{{session.user.title()}}{% endif %}'s"</span> puzzles
-      </h3>
-      <a
-        href="{{url_for('upload_puzzle')}}"
-        class="deep-orange btn"
+      <h3 class="intro"><span>"{{user["username"]}}'s"</span> puzzles</h3>
+      <a href="{{url_for('search', search_category='All')}}" class="deep-orange btn"
+        ><i class="material-icons left">chevron_left</i>Back</a
+      >
+      {{user["_id"]}}
+      {{session["id"]}}
+      {% if user["_id"] == session["id"] %}
+      <a href="{{url_for('upload_puzzle')}}" class="deep-orange btn"
         ><i class="material-icons right">cloud_upload</i>Upload a puzzle</a
       >
+      {% endif %}
+      
     </div>
   </section>
   <section class="container">
@@ -22,24 +26,35 @@
             <img src="{{puzzle.image}}" />
           </div>
           <div class="card-content">
-            <div
-              ><p class="left-align">Answer: </p><p class="left-align"> {{puzzle.answer.title()}}</p>
-              </div
-            >
+            <div>
+              <p class="left-align">Answer:</p>
+              <p class="left-align">{{puzzle.answer.title()}}</p>
+            </div>
             <p class="left-align">
-              Difficulty: </p><p class="left-align">{{puzzle.difficulty.capitalize()}}
+              Difficulty:
             </p>
+            <p class="left-align">{{puzzle.difficulty.capitalize()}}</p>
           </div>
-          <div class="div thumb-icons">  
+          <div class="div thumb-icons">
             <i class="material-icons left like">thumb_up</i>
             <p class="like left-align">{{ puzzle.likes|count }}</p>
             <i class="material-icons left dislike">thumb_down</i>
             <p class="dislike left-align">{{ puzzle.dislikes|count }}</p>
-        </div>
-          <div>          
-            <a href="{{url_for('edit_puzzle', puzzle_id=puzzle._id)}}" class="btn btn_small blue">Edit</a>
-            <a href="{{url_for('delete_puzzle', puzzle_id=puzzle._id)}}" class="waves-effect waves-light btn btn_small red">Delete</a>   
           </div>
+            {% if user == session['user'] %}
+          <div>
+            <a
+              href="{{url_for('edit_puzzle', puzzle_id=puzzle._id)}}"
+              class="btn btn_small blue"
+              >Edit</a
+            >
+            <a
+              href="{{url_for('delete_puzzle', puzzle_id=puzzle._id)}}"
+              class="waves-effect waves-light btn btn_small red"
+              >Delete</a
+            >
+          </div>
+          {% endif %}
           <div class="card-reveal">
             <span class="card-title grey-text text-darken-4"
               >Answer<i class="material-icons right">close</i></span

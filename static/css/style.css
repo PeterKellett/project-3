@@ -91,6 +91,10 @@ hr {
     color: #ff5722;
 }
 
+.letter_array a strong {
+    color: green;
+}
+
 .card {
     height: 410px;
 }
@@ -166,7 +170,9 @@ hr {
 }
 
 #thumbnail {
-    display: inline;
+    /*display: inline;*/
+    height: 50px;
+    width: 50px;
 }
 
 #x-icon {

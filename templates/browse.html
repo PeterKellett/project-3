@@ -6,10 +6,16 @@
     <div class="row center-align letter_array">|
       {% for letter in alphabet_array %}
       <a href="{{url_for('search', search_category=letter)}}"
-        >{{letter.capitalize()}} |
+        >
+        {% if letter==search_category %}
+            <strong>{{letter.capitalize()}}</strong>
+        {% else %} 
+           {{letter.capitalize()}}
+        {% endif %} |
       </a>
       {% endfor %}
     </div>
+
     <div class="row center-align">
       <div class="col s6">
         <!-- Dropdown Trigger -->
@@ -44,7 +50,7 @@
           {% for contributer in contributers %}
           <li>
             <a class="white-text" 
-              href="{{url_for('search', search_category=contributer.username)}}"
+              href="{{url_for('my_puzzles', id=contributer._id)}}"
               >{{ contributer.username }}</a
             >
           </li>
@@ -70,7 +76,7 @@
               Difficulty: {{puzzle.difficulty.capitalize()}}
             </p>
             <p class="left-align">Contributer:</p>
-            <p class="left-align">{{puzzle.added_by.title()}}</p>
+            <p class="left-align">{{puzzle.contributer_name.title()}}</p>
           </div>
           <div class="div thumb-icons">           
             {% if 'user' in session %}

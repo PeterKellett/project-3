@@ -63,18 +63,19 @@ def search(search_category):
     print(search_category)
     print(session)
     # print(likes)
-    alphabet_array = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',
-                      'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
-                      'W', 'X', 'Y', 'Z', 'all']
+    alphabet_array = ['All', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
+                      'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
+                      'V', 'W', 'X', 'Y', 'Z']
 
-    if search_category == 'all':
+    if search_category == 'All':
         print("if")
         return render_template('browse.html',
                                puzzles=mongo.db.puzzles.find(),
                                difficulty=mongo.db.
                                difficulty_categories.find(),
                                alphabet_array=alphabet_array,
-                               contributers=mongo.db.users.find())
+                               contributers=mongo.db.users.find(),
+                               search_category='All')
     elif search_category == 'easy' \
         or search_category == 'medium' \
             or search_category == 'hard':
@@ -97,7 +98,8 @@ def search(search_category):
                                difficulty=mongo.db.
                                difficulty_categories.find(),
                                alphabet_array=alphabet_array,
-                               contributers=mongo.db.users.find())
+                               contributers=mongo.db.users.find(),
+                               search_category=search_category)
 
 
 class RegistrationForm(Form):
@@ -152,10 +154,11 @@ def register():
                     flash("This email is already taken!!", "warning")
                     return render_template("register.html", form=form)
                 else:
-                    users.insert_one({'username': username,
+                    id = users.insert_one({'username': username,
                                       'email': email,
                                       'password': password})
                     flash('Registered Success!!', 'success')
+                    session["id"] = str(id.inserted_id)
                     session["user_email"] = email
                     session['logged_in'] = True
                     session["user"] = username
@@ -189,13 +192,10 @@ def login():
                 users = mongo.db.users
                 user_login = users.find_one({'email': request.form.
                                              get('email')})
-                print("1 ", user_login['_id'])
-                userid2 = str(user_login['_id'])
-                print("2 ", userid2)
                 if user_login:
                     if sha256_crypt.verify(request.form['password'],
                                            user_login['password']):
-                        session['id'] = userid2
+                        session['id'] = str(user_login['_id'])
                         session['user'] = user_login['username']
                         session['user_email'] = user_login['email']
                         session['logged_in'] = True
@@ -211,7 +211,6 @@ def login():
             else:
                 print("login else else")
                 return render_template("login.html", form=form)
-
     except Exception as e:
         error = "Invalid credentials, try again."
         return render_template("login.html", form=form, error=error)
@@ -284,7 +283,7 @@ def like(puzzle_id):
     else:
         flash("Please register/login first", "warning")
         print("like else")
-    return redirect(url_for('search', search_category='all'))
+    return redirect(url_for('search', search_category='All'))
 
 
 @app.route("/unlike/<puzzle_id>")
@@ -295,7 +294,7 @@ def unlike(puzzle_id):
             '_id': ObjectId(puzzle_id)
         })
         puzzles.update_one(puzzle, {"$pull": {"likes": session['id']}})
-    return redirect(url_for('search', search_category='all'))
+    return redirect(url_for('search', search_category='All'))
 
 
 @app.route("/dislike/<puzzle_id>")
@@ -307,7 +306,7 @@ def dislike(puzzle_id):
         })
         puzzles.update_one(puzzle, {"$push": {"dislikes": session['id']}})
         # puzzles.update_one(puzzle, {"$push": {"dislikes": session['id']}})
-    return redirect(url_for('search', search_category='all'))
+    return redirect(url_for('search', search_category='All'))
 
 
 @app.route("/undislike/<puzzle_id>")
@@ -318,7 +317,7 @@ def undislike(puzzle_id):
             '_id': ObjectId(puzzle_id)
         })
         puzzles.update_one(puzzle, {"$pull": {"dislikes": session['id']}})
-    return redirect(url_for('search', search_category='all'))
+    return redirect(url_for('search', search_category='All'))
 
 
 @app.route("/user")
@@ -333,18 +332,28 @@ def user():
         return redirect(url_for('login'))
 
 
-@app.route("/my_puzzles")
-def my_puzzles():
-    if "user" in session:
-        user = session["user"]
-        print(user)
-        return render_template("my-puzzles.html",
-                               user=session["user"],
-                               puzzles=list(mongo.db.puzzles
-                                            .find({"added_by": user})))
+@app.route("/my_puzzles/<id>")
+def my_puzzles(id):
+    user = mongo.db.users.find_one({"_id": ObjectId(id)})
+    print(user)
+    print(user["_id"])
+    print(session["id"])
+    if "id" in session:
+        if id == session["id"]:
+            return render_template("my-puzzles.html",
+                                   user=mongo.db.users.find_one({"_id": ObjectId(id)}),
+                                   puzzles=list(mongo.db.puzzles
+                                                .find({"contributer_id": id})))
+        else:
+            return render_template("my-puzzles.html",
+                                   user=mongo.db.users.find_one({"_id": ObjectId(id)}),
+                                   puzzles=list(mongo.db.puzzles
+                                                .find({"contributer_id": id})))
     else:
-        flash("You are not logged in", "warning")
-        return redirect(url_for('login'))
+        return render_template("my-puzzles.html",
+                               user=mongo.db.users.find_one({"_id": ObjectId(id)}),
+                               puzzles=list(mongo.db.puzzles
+                                            .find({"contributer_id": id})))
 
 
 @app.route("/upload_puzzle", methods=["POST", "GET"])
