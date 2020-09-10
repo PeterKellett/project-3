@@ -336,21 +336,25 @@ def user():
 def my_puzzles(id):
     user = mongo.db.users.find_one({"_id": ObjectId(id)})
     print(user)
-    print(user["_id"])
+    print(type(user))
+    print(type(user["_id"]))
+    user["_id"] = str(user["_id"])
+    print(user)
+    print(type(user["_id"]))
     if "id" in session:
         if id == session["id"]:
             return render_template("my-puzzles.html",
-                                   user=mongo.db.users.find_one({"_id": ObjectId(id)}),
+                                   user=user,
                                    puzzles=list(mongo.db.puzzles
                                                 .find({"contributer_id": id})))
         else:
             return render_template("my-puzzles.html",
-                                   user=mongo.db.users.find_one({"_id": ObjectId(id)}),
+                                   user=user,
                                    puzzles=list(mongo.db.puzzles
                                                 .find({"contributer_id": id})))
     else:
         return render_template("my-puzzles.html",
-                               user=mongo.db.users.find_one({"_id": ObjectId(id)}),
+                               user=user,
                                puzzles=list(mongo.db.puzzles
                                             .find({"contributer_id": id})))
 
@@ -361,7 +365,8 @@ def upload_puzzle():
         if request.method == "POST":
             puzzles = mongo.db.puzzles
             print(request.form.get('image'))
-            puzzles.insert_one({'added_by': session["user"],
+            puzzles.insert_one({'contributer_id': session["id"],
+                                'contributer_name': session["user"],
                                 'difficulty': request.form.get('difficulty'),
                                 'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
                                 'answer': request.form.get('answer')})
