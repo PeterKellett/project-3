@@ -50,7 +50,7 @@
           {% for contributer in contributers %}
           <li>
             <a class="white-text" 
-              href="{{url_for('my_puzzles', id=contributer._id)}}"
+              href="{{url_for('my_puzzles', id=contributer['_id'])}}"
               >{{ contributer.username }}</a
             >
           </li>

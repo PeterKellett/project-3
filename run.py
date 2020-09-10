@@ -337,7 +337,6 @@ def my_puzzles(id):
     user = mongo.db.users.find_one({"_id": ObjectId(id)})
     print(user)
     print(user["_id"])
-    print(session["id"])
     if "id" in session:
         if id == session["id"]:
             return render_template("my-puzzles.html",
