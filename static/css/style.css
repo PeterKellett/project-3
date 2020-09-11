@@ -84,15 +84,15 @@ hr {
 
 .letter_array {
     margin-top: 1rem;
-    color: #ff5722;
+    color: #039BE5;
 }   
 
-.letter_array a {
-    color: #ff5722;
+.btn {
+    width: 100%;
 }
 
 .letter_array a strong {
-    color: green;
+    color: #ff5722;
 }
 
 .card {
@@ -120,6 +120,10 @@ hr {
 
 .card a {
     width: 100%;
+}
+
+.card-content a {
+    text-decoration: underline;
 }
 
 .thumb-icons {
