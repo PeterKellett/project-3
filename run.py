@@ -281,7 +281,7 @@ def like(puzzle_id):
         puzzles.update_one(puzzle, {"$push": {"likes": session['id']}})
         puzzles.update_one(puzzle, {"$pull": {"dislikes": session['id']}})
     else:
-        flash("Please register/login first", "warning")
+        flash("You must be logged in to add likes/dislikes", "warning")
         print("like else")
     return redirect(url_for('search', search_category='All'))
 
@@ -294,6 +294,8 @@ def unlike(puzzle_id):
             '_id': ObjectId(puzzle_id)
         })
         puzzles.update_one(puzzle, {"$pull": {"likes": session['id']}})
+    else:
+        flash("You must be logged in to add likes/dislikes", "warning")
     return redirect(url_for('search', search_category='All'))
 
 
@@ -306,6 +308,8 @@ def dislike(puzzle_id):
         })
         puzzles.update_one(puzzle, {"$push": {"dislikes": session['id']}})
         # puzzles.update_one(puzzle, {"$push": {"dislikes": session['id']}})
+    else:
+        flash("You must be logged in to add likes/dislikes", "warning")
     return redirect(url_for('search', search_category='All'))
 
 
@@ -317,6 +321,8 @@ def undislike(puzzle_id):
             '_id': ObjectId(puzzle_id)
         })
         puzzles.update_one(puzzle, {"$pull": {"dislikes": session['id']}})
+    else:
+        flash("You must be logged in to add likes/dislikes", "warning")
     return redirect(url_for('search', search_category='All'))
 
 

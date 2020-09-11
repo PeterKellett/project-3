@@ -25,14 +25,19 @@
           </div>
         </div>
       </dl>
-      <button class="btn deep-orange" type="submit" value="Register" >Join Up
-          <i class="material-icons right">send</i> </button>
+      <div class="row">
+        <div class="col s6 offset-s3 l2 offset-l5">
+          <button class="btn deep-orange" type="submit" value="Register">
+            Join Up <i class="material-icons right">send</i>
+          </button>
+        </div>
+      </div>
     </form>
-<div class="row">
+    <div class="row">
       <div class="col s6 offset-s3">
         <p>Click here to <a href="{{ url_for('login') }}">Login</a> instead.</p>
       </div>
-      </div>
+    </div>
     {% if error %}
     <p class="error"><strong>Error:</strong>{{error}}</p>
     {% endif %}

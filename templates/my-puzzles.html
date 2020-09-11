@@ -5,16 +5,16 @@
 	<h3 class="intro"><span>"{{user["username"]}}'s"</span> puzzles</h3>
 	<div class="row center-align">
 		{% if user["_id"] == session["id"] %}
-        <div class="col s3 offset-s3">
+        <div class="col s6 m4 offset-m2 l3 offset-l3">
 			<a href="{{url_for('search', search_category='All')}}"
 				class="deep-orange btn"><i class="material-icons left">chevron_left</i>Back</a>
 		</div>
-		<div class="col s3">
+		<div class="col s6 m4 l3">
 			<a href="{{url_for('upload_puzzle')}}"
-				class="deep-orange btn"><i class="material-icons right">cloud_upload</i>Upload a puzzle</a>
+				class="deep-orange btn"><i class="material-icons right">cloud_upload</i><strong>+</strong>puzzle</a>
 		</div>
         {% else %}
-        <div class="col s2 offset-s5">
+        <div class="col s6 offset-s3 l2 offset-l5">
 			<a href="{{url_for('search', search_category='All')}}"
 				class="deep-orange btn"><i class="material-icons left">chevron_left</i>Back</a>
 		</div>

@@ -11,7 +11,8 @@ main {
     flex: 1 0 auto;
   }
 
-.nav-wrapper, footer {
+.nav-wrapper,
+footer {
     background-color: #f1d785;
     color: #000;
 }
@@ -37,6 +38,7 @@ nav ul a {
 }
 
 .brand-logo img {
+    display: inline-block;
     vertical-align: middle;
     height: 55px;
     width: auto;
@@ -47,10 +49,8 @@ h2 {
     color: #ab8b4d;
 }
 
-h3 {
-    font-family: 'Bowlby One', cursive;
-    color: #000;
-
+h6 {
+    font-family: 'Rubik', sans-serif;
 }
 
 .intro {
@@ -65,6 +65,10 @@ h3 {
 p {
     text-align: center;   
     font-family: 'Rubik', sans-serif;
+}
+
+.browse-button {
+    margin: 1rem;
 }
 
 p a {
@@ -103,10 +107,20 @@ hr {
     padding: 10px 10px 0;
 }
 
-
 .card-content button {
     width: 100%;
     color: #fff;
+}
+
+.card-answer {
+    margin-bottom: 5px;
+    background-color: #fff;
+}
+.card-answer p {
+    border: 1px solid #ff5722;
+    border-radius: 2px;
+    padding: 4px;
+    color: #ff5722;
 }
 
 .card, .card-reveal {

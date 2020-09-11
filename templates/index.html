@@ -9,15 +9,15 @@
         "Welcome{% if 'user' in session %}
         <span>{{session.user.title()}}</span>{% endif %} to Picture Puzzles"
       </h3>
-      <p>Can you guess the phrase by the images or have you got some good ones yourself?</p>
-      <p>
+      <h6>Can you guess the phrase by the images or have you got some good ones yourself?</h6>
+      <h6>
         Feel free to browse our puzzles, you can even join us and upload your own ideas to
         add to the collection.
-      </p>
+      </h6>
       
       <a
         href="{{url_for('search', search_category='All')}}"
-        class="deep-orange  btn-large"
+        class="deep-orange  btn-large browse-button"
         ><i class="material-icons right">search</i>Browse</a
       >
     </div>

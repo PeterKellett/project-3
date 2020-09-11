@@ -16,7 +16,8 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
-
+    <!--Font Awesome link-->
+    <script src="https://kit.fontawesome.com/5522ae6586.js"></script>
     <!--My css link-------------->
     <link
       rel="stylesheet"
@@ -39,12 +40,12 @@
   </head>
 
   <body>
-    <div class="navbar-fixed">
+    
       <nav>
         <div class="nav-wrapper">
           <a href="{{url_for('index')}}" class="brand-logo center">
             <img
-              class="show-on-large"
+              class="hide-on-med-and-down"
               src="https://res.cloudinary.com/dfboxofas/image/upload/v1597497835/Project-3/home-image_bqfvqk.jpg"
               alt="Navbar logo"
             />
@@ -96,7 +97,7 @@
           </ul>
         </div>
       </nav>
-    </div>
+    
     <ul class="sidenav" id="mobile-demo">
       <li>
         <a href="{{url_for('index')}}"
