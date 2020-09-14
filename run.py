@@ -16,10 +16,6 @@ from bson.objectid import ObjectId
 from flask_mail import Mail, Message
 
 app = Flask(__name__)
-app.config.update(
-    MAIL_USERNAME='peterprivate7@gmail.com',
-    MAIL_PASSWORD='Blackhills1'
-)
 mail = Mail(app)
 
 app.secret_key = os.getenv("SECRET", "randomstring123")
@@ -30,6 +26,14 @@ app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 
 mongo = PyMongo(app)
 
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'peterprivate7@gmail.com'
+app.config['MAIL_PASSWORD'] = 'Blackhills'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+mail = Mail(app)
+
 
 @app.route("/")
 def index():
@@ -39,22 +43,12 @@ def index():
 
 @app.route("/flask_email")
 def flask_email():
-    msg = Message("Hello",
-                  sender="peterprivate7@gmail.com",
-                  recipients=["peterwkellett@gmail.com"])
+    msg = Message('Hello',
+                  sender='peterprivate7@gmail.com',
+                  recipients=['peterwkellett@gmail.com'])
+    msg.body = "This is the email body"
     mail.send(msg)
-    return render_template('interactive.html')
-
-
-"""
-@app.route("/background_process")
-def background_process():
-    lang = request.args.get('proglang')
-    if str(lang).lower() == 'python':
-        return jsonify(result='Correct')
-    else:
-        return jsonify(result='Wrong!!')
-"""
+    return "Sent"
 
 
 @app.route("/browse/<search_category>")
@@ -131,7 +125,7 @@ class RegistrationForm(Form):
     confirm = PasswordField('Repeat Password',
                             validators=[validators.DataRequired(),
                                         validators.EqualTo('password',
-                                        message='Passwords must match')])
+                                                           message='Passwords must match')])
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -155,8 +149,8 @@ def register():
                     return render_template("register.html", form=form)
                 else:
                     id = users.insert_one({'username': username,
-                                      'email': email,
-                                      'password': password})
+                                           'email': email,
+                                           'password': password})
                     flash('Registered Success!!', 'success')
                     session["id"] = str(id.inserted_id)
                     session["user_email"] = email
@@ -223,6 +217,7 @@ def forgot_password():
 
 @app.route("/email_sent")
 def email_sent():
+    flash("An email has been sent", "success")
     return render_template('password-request-landing.html')
 
 
@@ -401,10 +396,10 @@ def update_puzzle(puzzle_id):
     puzzles = mongo.db.puzzles
     puzzles.update({'_id': ObjectId(puzzle_id)},
                    {
-                    'added_by': session["user"],
-                    'difficulty': request.form.get('difficulty'),
-                    'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
-                    'answer': request.form.get('answer')
+        'added_by': session["user"],
+        'difficulty': request.form.get('difficulty'),
+        'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
+        'answer': request.form.get('answer')
     })
     return redirect(url_for('my_puzzles'))
 
