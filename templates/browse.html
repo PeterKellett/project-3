@@ -14,10 +14,10 @@
     </div>
 
     <div class="row center-align">
-      <div class="col s5 offset-s1 m4 offset-m2 l3 offset-l3">
+      <div class="col s6 offset-s3 l2 offset-l5">
         <!-- Dropdown Trigger -->
         <a
-          class="dropdown-trigger deep-orange btn"
+          class="dropdown-trigger deep-orange btn-small"
           href="#"
           data-target="dropdown1"
           >Difficulty</a
@@ -43,34 +43,7 @@
         </ul>
       </div>
 
-      <div class="col s5 m4 l3">
-        <!-- Dropdown Trigger -->
-        <a
-          class="dropdown-trigger deep-orange btn"
-          href="#"
-          data-target="dropdown2"
-          >Contributer</a
-        >
-        <!-- Dropdown Structure -->
-        <ul id="dropdown2" class="dropdown-content deep-orange">
-          <li>
-            <a
-              class="white-text"
-              href="{{url_for('search', search_category='all')}}"
-              >All</a
-            >
-          </li>
-          {% for contributer in contributers %}
-          <li>
-            <a
-              class="white-text"
-              href="{{url_for('my_puzzles', id=contributer['_id'])}}"
-              >{{ contributer.username }}</a
-            >
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
+
     </div>
   </div>
 
