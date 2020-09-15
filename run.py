@@ -69,7 +69,6 @@ def search(search_category):
                                difficulty=mongo.db.
                                difficulty_categories.find(),
                                alphabet_array=alphabet_array,
-                               contributers=mongo.db.users.find(),
                                search_category='All')
     elif search_category == 'easy' \
         or search_category == 'medium' \
@@ -80,8 +79,8 @@ def search(search_category):
                                puzzles.find({"difficulty": search_category}),
                                difficulty=mongo.db.
                                difficulty_categories.find(),
-                               alphabet_array=alphabet_array,
-                               contributers=mongo.db.users.find())
+                               alphabet_array=alphabet_array
+                               )
     else:
         print("else")
         my_letter = "^" + search_category
@@ -93,7 +92,6 @@ def search(search_category):
                                difficulty=mongo.db.
                                difficulty_categories.find(),
                                alphabet_array=alphabet_array,
-                               contributers=mongo.db.users.find(),
                                search_category=search_category)
 
 
@@ -373,7 +371,7 @@ def upload_puzzle():
                                 'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
                                 'answer': request.form.get('answer')})
             flash('Upload Success!!', 'success')
-            return redirect(url_for('my_puzzles'))
+            return redirect(url_for('my_puzzles',  id=session['id']))
         else:
             return render_template("upload-puzzle.html",
                                    difficulty=list(mongo.db
@@ -397,12 +395,13 @@ def update_puzzle(puzzle_id):
     puzzles = mongo.db.puzzles
     puzzles.update({'_id': ObjectId(puzzle_id)},
                    {
-        'added_by': session["user"],
+        'contributer_id': session["id"],
+        'contributer_name': session["user"],
         'difficulty': request.form.get('difficulty'),
         'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
         'answer': request.form.get('answer')
     })
-    return redirect(url_for('my_puzzles'))
+    return redirect(url_for('my_puzzles',  id=session['id']))
 
 
 @app.route("/delete_puzzle/<puzzle_id>")
