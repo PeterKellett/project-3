@@ -407,7 +407,7 @@ def update_puzzle(puzzle_id):
 @app.route("/delete_puzzle/<puzzle_id>")
 def delete_puzzle(puzzle_id):
     mongo.db.puzzles.remove({'_id': ObjectId(puzzle_id)})
-    return redirect(url_for('my_puzzles'))
+    return redirect(url_for('my_puzzles',  id=session['id']))
 
 
 @app.route("/logout")
