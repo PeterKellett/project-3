@@ -201,6 +201,11 @@ hr {
     width: 50px;
 }
 
+img.puzzle_image {
+    height: 100px;
+    width: 100px;
+}
+
 #x-icon {
     background-color: red;
     color: white;
