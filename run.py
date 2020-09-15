@@ -43,6 +43,7 @@ def index():
 
 @app.route("/flask_email")
 def flask_email():
+    print("flask_email function")
     msg = Message('Hello',
                   sender='peterprivate7@gmail.com',
                   recipients=['peterwkellett@gmail.com'])
