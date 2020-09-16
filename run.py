@@ -177,7 +177,7 @@ def login():
         print("login function")
         form = LoginForm(request.form)
         if "user" in session:
-            flash("You are already registered", "warning")
+            flash("You are already logged in", "success")
             return redirect(url_for('index'))
         else:
             print("login else")
@@ -335,12 +335,7 @@ def user():
 @app.route("/my_puzzles/<id>")
 def my_puzzles(id):
     user = mongo.db.users.find_one({"_id": ObjectId(id)})
-    print(user)
-    print(type(user))
-    print(type(user["_id"]))
     user["_id"] = str(user["_id"])
-    print(user)
-    print(type(user["_id"]))
     if "id" in session:
         if id == session["id"]:
             return render_template("my-puzzles.html",
@@ -393,14 +388,31 @@ def edit_puzzle(puzzle_id):
 @app.route("/update_puzzle/<puzzle_id>", methods=["POST"])
 def update_puzzle(puzzle_id):
     puzzles = mongo.db.puzzles
-    puzzles.update({'_id': ObjectId(puzzle_id)},
-                   {
-        'contributer_id': session["id"],
-        'contributer_name': session["user"],
-        'difficulty': request.form.get('difficulty'),
-        'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
-        'answer': request.form.get('answer')
-    })
+    image = request.form.get('image')
+    print(image)
+    if image is None:
+        print("image is none")
+        the_puzzle = mongo.db.puzzles.find_one({"_id": ObjectId(puzzle_id)})
+        print(the_puzzle)
+        image = the_puzzle['image']
+        print(image)
+        puzzles.update({'_id': ObjectId(puzzle_id)},
+                    {
+            'contributer_id': session["id"],
+            'contributer_name': session["user"],
+            'difficulty': request.form.get('difficulty'),
+            'image': image,
+            'answer': request.form.get('answer')
+        })
+    else:
+        puzzles.update({'_id': ObjectId(puzzle_id)},
+                    {
+            'contributer_id': session["id"],
+            'contributer_name': session["user"],
+            'difficulty': request.form.get('difficulty'),
+            'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
+            'answer': request.form.get('answer')
+        })
     return redirect(url_for('my_puzzles',  id=session['id']))
 
 

@@ -14,8 +14,8 @@
       >
         <div class="row">
           <div class="input-field col s12 m6 offset-m3">
-            <div id="thumbnail"></div>
-            <img class="puzzle_image" src="{{ puzzle.image }}" />
+            <div id="thumbnail">
+            <img class="puzzle_image" src="{{ puzzle.image }}" /></div>
             <div class="center-align" id="x-icon">Replace image</div>
             
           </div>
@@ -104,27 +104,19 @@
       }
     );
 
-    if (myWidget.isMinimized()) {
-      console.log("widget showing");
-    } else {
-      console.log("not showing");
-      document.getElementById("x-icon").addEventListener(
-        "click",
-        function () {
-          myWidget.open();
-          //$(this).hide();
-          //$(".puzzle_image").hide();
-        },
-        false
-      );
-    }
-
+   
+    console.log("not showing");
+    document.getElementById("x-icon").addEventListener(
+    "click",
+    function () {
+        myWidget.open();
+        //$(this).hide();
+        //$(".puzzle_image").hide();
+    },
+    false
+    );
     
-    $(".CloseButton").click(function () {
-      console.log("widget closed");
-      $(".puzzle_image").show();
-      $("#x-icon").show();
-    });
+
   </script>
   {% endblock %}
 </html>
