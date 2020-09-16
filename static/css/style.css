@@ -196,12 +196,13 @@ hr {
 }
 
 #thumbnail {
-    /*display: inline;*/
-    height: 50px;
-    width: 50px;
+    display: inline;
+    height: 100px;
+    width: auto;
 }
 
 img.puzzle_image {
+    display: inline;
     height: 100px;
     width: 100px;
 }
@@ -209,6 +210,10 @@ img.puzzle_image {
 #x-icon {
     background-color: red;
     color: white;
+    width: 120px;
+    padding: 5px;
+    margin: auto;
+    border-radius: 5px;
 }
 
 table {
