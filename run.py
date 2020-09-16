@@ -26,30 +26,10 @@ app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 
 mongo = PyMongo(app)
 
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'peterprivate7@gmail.com'
-app.config['MAIL_PASSWORD'] = 'Blackhills'
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-mail = Mail(app)
-
-
 @app.route("/")
 def index():
     return render_template("index.html",
                            puzzles=list(mongo.db.puzzles.find()))
-
-
-@app.route("/flask_email")
-def flask_email():
-    print("flask_email function")
-    msg = Message('Hello',
-                  sender='peterprivate7@gmail.com',
-                  recipients=['peterwkellett@gmail.com'])
-    msg.body = "This is the email body"
-    mail.send(msg)
-    return "Sent"
 
 
 @app.route("/browse/<search_category>")
