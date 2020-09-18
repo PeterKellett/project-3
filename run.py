@@ -1,8 +1,8 @@
 import os
 from flask import Flask, render_template, \
-    redirect, request, url_for, session, flash, jsonify
+    redirect, request, url_for, session, flash
 
-from wtforms import Form, BooleanField, \
+from wtforms import Form, \
     TextField, PasswordField, validators
 
 from passlib.hash import sha256_crypt
@@ -13,10 +13,8 @@ if os.path.exists("env.py"):
 
 from bson.objectid import ObjectId
 
-from flask_mail import Mail, Message
 
 app = Flask(__name__)
-mail = Mail(app)
 
 app.secret_key = os.getenv("SECRET", "randomstring123")
 
@@ -25,6 +23,7 @@ app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 # app.config["secret_key"] = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
+
 
 @app.route("/")
 def index():
@@ -95,16 +94,17 @@ class RegistrationForm(Form):
                                   ])
     password = PasswordField('Password',
                              validators=[validators.DataRequired(),
-                                         validators.EqualTo('confirm',
-                                                            message='Passwords \
-                                                                     must \
-                                                                     match'
-                                                            )
+                                         validators.Length(min=6,
+                                                           message='Passwords must have \
+                                                                    a minimum \
+                                                                    of 6 \
+                                                                    characters')
                                          ])
     confirm = PasswordField('Repeat Password',
                             validators=[validators.DataRequired(),
                                         validators.EqualTo('password',
-                                                           message='Passwords must match')])
+                                                           message='Passwords must \
+                                                                    match')])
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -377,22 +377,22 @@ def update_puzzle(puzzle_id):
         image = the_puzzle['image']
         print(image)
         puzzles.update({'_id': ObjectId(puzzle_id)},
-                    {
-            'contributer_id': session["id"],
-            'contributer_name': session["user"],
-            'difficulty': request.form.get('difficulty'),
-            'image': image,
-            'answer': request.form.get('answer')
-        })
+                       {
+                        'contributer_id': session["id"],
+                        'contributer_name': session["user"],
+                        'difficulty': request.form.get('difficulty'),
+                        'image': image,
+                        'answer': request.form.get('answer')
+                        })
     else:
         puzzles.update({'_id': ObjectId(puzzle_id)},
-                    {
-            'contributer_id': session["id"],
-            'contributer_name': session["user"],
-            'difficulty': request.form.get('difficulty'),
-            'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
-            'answer': request.form.get('answer')
-        })
+                       {
+                        'contributer_id': session["id"],
+                        'contributer_name': session["user"],
+                        'difficulty': request.form.get('difficulty'),
+                        'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
+                        'answer': request.form.get('answer')
+                       })
     return redirect(url_for('my_puzzles',  id=session['id']))
 
 

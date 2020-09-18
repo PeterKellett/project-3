@@ -3,6 +3,7 @@
   {% extends 'base.html' %} {% block title %}Puzzles{% endblock %} {% block
   content %}
   <div class="container">
+  <!--Div for letter array-->
     <div class="row center-align letter_array">
       | {% for letter in alphabet_array %}
       <a href="{{url_for('search', search_category=letter)}}">
@@ -12,17 +13,17 @@
       </a>
       {% endfor %}
     </div>
-
+    <!--Difficulty drop down button-->
     <div class="row center-align">
       <div class="col s6 offset-s3 l2 offset-l5">
-        <!-- Dropdown Trigger -->
+        <!--Button Dropdown Trigger -->
         <a
           class="dropdown-trigger deep-orange btn-small"
           href="#"
           data-target="dropdown1"
           >Difficulty</a
         >
-        <!-- Dropdown Structure -->
+        <!--Button Dropdown Structure -->
         <ul id="dropdown1" class="dropdown-content deep-orange">
           <li>
             <a
@@ -46,7 +47,7 @@
 
     </div>
   </div>
-
+    <!--Dingbat puzzle cards-->
   <div class="container">
     <div class="row">
       {% for puzzle in puzzles %}
