@@ -40,6 +40,7 @@
   </head>
 
   <body>
+  <!--Navbar section-->
     <div class="navbar-fixed">
       <nav>
         <div class="nav-wrapper">
@@ -54,6 +55,7 @@
           <a href="#" data-target="mobile-demo" class="sidenav-trigger"
             ><i class="material-icons">menu</i></a
           >
+          <!--Navbar links for large screens-->
           <ul class="right hide-on-med-and-down">
             <li>
               <a href="{{url_for('index')}}"
@@ -66,6 +68,7 @@
                 ><i class="material-icons left">school</i>Puzzles</a
               >
             </li>
+            <!--User logged in links-->
             {% if 'user' in session %}
             <li>
               <a href="{{url_for('my_puzzles', id=session['id'])}}"
@@ -82,6 +85,7 @@
                 ><i class="material-icons left">exit_to_app </i>Logout</a
               >
             </li>
+            <!--User not logged in links-->
             {% else %}
             <li>
               <a href="{{url_for('register')}}"
@@ -98,7 +102,7 @@
         </div>
       </nav>
       </div>
-    
+    <!--Navbar links for sidenav-->
     <ul class="sidenav" id="mobile-demo">
       <li>
         <a href="{{url_for('index')}}"
@@ -111,6 +115,7 @@
           ><i class="material-icons left">school</i>Puzzles</a
         >
       </li>
+      <!--User logged in links-->
       {% if 'user' in session %}
       <li>
         <a href="{{url_for('my_puzzles', id=session['id'])}}"
@@ -127,6 +132,7 @@
           ><i class="material-icons left">exit_to_app </i>Logout</a
         >
       </li>
+      <!--User not logged in links-->
       {% else %}
       <li>
         <a href="{{url_for('register')}}"
@@ -141,6 +147,7 @@
       {% endif %}
     </ul>
     <main>
+    <!--Flash messages-->
       {% with messages = get_flashed_messages(with_categories=true) %} {% if
       messages %}
       <div class="container center-align">
@@ -171,6 +178,7 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
+    <!--Sidenav trigger-->
     <script type="text/javascript">
       $(document).ready(function () {
         console.log("Document ready!");
@@ -179,6 +187,7 @@
         $(".dropdown-trigger").dropdown();
       });
     </script>
+    <!--Function to remove flash messages-->
     <script type="text/javascript">
       function delete_flash(flash) {
         $(flash).parent().remove();
