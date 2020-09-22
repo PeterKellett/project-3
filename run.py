@@ -253,7 +253,12 @@ def like(puzzle_id):
             '_id': ObjectId(puzzle_id)
         })
         puzzles.update_one(puzzle, {"$push": {"likes": session['id']}})
+        print("done once")
+        puzzle = mongo.db.puzzles.find_one({
+            '_id': ObjectId(puzzle_id)
+        })
         puzzles.update_one(puzzle, {"$pull": {"dislikes": session['id']}})
+        print("done twice")
     else:
         flash("You must be logged in to add likes/dislikes", "warning")
         print("like else")
@@ -281,7 +286,10 @@ def dislike(puzzle_id):
             '_id': ObjectId(puzzle_id)
         })
         puzzles.update_one(puzzle, {"$push": {"dislikes": session['id']}})
-        # puzzles.update_one(puzzle, {"$push": {"dislikes": session['id']}})
+        puzzle = mongo.db.puzzles.find_one({
+            '_id': ObjectId(puzzle_id)
+        })
+        puzzles.update_one(puzzle, {"$pull": {"likes": session['id']}})
     else:
         flash("You must be logged in to add likes/dislikes", "warning")
     return redirect(url_for('search', search_category='All'))
