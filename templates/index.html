@@ -14,12 +14,29 @@
         Feel free to browse our puzzles, you can even join us and upload your own ideas to
         add to the collection.
       </h6>
-      
+      {% if 'user' in session %}
       <a
         href="{{url_for('search', search_category='All')}}"
         class="deep-orange  btn-large browse-button"
         ><i class="material-icons right">search</i>Browse</a
       >
+      {% else %}
+      <a
+        href="{{url_for('register')}}"
+        class="blue  btn-large browse-button"
+        ><i class="material-icons right">person_add</i>Join up</a
+      >
+      <a
+        href="{{url_for('login')}}"
+        class="green  btn-large browse-button"
+        ><i class="material-icons right">person</i>Login</a
+      >
+        <a
+        href="{{url_for('search', search_category='All')}}"
+        class="deep-orange  btn-large browse-button"
+        ><i class="material-icons right">search</i>Browse as guest</a
+      >
+      {% endif %}
     </div>
   </section>
   <section class="container">
