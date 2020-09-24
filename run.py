@@ -18,7 +18,7 @@ app = Flask(__name__)
 
 app.secret_key = os.getenv("SECRET", "randomstring123")
 
-app.config["MONGO_DBNAME"] = 'picture_puzzles'
+app.config["MONGO_DBNAME"] = 'dingbat_dictionary'
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 # app.config["secret_key"] = os.environ.get("SECRET_KEY")
 
