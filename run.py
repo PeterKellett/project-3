@@ -144,11 +144,19 @@ def register():
 
 class LoginForm(Form):
     email = TextField('Email',
-                      validators=[validators.DataRequired()
+                      validators=[validators.DataRequired(),
+                                  validators.Email(message='Email supplied \
+                                                            is not of the \
+                                                            correct format.')
                                   ])
     password = PasswordField('Password',
-                             validators=[validators
-                                         .DataRequired()])
+                             validators=[validators.DataRequired(),
+                                         validators.Length(min=6,
+                                                           message='Passwords must have \
+                                                                    a minimum \
+                                                                    of 6 \
+                                                                    characters')
+                                         ])
 
 
 @app.route('/login', methods=["GET", "POST"])
