@@ -23,11 +23,11 @@
             <select
               id="difficulty"
               name="difficulty"
-              class="validate"
+              aria-required="true"          
               required
             >
             <option value="" label="Difficulty"
-                ></option
+                >Select</option
               >
               {% for category in difficulty %}
               <option value="{{category.difficulty}}"
@@ -92,6 +92,7 @@
       (error, result) => {
         if (!error && result && result.event === "success") {
           console.log("Done! Here is the image info: ", result.info);
+          $('#upload_widget').hide();
         }
       }
     );
