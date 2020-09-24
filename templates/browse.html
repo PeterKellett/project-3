@@ -54,7 +54,7 @@
       <div class="col s6 m4 l2">
         <div class="card hoverable">
           <div class="card-image waves-effect waves-block waves-light">
-            <img src="{{puzzle.image}}" />
+            <img src="{{puzzle.image}}" alt="Dingbat image"/>
           </div>
           <div class="card-content">
             <div class="card-answer ">
@@ -78,20 +78,30 @@
             >
           </div>
           <div class="div thumb-icons">
-            {% if 'user' in session %} {% set ns = namespace(liked=false) %} {%
-            for item in puzzle.likes %} {% if item == session.id %} {% set
-            ns.liked = True %} {% endif %} {% endfor %} {% if ns.liked == True
-            %}
+          <!--Check to see if user has previously liked the dingbat-->
+            {% if 'user' in session %} 
+            <!--Declare a variable 'liked' and set to False-->
+            {% set ns = namespace(liked=false) %} 
+            <!--Iterate through the documents liked array-->
+            {% for item in puzzle.likes %} 
+            <!--If an item in the documents liked array equals the users session["id"] then set the 'liked' variable to True-->
+            {% if item == session.id %} 
+            {% set ns.liked = True %} {% endif %} {% endfor %} 
+            <!--If the 'liked' variable equals True then indicate this by setting the thumb icon to large and setting the href to the route 'unlike'-->
+            {% if ns.liked == True %}
             <a href="{{ url_for('unlike', puzzle_id=puzzle._id)}}">
               <i class="material-icons left like icon-large">thumb_up</i>
             </a>
             {% else %}
+            <!--If the 'liked' variable equals False then indicate this by setting the thumb icon to normal and setting the href to the route 'like'-->
             <a href="{{ url_for('like', puzzle_id=puzzle._id)}}">
               <i class="material-icons left like">thumb_up</i>
             </a>
             {% endif %}
+            <!--To declare the total 'Likes' the Dingbat has is to count the number of items in the documents 'likes' array and display the total-->
             <p class="like left-align">{{ puzzle.likes|count }}</p>
 
+            <!--Logic similiar as above but for declaring 'Dislikes'-->
             {% set ns = namespace(disliked=false) %} {% for item in
             puzzle.dislikes %} {% if item == session.id %} {% set ns.disliked =
             True %} {% endif %} {% endfor %} {% if ns.disliked == True %}
@@ -124,7 +134,7 @@
       {% endfor %}
     </div>
   </div>
-  <script type="text/javascript">
+  <script>
     $(document).ready(function () {
       console.log("Xtra Document ready!");
       $(".answer-button").click(function () {

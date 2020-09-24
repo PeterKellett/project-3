@@ -17,24 +17,24 @@
       {% if 'user' in session %}
       <a
         href="{{url_for('search', search_category='All')}}"
-        class="deep-orange  btn-large browse-button"
+        class="deep-orange btn-large browse-button hoverable"
         ><i class="material-icons right">search</i>Browse</a
       >
       {% else %}
       <a
         href="{{url_for('register')}}"
-        class="blue  btn-large browse-button"
+        class="blue btn-large browse-button hoverable"
         ><i class="material-icons right">person_add</i>Join up</a
       >
       <a
         href="{{url_for('login')}}"
-        class="green  btn-large browse-button"
+        class="green btn-large browse-button hoverable"
         ><i class="material-icons right">person</i>Login</a
       >
         <a
         href="{{url_for('search', search_category='All')}}"
-        class="deep-orange  btn-large browse-button"
-        ><i class="material-icons right">search</i>Browse as guest</a
+        class="deep-orange btn-large browse-button hoverable"
+        ><i class="material-icons right">search</i>Browse</a
       >
       {% endif %}
     </div>

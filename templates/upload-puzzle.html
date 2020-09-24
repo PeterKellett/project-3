@@ -23,16 +23,15 @@
             <select
               id="difficulty"
               name="difficulty"
-              type="text"
               class="validate"
               required
             >
-              <!--
-                <option value="" disabled selected>Difficulty</option>
-            -->
+            <option value="" label="Difficulty"
+                ></option
+              >
               {% for category in difficulty %}
               <option value="{{category.difficulty}}"
-                ><div>{{category.difficulty.title()}}</div></option
+                >{{category.difficulty.title()}}</option
               >
               {% endfor %}
             </select>
@@ -73,11 +72,10 @@
   <!--This script -->
   <script
     src="https://widget.cloudinary.com/v2.0/global/all.js"
-    type="text/javascript"
   ></script>
 
   <!--This script configures the Cloudinary connection-->
-  <script type="text/javascript">
+  <script>
     var myWidget = cloudinary.createUploadWidget(
       {
         cloudName: "dfboxofas",
@@ -102,7 +100,6 @@
       "click",
       function () {
         myWidget.open();
-        $(this).hide();
       },
       false
     );

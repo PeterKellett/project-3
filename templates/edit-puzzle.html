@@ -15,7 +15,7 @@
         <div class="row">
           <div class="input-field col s12 m6 offset-m3">
             <div id="thumbnail">
-            <img class="puzzle_image" src="{{ puzzle.image }}" /></div>
+            <img class="puzzle_image" src="{{ puzzle.image }}" alt="Dingbat image"/></div>
             <div class="center-align" id="x-icon">Replace image</div>
             
           </div>
@@ -23,7 +23,6 @@
             <select
               id="difficulty"
               name="difficulty"
-              type="text"
               class="validate"
               required
             >
@@ -33,11 +32,11 @@
               {% for category in difficulty %} {% if category.difficulty ==
               puzzle.difficulty %}
               <option value="{{category.difficulty}}" selected
-                ><div>{{category.difficulty.title()}}</div></option
+                >{{category.difficulty.title()}}</option
               >
               {% else %}
               <option value="{{category.difficulty}}"
-                ><div>{{category.difficulty.title()}}</div></option
+                >{{category.difficulty.title()}}</option
               >
               {% endif %} {% endfor %}
             </select>
@@ -77,11 +76,10 @@
   </div>
   <script
     src="https://widget.cloudinary.com/v2.0/global/all.js"
-    type="text/javascript"
   ></script>
 
   <!--This script configures the Cloudinary connection-->
-  <script type="text/javascript">
+  <script>
     var myWidget = cloudinary.createUploadWidget(
       {
         cloudName: "dfboxofas",

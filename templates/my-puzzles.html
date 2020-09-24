@@ -53,11 +53,45 @@
             </p>
             <p class="left-align">{{puzzle.difficulty.capitalize()}}</p>
           </div>
-          <div class="div thumb-icons">
-            <i class="material-icons left like">thumb_up</i>
+                    <div class="div thumb-icons">
+            {% if 'user' in session %} {% set ns = namespace(liked=false) %} {%
+            for item in puzzle.likes %} {% if item == session.id %} {% set
+            ns.liked = True %} {% endif %} {% endfor %} {% if ns.liked == True
+            %}
+            <a href="{{ url_for('unlike', puzzle_id=puzzle._id)}}">
+              <i class="material-icons left like icon-large">thumb_up</i>
+            </a>
+            {% else %}
+            <a href="{{ url_for('like', puzzle_id=puzzle._id)}}">
+              <i class="material-icons left like">thumb_up</i>
+            </a>
+            {% endif %}
             <p class="like left-align">{{ puzzle.likes|count }}</p>
-            <i class="material-icons left dislike">thumb_down</i>
+
+            {% set ns = namespace(disliked=false) %} {% for item in
+            puzzle.dislikes %} {% if item == session.id %} {% set ns.disliked =
+            True %} {% endif %} {% endfor %} {% if ns.disliked == True %}
+            <a href="{{ url_for('undislike', puzzle_id=puzzle._id)}}">
+              <i class="material-icons left dislike icon-large"
+                >thumb_down</i
+              ></a
+            >
+            {% else %}
+            <a href="{{ url_for('dislike', puzzle_id=puzzle._id)}}">
+              <i class="material-icons left dislike">thumb_down</i></a
+            >
+            {% endif %}
             <p class="dislike left-align">{{ puzzle.dislikes|count }}</p>
+            {% else %}
+            <a href="{{ url_for('like', puzzle_id=puzzle._id)}}">
+              <i class="material-icons left">thumb_up</i>
+            </a>
+            <p class="like left-align">{{ puzzle.likes|count }}</p>
+            <a href="{{ url_for('dislike', puzzle_id=puzzle._id)}}">
+              <i class="material-icons left">thumb_down</i>
+            </a>
+            <p class="dislike left-align">{{ puzzle.dislikes|count }}</p>
+            {% endif %}
           </div>
           {% if user['_id'] == session['id'] %}
           <div>
