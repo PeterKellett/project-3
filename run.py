@@ -28,50 +28,44 @@ mongo = PyMongo(app)
 @app.route("/")
 def index():
     return render_template("index.html",
-                           puzzles=list(mongo.db.puzzles.find()))
+                           dingbats=list(mongo.db.dingbats.find()))
 
 
-@app.route("/browse/<search_category>")
-def search(search_category):
-    print("search")
-    print(search_category)
-    print(session)
-    # print(likes)
+@app.route("/browse/<browse_category>")
+def browse(browse_category):
     alphabet_array = ['All', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
                       'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
                       'V', 'W', 'X', 'Y', 'Z']
 
-    if search_category == 'All':
+    if browse_category == 'All':
         print("if")
         return render_template('browse.html',
-                               puzzles=mongo.db.puzzles.find(),
+                               dingbats=mongo.db.dingbats.find(),
                                difficulty=mongo.db.
                                difficulty_categories.find(),
                                alphabet_array=alphabet_array,
-                               search_category='All')
-    elif search_category == 'easy' \
-        or search_category == 'medium' \
-            or search_category == 'hard':
-        print("elif")
+                               browse_category='All')
+    elif browse_category == 'easy' \
+        or browse_category == 'medium' \
+            or browse_category == 'hard':
         return render_template('browse.html',
-                               puzzles=mongo.db.
-                               puzzles.find({"difficulty": search_category}),
+                               dingbats=mongo.db.
+                               dingbats.find({"difficulty": browse_category}),
                                difficulty=mongo.db.
                                difficulty_categories.find(),
                                alphabet_array=alphabet_array
                                )
     else:
         print("else")
-        my_letter = "^" + search_category
-        print(my_letter)
+        my_letter = "^" + browse_category
         return render_template('browse.html',
-                               puzzles=mongo.db.
-                               puzzles.find
+                               dingbats=mongo.db.
+                               dingbats.find
                                ({"answer": {"$regex": my_letter.lower()}}),
                                difficulty=mongo.db.
                                difficulty_categories.find(),
                                alphabet_array=alphabet_array,
-                               search_category=search_category)
+                               browse_category=browse_category)
 
 
 class RegistrationForm(Form):
@@ -111,14 +105,12 @@ class RegistrationForm(Form):
 def register():
     try:
         form = RegistrationForm(request.form)
-        print("Try")
         if "user" in session:
             flash('You are already registered', 'warning')
             return redirect(url_for('index'))
         else:
             if request.method == "POST" and form.validate():
-                print("POST")
-                username = form.username.data
+                username = form.username.data.lower()
                 email = form.email.data
                 password = sha256_crypt.hash((str(form.password.data)))
                 users = mongo.db.users
@@ -132,9 +124,8 @@ def register():
                                            'password': password})
                     flash('Registered Success!!', 'success')
                     session["id"] = str(id.inserted_id)
-                    session["user_email"] = email
-                    session['logged_in'] = True
                     session["user"] = username
+                    session["email"] = email
                     return redirect(url_for('user'))
             else:
                 return render_template("register.html", form=form)
@@ -162,13 +153,11 @@ class LoginForm(Form):
 @app.route('/login', methods=["GET", "POST"])
 def login():
     try:
-        print("login function")
         form = LoginForm(request.form)
         if "user" in session:
             flash("You are already logged in", "success")
             return redirect(url_for('index'))
         else:
-            print("login else")
             if request.method == "POST":
                 users = mongo.db.users
                 user_login = users.find_one({'email': request.form.
@@ -180,7 +169,6 @@ def login():
                         session['user'] = user_login['username']
                         session['user_email'] = user_login['email']
                         session['logged_in'] = True
-                        print(session)
                         flash("You are now logged in", "success")
                         return redirect(url_for("user"))
                     else:
@@ -200,12 +188,6 @@ def login():
 @app.route("/forgot_password")
 def forgot_password():
     return render_template('forgot-password.html')
-
-
-@app.route("/email_sent")
-def email_sent():
-    flash("An email has been sent", "success")
-    return render_template('password-request-landing.html')
 
 
 @app.route("/my_account")
@@ -253,118 +235,119 @@ def reset_password():
         return redirect(url_for('index'))
 
 
-@app.route("/like/<puzzle_id>")
-def like(puzzle_id):
+@app.route("/like/<dingbat_id>")
+def like(dingbat_id):
     if "user" in session:
-        puzzles = mongo.db.puzzles
-        puzzle = mongo.db.puzzles.find_one({
-            '_id': ObjectId(puzzle_id)
+        dingbats = mongo.db.dingbats
+        dingbat = mongo.db.dingbats.find_one({
+            '_id': ObjectId(dingbat_id)
         })
-        puzzles.update_one(puzzle, {"$push": {"likes": session['id']}})
-        print("done once")
-        puzzle = mongo.db.puzzles.find_one({
-            '_id': ObjectId(puzzle_id)
+        dingbats.update_one(dingbat, {"$push": {"likes": session['id']}})
+        dingbat = mongo.db.dingbats.find_one({
+            '_id': ObjectId(dingbat_id)
         })
-        puzzles.update_one(puzzle, {"$pull": {"dislikes": session['id']}})
-        print("done twice")
+        dingbats.update_one(dingbat, {"$pull": {"dislikes": session['id']}})
     else:
         flash("You must be logged in to add likes/dislikes", "warning")
-        print("like else")
-    return redirect(url_for('search', search_category='All'))
+    return redirect(url_for('browse', browse_category='All'))
 
 
-@app.route("/unlike/<puzzle_id>")
-def unlike(puzzle_id):
+@app.route("/unlike/<dingbat_id>")
+def unlike(dingbat_id):
     if "user" in session:
-        puzzles = mongo.db.puzzles
-        puzzle = mongo.db.puzzles.find_one({
-            '_id': ObjectId(puzzle_id)
+        dingbats = mongo.db.dingbats
+        dingbat = mongo.db.dingbats.find_one({
+            '_id': ObjectId(dingbat_id)
         })
-        puzzles.update_one(puzzle, {"$pull": {"likes": session['id']}})
+        dingbats.update_one(dingbat, {"$pull": {"likes": session['id']}})
     else:
         flash("You must be logged in to add likes/dislikes", "warning")
-    return redirect(url_for('search', search_category='All'))
+    return redirect(url_for('browse', browse_category='All'))
 
 
-@app.route("/dislike/<puzzle_id>")
-def dislike(puzzle_id):
+@app.route("/dislike/<dingbat_id>")
+def dislike(dingbat_id):
     if "user" in session:
-        puzzles = mongo.db.puzzles
-        puzzle = mongo.db.puzzles.find_one({
-            '_id': ObjectId(puzzle_id)
+        dingbats = mongo.db.dingbats
+        dingbat = mongo.db.dingbats.find_one({
+            '_id': ObjectId(dingbat_id)
         })
-        puzzles.update_one(puzzle, {"$push": {"dislikes": session['id']}})
-        puzzle = mongo.db.puzzles.find_one({
-            '_id': ObjectId(puzzle_id)
+        dingbats.update_one(dingbat, {"$push": {"dislikes": session['id']}})
+        dingbat = mongo.db.dingbats.find_one({
+            '_id': ObjectId(dingbat_id)
         })
-        puzzles.update_one(puzzle, {"$pull": {"likes": session['id']}})
+        dingbats.update_one(dingbat, {"$pull": {"likes": session['id']}})
     else:
         flash("You must be logged in to add likes/dislikes", "warning")
-    return redirect(url_for('search', search_category='All'))
+    return redirect(url_for('browse', browse_category='All'))
 
 
-@app.route("/undislike/<puzzle_id>")
-def undislike(puzzle_id):
+@app.route("/undislike/<dingbat_id>")
+def undislike(dingbat_id):
     if "user" in session:
-        puzzles = mongo.db.puzzles
-        puzzle = mongo.db.puzzles.find_one({
-            '_id': ObjectId(puzzle_id)
+        dingbats = mongo.db.dingbats
+        dingbat = mongo.db.dingbats.find_one({
+            '_id': ObjectId(dingbat_id)
         })
-        puzzles.update_one(puzzle, {"$pull": {"dislikes": session['id']}})
+        dingbats.update_one(dingbat, {"$pull": {"dislikes": session['id']}})
     else:
         flash("You must be logged in to add likes/dislikes", "warning")
-    return redirect(url_for('search', search_category='All'))
+    return redirect(url_for('browse', browse_category='All'))
 
 
 @app.route("/user")
 def user():
-    print("user function")
     if "user" in session:
-        print("user if")
         return redirect(url_for('index'))
     else:
-        print("user else")
         flash("You are not logged in.", "warning")
         return redirect(url_for('login'))
 
 
-@app.route("/my_puzzles/<id>")
-def my_puzzles(id):
+@app.route("/my_dingbats/<id>")
+def my_dingbats(id):
     user = mongo.db.users.find_one({"_id": ObjectId(id)})
     user["_id"] = str(user["_id"])
     if "id" in session:
         if id == session["id"]:
-            return render_template("my-puzzles.html",
+            return render_template("my-dingbats.html",
                                    user=user,
-                                   puzzles=list(mongo.db.puzzles
+                                   dingbats=list(mongo.db.dingbats
                                                 .find({"contributer_id": id})))
         else:
-            return render_template("my-puzzles.html",
+            return render_template("my-dingbats.html",
                                    user=user,
-                                   puzzles=list(mongo.db.puzzles
+                                   dingbats=list(mongo.db.dingbats
                                                 .find({"contributer_id": id})))
     else:
-        return render_template("my-puzzles.html",
+        return render_template("my-dingbats.html",
                                user=user,
-                               puzzles=list(mongo.db.puzzles
+                               dingbats=list(mongo.db.dingbats
                                             .find({"contributer_id": id})))
 
 
-@app.route("/upload_puzzle", methods=["POST", "GET"])
-def upload_puzzle():
+@app.route("/upload_dingbat", methods=["POST", "GET"])
+def upload_dingbat():
     if "user" in session:
         if request.method == "POST":
-            puzzles = mongo.db.puzzles
-            print(request.form.get('image'))
-            puzzles.insert_one({'contributer_id': session["id"],
-                                'contributer_name': session["user"],
-                                'difficulty': request.form.get('difficulty'),
-                                'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
-                                'answer': request.form.get('answer')})
-            flash('Upload Success!!', 'success')
-            return redirect(url_for('my_puzzles',  id=session['id']))
+            image = request.form.get('image')
+            if image is None:
+                flash('Please choose an image to upload', 'error')
+                return render_template("upload-dingbat.html",
+                                   difficulty=list(mongo.db
+                                                   .difficulty_categories
+                                                   .find()))
+            else:                                   
+                dingbats = mongo.db.dingbats
+                dingbats.insert_one({'contributer_id': session["id"],
+                                    'contributer_name': session["user"],
+                                    'difficulty': request.form.get('difficulty'),
+                                    'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
+                                    'answer': request.form.get('answer').lower()})
+                flash('Upload Success!!', 'success')
+                return redirect(url_for('my_dingbats',  id=session['id']))
         else:
-            return render_template("upload-puzzle.html",
+            return render_template("upload-dingbat.html",
                                    difficulty=list(mongo.db
                                                    .difficulty_categories
                                                    .find()))
@@ -373,26 +356,23 @@ def upload_puzzle():
         return redirect(url_for('index'))
 
 
-@app.route("/edit_puzzle/<puzzle_id>")
-def edit_puzzle(puzzle_id):
-    the_puzzle = mongo.db.puzzles.find_one({"_id": ObjectId(puzzle_id)})
+@app.route("/edit_dingbat/<dingbat_id>")
+def edit_dingbat(dingbat_id):
+    the_dingbat = mongo.db.dingbats.find_one({"_id": ObjectId(dingbat_id)})
     difficulty_categories = mongo.db.difficulty_categories.find()
-    return render_template('edit-puzzle.html',
-                           puzzle=the_puzzle, difficulty=difficulty_categories)
+    return render_template('edit-dingbat.html',
+                           dingbat=the_dingbat, difficulty=difficulty_categories)
 
 
-@app.route("/update_puzzle/<puzzle_id>", methods=["POST"])
-def update_puzzle(puzzle_id):
-    puzzles = mongo.db.puzzles
+@app.route("/update_dingbat/<dingbat_id>", methods=["POST"])
+def update_dingbat(dingbat_id):
+    dingbats = mongo.db.dingbats
     image = request.form.get('image')
-    print(image)
     if image is None:
         print("image is none")
-        the_puzzle = mongo.db.puzzles.find_one({"_id": ObjectId(puzzle_id)})
-        print(the_puzzle)
-        image = the_puzzle['image']
-        print(image)
-        puzzles.update({'_id': ObjectId(puzzle_id)},
+        the_dingbat = mongo.db.dingbats.find_one({"_id": ObjectId(dingbat_id)})
+        image = the_dingbat['image']
+        dingbats.update({'_id': ObjectId(dingbat_id)},
                        {
                         'contributer_id': session["id"],
                         'contributer_name': session["user"],
@@ -401,7 +381,7 @@ def update_puzzle(puzzle_id):
                         'answer': request.form.get('answer')
                         })
     else:
-        puzzles.update({'_id': ObjectId(puzzle_id)},
+        dingbats.update({'_id': ObjectId(dingbat_id)},
                        {
                         'contributer_id': session["id"],
                         'contributer_name': session["user"],
@@ -409,13 +389,13 @@ def update_puzzle(puzzle_id):
                         'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
                         'answer': request.form.get('answer')
                        })
-    return redirect(url_for('my_puzzles',  id=session['id']))
+    return redirect(url_for('my_dingbats',  id=session['id']))
 
 
-@app.route("/delete_puzzle/<puzzle_id>")
-def delete_puzzle(puzzle_id):
-    mongo.db.puzzles.remove({'_id': ObjectId(puzzle_id)})
-    return redirect(url_for('my_puzzles',  id=session['id']))
+@app.route("/delete_dingbat/<dingbat_id>")
+def delete_dingbat(dingbat_id):
+    mongo.db.dingbats.remove({'_id': ObjectId(dingbat_id)})
+    return redirect(url_for('my_dingbats',  id=session['id']))
 
 
 @app.route("/logout")

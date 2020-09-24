@@ -16,7 +16,7 @@
       </h6>
       {% if 'user' in session %}
       <a
-        href="{{url_for('search', search_category='All')}}"
+        href="{{url_for('browse', browse_category='All')}}"
         class="deep-orange btn-large browse-button hoverable"
         ><i class="material-icons right">search</i>Browse</a
       >
@@ -32,7 +32,7 @@
         ><i class="material-icons right">person</i>Login</a
       >
         <a
-        href="{{url_for('search', search_category='All')}}"
+        href="{{url_for('browse', browse_category='All')}}"
         class="deep-orange btn-large browse-button hoverable"
         ><i class="material-icons right">search</i>Browse</a
       >

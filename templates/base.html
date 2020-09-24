@@ -64,14 +64,14 @@
             </li>
             <li>
               <a
-                href="{{url_for('search', search_category='All')}}"
+                href="{{url_for('browse', browse_category='All')}}"
                 ><i class="material-icons left">school</i>Dingbats</a
               >
             </li>
             <!--User logged in links-->
             {% if 'user' in session %}
             <li>
-              <a href="{{url_for('my_puzzles', id=session['id'])}}"
+              <a href="{{url_for('my_dingbats', id=session['id'])}}"
                 ><i class="material-icons left">playlist_add</i>My Dingbats</a
               >
             </li>
@@ -111,14 +111,14 @@
       </li>
       <li>
         <a
-          href="{{url_for('search', search_category='All')}}"
+          href="{{url_for('browse', browse_category='All')}}"
           ><i class="material-icons left">school</i>Dingbats</a
         >
       </li>
       <!--User logged in links-->
       {% if 'user' in session %}
       <li>
-        <a href="{{url_for('my_puzzles', id=session['id'])}}"
+        <a href="{{url_for('my_dingbats', id=session['id'])}}"
           ><i class="material-icons left">playlist_add</i>My Dingbats</a
         >
       </li>

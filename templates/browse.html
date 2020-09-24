@@ -6,8 +6,8 @@
   <!--Div for letter array-->
     <div class="row center-align letter_array">
       | {% for letter in alphabet_array %}
-      <a href="{{url_for('search', search_category=letter)}}">
-        {% if letter==search_category %}
+      <a href="{{url_for('browse', browse_category=letter)}}">
+        {% if letter==browse_category %}
         <strong>{{letter.capitalize()}}</strong>
         {% else %} {{letter.capitalize()}} {% endif %} |
       </a>
@@ -28,7 +28,7 @@
           <li>
             <a
               class="white-text"
-              href="{{url_for('search', search_category='All')}}"
+              href="{{url_for('browse', browse_category='All')}}"
               >All</a
             >
           </li>
@@ -36,7 +36,7 @@
           <li>
             <a
               class="white-text"
-              href="{{url_for('search', search_category=diff.difficulty)}}"
+              href="{{url_for('browse', browse_category=diff.difficulty)}}"
               >{{diff.difficulty.capitalize()}}</a
             >
           </li>
@@ -48,13 +48,13 @@
     </div>
   </div>
     <!--Dingbat puzzle cards-->
-  <div class="container">
+  <section class="container">
     <div class="row">
-      {% for puzzle in puzzles %}
+      {% for dingbat in dingbats %}
       <div class="col s6 m4 l2">
         <div class="card hoverable">
           <div class="card-image waves-effect waves-block waves-light">
-            <img src="{{puzzle.image}}" alt="Dingbat image"/>
+            <img src="{{dingbat.image}}" alt="Dingbat image"/>
           </div>
           <div class="card-content">
             <div class="card-answer ">
@@ -64,17 +64,17 @@
                 See Answer
               </button>
               <p class="left-align answer" hidden>
-              {{puzzle.answer.title()}}
+              {{dingbat.answer.capitalize()}}
             </p>
             </div>
             <p class="left-align">
-              Difficulty: {{puzzle.difficulty.capitalize()}}
+              Difficulty: {{dingbat.difficulty.capitalize()}}
             </p>
             <p class="left-align">Contributer:</p>
             <a
-              href="{{url_for('my_puzzles', id=puzzle['contributer_id'])}}"
+              href="{{url_for('my_dingbats', id=dingbat['contributer_id'])}}"
               class="left-align"
-              >{{puzzle.contributer_name.title()}}</a
+              >{{dingbat.contributer_name.title()}}</a
             >
           </div>
           <div class="div thumb-icons">
@@ -83,48 +83,52 @@
             <!--Declare a variable 'liked' and set to False-->
             {% set ns = namespace(liked=false) %} 
             <!--Iterate through the documents liked array-->
-            {% for item in puzzle.likes %} 
+            {% for item in dingbat.likes %} 
             <!--If an item in the documents liked array equals the users session["id"] then set the 'liked' variable to True-->
             {% if item == session.id %} 
             {% set ns.liked = True %} {% endif %} {% endfor %} 
             <!--If the 'liked' variable equals True then indicate this by setting the thumb icon to large and setting the href to the route 'unlike'-->
             {% if ns.liked == True %}
-            <a href="{{ url_for('unlike', puzzle_id=puzzle._id)}}">
+            <a href="{{ url_for('unlike', dingbat_id=dingbat._id)}}">
               <i class="material-icons left like icon-large">thumb_up</i>
             </a>
             {% else %}
             <!--If the 'liked' variable equals False then indicate this by setting the thumb icon to normal and setting the href to the route 'like'-->
-            <a href="{{ url_for('like', puzzle_id=puzzle._id)}}">
+            <a href="{{ url_for('like', dingbat_id=dingbat._id)}}">
               <i class="material-icons left like">thumb_up</i>
             </a>
             {% endif %}
             <!--To declare the total 'Likes' the Dingbat has is to count the number of items in the documents 'likes' array and display the total-->
-            <p class="like left-align">{{ puzzle.likes|count }}</p>
+            <p class="like left-align">{{ dingbat.likes|count }}</p>
 
             <!--Logic similiar as above but for declaring 'Dislikes'-->
-            {% set ns = namespace(disliked=false) %} {% for item in
-            puzzle.dislikes %} {% if item == session.id %} {% set ns.disliked =
-            True %} {% endif %} {% endfor %} {% if ns.disliked == True %}
-            <a href="{{ url_for('undislike', puzzle_id=puzzle._id)}}">
+            {% set ns = namespace(disliked=false) %} 
+                {% for item in dingbat.dislikes %} 
+                    {% if item == session.id %} 
+                        {% set ns.disliked = True %} 
+                    {% endif %} 
+                {% endfor %} 
+            {% if ns.disliked == True %}
+            <a href="{{ url_for('undislike', dingbat_id=dingbat._id)}}">
               <i class="material-icons left dislike icon-large"
                 >thumb_down</i
               ></a
             >
             {% else %}
-            <a href="{{ url_for('dislike', puzzle_id=puzzle._id)}}">
+            <a href="{{ url_for('dislike', dingbat_id=dingbat._id)}}">
               <i class="material-icons left dislike">thumb_down</i></a
             >
             {% endif %}
-            <p class="dislike left-align">{{ puzzle.dislikes|count }}</p>
+            <p class="dislike left-align">{{ dingbat.dislikes|count }}</p>
             {% else %}
-            <a href="{{ url_for('like', puzzle_id=puzzle._id)}}">
+            <a href="{{ url_for('like', dingbat_id=dingbat._id)}}">
               <i class="material-icons left">thumb_up</i>
             </a>
-            <p class="like left-align">{{ puzzle.likes|count }}</p>
-            <a href="{{ url_for('dislike', puzzle_id=puzzle._id)}}">
+            <p class="like left-align">{{ dingbat.likes|count }}</p>
+            <a href="{{ url_for('dislike', dingbat_id=dingbat._id)}}">
               <i class="material-icons left">thumb_down</i>
             </a>
-            <p class="dislike left-align">{{ puzzle.dislikes|count }}</p>
+            <p class="dislike left-align">{{ dingbat.dislikes|count }}</p>
             {% endif %}
           </div>
         
@@ -133,7 +137,7 @@
 
       {% endfor %}
     </div>
-  </div>
+  </section>
   <script>
     $(document).ready(function () {
       console.log("Xtra Document ready!");
