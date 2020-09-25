@@ -9,18 +9,17 @@ from passlib.hash import sha256_crypt
 
 from flask_pymongo import PyMongo
 if os.path.exists("env.py"):
-    import env as config
+    import env
 
 from bson.objectid import ObjectId
 
 
 app = Flask(__name__)
 
-app.secret_key = os.getenv("SECRET", "randomstring123")
 
 app.config["MONGO_DBNAME"] = 'dingbat_dictionary'
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
-# app.config["secret_key"] = os.environ.get("SECRET_KEY")
+app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY")
 
 mongo = PyMongo(app)
 
