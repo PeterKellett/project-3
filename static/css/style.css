@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Bowlby+One|Rubik&display=swap');
 
 body {
-    background-color: #f5edd3;
+    background-color: #f5f1e2;
     display: flex;
     min-height: 100vh;
     flex-direction: column;
@@ -109,7 +109,8 @@ hr {
 }
 
 .card {
-    height: 410px;
+    height: 400px;
+    background-color: #f1d785;
 }
 
 .card .card-content {
@@ -117,6 +118,7 @@ hr {
 }
 
 .card-content button {
+    background-color: #000000d1;
     width: 100%;
     color: #fff;
 }
@@ -126,14 +128,10 @@ hr {
     background-color: #fff;
 }
 .card-answer p {
-    border: 1px solid #ff5722;
+    border: 1px solid #000000d1;
     border-radius: 2px;
     padding: 4px;
-    color: #ff5722;
-}
-
-.card, .card-reveal {
-    background-color: #f0f2bf5c;
+    color: #000;
 }
 
 .card-image img {
@@ -215,6 +213,10 @@ img.puzzle_image {
     padding: 5px;
     margin: auto;
     border-radius: 5px;
+}
+
+.card.medium {
+    height: 425px;
 }
 
 table {
