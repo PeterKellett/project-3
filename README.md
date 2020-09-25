@@ -5,9 +5,10 @@
 The purpose of this project is to demonstrate my ability in the use of a document based database and to perform Create, Read, Update and Delete (CRUD) operations on it.
 For this I have constructed a simple Dingbats dictionary where users can view and filter through all the existing entries and be able to upload their own ideas too. Although a user can view all of the users puzzles they only have the ability to edit and delete their own puzzles. I am using MongoDb to store the database documents.
 
-I have also incorporated a 'Likes' and 'Dislikes' functionality as a simple way for different users to show their satisfaction to a particular puzzle. A user must be registered and logged in to avail of this functionality although the number of Likes and Dislikes that each puzzle has are still shown to guest users.  
+I have also incorporated a 'Likes' and 'Dislikes' functionality as a simple way for different users to show their satisfaction to a particular puzzle. A user must be registered and logged in to avail of this functionality although the number of Likes and Dislikes that each puzzle has are still shown to guest users.
 
-## Sitemap  
+## Sitemap
+
 ![Site Map](https://res.cloudinary.com/dfboxofas/image/upload/v1600962101/Project-3-readMe%20images/sitemap_o22eng.png)
 
 ## Modules and Source libraries
@@ -48,20 +49,27 @@ jQuery is used for displaying/hiding the collapsible sidenav menu on small and m
 It is also used for toggling the Answer button on each puzzle card and for manually removing flash messages.
 
 ## User Experience (UX)
-### Navbar  
-A fixed navbar is used in the website design as some of the page content can vary depending on which filters the user has applied. By applying a fixed navbar this will allow the user to navigate to other pages without the need to scroll the page to the top. 
 
-### Index array  
+### Navbar
+
+A fixed navbar is used in the website design as some of the page content can vary depending on which filters the user has applied. By applying a fixed navbar this will allow the user to navigate to other pages without the need to scroll the page to the top.
+
+### Index array
+
 As this is a dictionary/glossary of dingbat definitions the user experience comes with being able to filter through the definitions in a concise controlled way. With this in mind an alphabet array index is provided for the user which will return all items with an answer beginning with the indexed letter.
 
 ### Filtering by Difficulty
- A user is able to filter by the difficulty category, this is provided via a dropdown menu button. 
 
-### Filtering by Contributer  
-A user is able to view all of a particular contributers entries by clicking the contributer name in each puzzle.  
+A user is able to filter by the difficulty category, this is provided via a dropdown menu button.
+
+### Filtering by Contributer
+
+A user is able to view all of a particular contributers entries by clicking the contributer name in each puzzle.
 
 ### Likes/dislikes
+
 To provide an element of interaction to users a user also has the ability to express their satisfaction of each entry. This is provided by way of thumbs up and thumbs down icons on each puzzle card. A user must be registered and logged in to be able to indicate a like or dislike as the user id is required. The user id is required for the following reasons:
+
 1. To retain a users indications for future site visits the users id is stored to the respective puzzle MongoDb document likes array or dislikes array.
 2. To be able to indicate the number of likes or dislikes each puzzle has to all visitors this is the number of entries in the respective puzzle arrays.
 3. To prevent unwarranted users from repeatedly clicking the like or dislike icon thus racking up indiscriminate values for each.
@@ -81,9 +89,11 @@ The puzzle upload form consists of 3 inputs.
 ## User Security
 
 ### Passwords
+
 As a website that involves users adding their own content it is of upmost importance that this content remains secure to that user and is in no way corruptable by others. For this reason a registration/login with password encryption functionality is employed using passlib module from flask.
 
 ### Logged in Session variables
+
 This website uses the flask session module to allow the use of storing unique user variables on the server-side as key: value pairs and are used alongside Jinja Templating Logic to allow us to control which content is displayed to users dependant on whether they are logged in or not. It is used to control access to modifying personal account details such as My Puzzles and the change password functionality. They are set when a user either registers or logs in and are deleted when a user either logs out or closes the browser tab.
 The session variables being stored in this case are:
 
@@ -139,155 +149,106 @@ The users username as supplied when registering is stored as a session variable 
 | dislikes         | Array [users._id]                | None                 | No             |
 
 ## Testing  
-### Test: Device responsive testing  
-This project was tested for display responsiveness using the following screen sizes.
-1. Large screen
-    - Desktop Chrome
-    - Desktop Firefox
-    - Desktop Microsoft Edge  
-2. Medium screen
-    - iPad Pro Safari  
-    - Desktop Chrome emulator
-3. Small screen  
-    - Phone Samsung 7
-    - iPhone 6
-    - Desktop Chrome emulator  
+### Features tested  
+1. Screen responsiveness  
+2. Site navigation links
+3. Register a user
+4. Login / Logout
+5. Password encryption and site Security
+6. Uploading a new dingbat entry
+7. Editing and deleting dingbat entries
+8. Initiating likes and dislikes xor functionality
+Full details on testing and procedures can be seen in [testing.md](./testing.md).  
 
-### Functional Testing  
-#### Test: Navbar links  
-1. When user logged out verify the navbar contains the following links.
-    - Home: Verify user is navigated to the home page.
-    - Dingbats: Verify user is navigated to the main Dingbats page.
-    - Join: Verify user is brought to the Registration page.
-    - Login: Verify user is brought to the login page.
-2. When user is logged in verify the navbar contains the following links.
-    - Home: Verify user is navigated to the home page.
-    - Dingbats: Verify user is navigated to the main Dingbats page.
-    - My Dingbats: Verify user is brought to a page showing their own uploaded Dingbat entries and the upload/Edit/Delete buttons are rendered,
-    - My Account: Verify user is brought to the My Account page.
-    - Logout: Verify user is logged out and is returned to the Home page.
+## Deployment Procedures
 
-#### Test: Home page buttons 
-1. When user logged out verify following page buttons are displayed.
-    - Join: Verify user is brought to the Registration page.
-    - Login: Verify user is brought to the login page.
-    - Browse: Verify user is navigated to the main Dingbats page.
-2. When user is logged in verify the only the Browse button is displayed.
+This projects repository is held in GitHub and is hosted with Heroku Apps.
+Deployment to Heroku Apps is done from the GitHub master branch.
 
-#### Test: Dingbat page letter array 
-The letter array on the Dingbat page serves as an index to the user by returning only the Dingbats with an answer beginning with the chosen letter.
-- Click on each letter in turn and verify only Dingbats with an answer beginning with that letter are returned.
+- GitHub repository: https://github.com/PeterKellett/project-3
 
-#### Test: Dingbat page Difficulty select button 
-- Verify the button dropdown selections contain Easy, Medium, Hard.
-- Click on each selection in turn and verify only Dingbats with the selected difficulty are returned.
+#### Deployment procedure to implement new functionality
 
-#### Test: Dingbat Answer buttons 
-- Click on each answer button and verify the button/answer is toggled with each click on that Dingbat card only.  
+1. Go to project repository above and create a new upstream branch or raise an issue, this will also create an upstream branch.
+2. Open this branch or issue in code editor. For this project GitPod was used.
+3. Add and commit code to this branch until satisfied code can be merged with the main branch.
+4. Send a pull request to GitHub requesting the branch can be merged.
+5. If there are no conflicts raised this branch or issue can then be closed by performing a merge onto the main branch. A merge can also be performed from GitPod.
+6. This GitHub repository master branch is automatically connected to Heroku through Heroku settings so any merges to the GitHub master branch are automatically deployed and built in Heroku.
 
-#### Test: Likes/Dislikes 
-1. When user is logged out.
-    - Verify the thumb icons are disabled and colored blue.
-    - Click on a thumb icon and verify a flash message 'You must be logged in to add likes/dislikes' is displayed to user.
-    - Verify the total number of the Dingbats likes and dislikes is displayed on the card and are colored green and red respectively.  
-2. When user is logged in. 
-    - Verify the thumb icons are enabled and colored green and red respectively.  
-    - Click on a green 'like' thumb icon and verify the number of likes for that Dingbat entry is incremented by +1 and the thumb icon clicked is now rendered in a larger size. 
-    - Click on that same green 'like' thumb icon again and verify the number of likes for that Dingbat entry is decremented by -1 and the thumb icon clicked is now rendered in a normal size. 
-    - Click on a red 'dislike' thumb icon and verify the number of dislikes for that Dingbat entry is incremented by +1 and the thumb icon clicked is now rendered in a larger size. 
-    - Click on that same red 'dislike' thumb icon again and verify the number of dislikes for that Dingbat entry is decremented by -1 and the thumb icon clicked is now rendered in a normal size.  
-3. Testing xor logic on likes/dislikes  
-    - Click on a green 'like' thumb icon and verify the number of likes for that Dingbat entry is incremented by +1 and the thumb icon clicked is now rendered in a larger size. 
-    - Click on the red 'dislike' thumb icon on the same Dingbat card and verify that the number of likes is decremented by -1 and the green thumb icon is reduced in size and at the same time verify the red dislike number is incremented by +1 and the red thumb icon is increased in size.
-    - Click on a red 'dislike' thumb icon and verify the number of dislikes for that Dingbat entry is incremented by +1 and the thumb icon clicked is now rendered in a larger size. 
-    - Click on the green 'like' thumb icon on the same Dingbat card and verify that the number of dislikes is decremented by -1 and the red thumb icon is reduced in size and at the same time verify the green like number is incremented by +1 and the green thumb icon is increased in size. 
-- These tests were also double checked by verifying in MongoDb that the correct user ObjectId's were being correctly pushed and pulled from the respective Mongo document arrays.  
+#### Deployment procedure to clone this project
 
+1. Go to project repository above and click 'Code' button
+2. Copy the url (see image below and for full instructions see https://docs.github.com/en/enterprise/2.13/user/articles/cloning-a-repository)
+   ![Screenshot](https://res.cloudinary.com/dfboxofas/image/upload/v1601037183/Project-3-readMe%20images/clone_screenshot_i5mgip.png)
+3. In your code editor have the following installed:
 
-#### Test: Verify Dingbat Contributer links
-- Click on a contributers name and verify user is brought to page showing that contributers entries. 
+   - Git
+   - pip3
+   - dnspython
+   - flask
+   - flask-pymongo
+   - flask-wtf
+   - flask cloudinary
 
-#### Test: Verify Upload/Edit/Delete buttons hidden if contributers id != the session id variable
-Clicking on the contributer name on a Dingbat card will bring a user to the Dingbat page for that contributer so a user can view all of that contributers Dingbat entries. By using logic and comparing the contributers ObjectId to the ObjectId stored in the session variables, we can use logic to prevent access to the upload/edit/delete functionality when these variables do not match thus providing read only access and stopping unauthorised access to others to prevent malicious tampering of Dingbat entries.  
+   These are installed from the Python Package Index (PyPI) repository.
 
-- Log in as a user with Dingbats uploaded. 
-- Click on the name of any other contributer. Verify the Dingbats are displayed but the Upload/Edit/Delete buttons are not rendered.
-- Repeat for many different contributers.
-- Now click on your own name on a Dingbat uploaded by the user you logged in as.
-- Verify the Upload/Edit/Delete buttons are rendered as the contributers id of the Dingbat selected will be the same as that stored in the session id variable so the Jinja logic will now permit the user access to these editors rights.
-- Repeat the above as a logged out user and verify these buttons are again not rendered for any contributer whatsoever.
+4. Install the cloned repository by running the code snippet copied above.
+5. Create a requirements.txt file by running:  
+   pip3 freeze --local > requirements.txt
 
-#### Test: Register
-1. Field validation test  
-    Username:  
-    - Verify this field must fail if less than 4 characters are entered.  
-    - Verify validation fail message is displayed for failed attempts.
-    - Message "Username must be at least 4 characters long."
+#### Connect to MongoDb
 
-    Email:  
-    - Verify this field must fail if the input is not of email format.
-    - Verify validation fail message is displayed for failed attempts.
-    - Message "Email supplied is not of the correct format."
+1. In MongoDb click on the connect button on the cluster you wish to connect to and copy the connection string provided.
+2. Create an env.py file to contain the MONGO_URI connection string. Correct the 'dbname' and 'password' values in the connection string to the correct values.
+3. Add this env.py file to .gitignore.
+4. This program can now be run locally by running the command:
+   - python3 run.py
 
-    Password:
-    - Verify this field must fail if less than 6 characters are entered.
-    - Verify input charaters are blobbed out for user confidentiality.
-    - Verify validation fail message is displayed for failed attempts. 
-    - Message "Passwords must have a minimum of 6 characters" 
+#### To connect to Heroku
 
-    Repeat Password:
-    - Verify this field must fail if this field does not match the Password field.
-    - Verify input charaters are blobbed out for user confidentiality.
-    - Verify validation fail message is displayed for failed attempts.
-    - Message "Passwords must match"  
+1. Create a Procfile to initiate the Heroku web dyno.
+   echo web: python3 run.py > Procfile
+2. In your Heroku App go to Settings and Reveal Config Vars.
+3. Configure the variables as:  
+   | KEY | VALUE |  
+   | -------- | -------------- |  
+   | IP | 0.0.0.0 |  
+   | PORT | 5000 |  
+   | MONGO_URI | mongodb+srv://root:<password>@myfirstcluster.jraod.mongodb.net/<dbname>?retryWrites=true&w=majority |
+   | SECRET_KEY | <secret_key> |
 
-2. MongoDb Users document
-    - Register a new user and verify the a new MongoDb Users document was created with the following fields submitted.  
-        - _id
-        - username
-        - email
-        - password
+#### To deploy to Heroku from GitHub master branch
+1. In your Heroku App go to Deploy tab.
+2. Choose the deployment method, choose GitHub.
+3. Enter the repository name and GitHub password.
+4. Click deploy from master branch.
+5. This setting can be automated so any new merges to the GitHub master branch will automatically redeploy and build on Heroku Apps.
 
-3. Password encryption method  
-    - Register as user and verify backend in MongoDb that the password for the new users password is in an encrypted format.  
+## Bugs and troubleshooting
+During the course of this project I encountered many, many minor issues. Most were to do with setting and passing the relevant variables from one function to another. These were mainly identified using the built in python debug tool, the browser developer tools and printing values and types of variables to the console for further examination and using online documentation. 
+Examples of such were:  
+- Working with ObjectId's 
+- PyMongo curser objects
+- Pushing and pulling ObjectId's to arrays 
+- Password encryption 
+- Jinja templating logic
 
+## Online References used 
+Flask:  
+https://flask.palletsprojects.com/en/1.1.x/tutorial/factory/  
+https://pythonprogramming.net/practical-flask-introduction/  
+Materialize:  
+https://materializecss.com/about.html  
+Cloudinary:  
+https://cloudinary.com/documentation/cloudinary_guides  
+MongoDb:  
+https://docs.mongodb.com/manual/reference/method/  
+HTML CSS JavaScript:
+https://www.w3schools.com/  
+Other resources:  
+https://stackoverflow.com/  
+https://www.favicon.cc/  
 
-#### Test: Login / Logout
-1. Field validation test 
-    Email:  
-    - Verify this field must fail if the input is not of email format.
-    - Verify validation fail message is displayed for failed attempts.
-    - Message "Email supplied is not of the correct format."  
-    Password:
-    - Verify this field must fail if less than 6 characters are entered.
-    - Verify input charaters are blobbed out for user confidentiality.
-    - Verify validation fail message is displayed for failed attempts. 
-    - Message "Passwords must have a minimum of 6 characters"  
-2. Login functionality   
-    Login and verify the following changes to the site.
-    - The Navbar links should now be for:
-        - Home
-        - Dingbats
-        - My Dingbats
-        - My Account
-        - Logout
-    - The correct username should be displayed in the Welcome header on the Home page.
-    - The 'Like' and 'Dislike' functionality is now enabled. 
-    - A user has the ability to Upload a Dingbat from their My Puzzles page.  
-3. Logout functionality  
-    Click on 'Logout' link in navbar and verify all session variables have been deleted all logged in functionality is disabled.
-
-#### Test: Upload functionality
-1. Cloudinary upload widget  
-    - Verify Cloudinary upload widget opens and closes without error.
-    - Verify user can upload an image from all sources.
-        - Local 
-        - Web address
-        - google Drive
-        - Dropbox
-        - Facebook
-        - instagram
-        - Shutterstock
-    - 
 
 

@@ -2,7 +2,7 @@
 <html lang="en">
 {% extends 'base.html' %} {% block content %}
 <section class="container">
-	<h3 class="intro"><span>"{{user["username"]}}'s"</span> dingbats</h3>
+	<h3 class="intro"><span>"{{user["username"].title()}}'s"</span> dingbats</h3>
 	<div class="row center-align">
 		{% if user["_id"] == session["id"] %}
 		<div class="col s6 m4 offset-m2 l3 offset-l3">

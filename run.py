@@ -27,8 +27,7 @@ mongo = PyMongo(app)
 
 @app.route("/")
 def index():
-    return render_template("index.html",
-                           dingbats=list(mongo.db.dingbats.find()))
+    return render_template("index.html")
 
 
 @app.route("/browse/<browse_category>")
@@ -68,6 +67,7 @@ def browse(browse_category):
                                browse_category=browse_category)
 
 
+# Initiate flask registration form
 class RegistrationForm(Form):
     username = TextField('Username',
                          validators=[validators.DataRequired(),
@@ -101,38 +101,37 @@ class RegistrationForm(Form):
                                                                     match')])
 
 
+# Route to registration page
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    try:
-        form = RegistrationForm(request.form)
-        if "user" in session:
-            flash('You are already registered', 'warning')
-            return redirect(url_for('index'))
-        else:
-            if request.method == "POST" and form.validate():
-                username = form.username.data.lower()
-                email = form.email.data
-                password = sha256_crypt.hash((str(form.password.data)))
-                users = mongo.db.users
-                existing_user = users.find_one({'email': email})
-                if existing_user:
-                    flash("This email is already taken!!", "warning")
-                    return render_template("register.html", form=form)
-                else:
-                    id = users.insert_one({'username': username,
-                                           'email': email,
-                                           'password': password})
-                    flash('Registered Success!!', 'success')
-                    session["id"] = str(id.inserted_id)
-                    session["user"] = username
-                    session["email"] = email
-                    return redirect(url_for('user'))
-            else:
+    form = RegistrationForm(request.form)
+    if "user" in session:
+        flash('You are already registered', 'warning')
+        return redirect(url_for('index'))
+    else:
+        if request.method == "POST" and form.validate():
+            username = form.username.data.lower()
+            email = form.email.data
+            password = sha256_crypt.hash((str(form.password.data)))
+            users = mongo.db.users
+            existing_user = users.find_one({'email': email})
+            if existing_user:
+                flash("This email is already taken!!", "warning")
                 return render_template("register.html", form=form)
-    except Exception as e:
-        return(str(e))
+            else:
+                id = users.insert_one({'username': username,
+                                       'email': email,
+                                       'password': password})
+                flash('Registered Success!!', 'success')
+                session["id"] = str(id.inserted_id)
+                session["user"] = username
+                session["email"] = email
+                return redirect(url_for('user'))
+        else:
+            return render_template("register.html", form=form)
 
 
+# Initiate flask log in form
 class LoginForm(Form):
     email = TextField('Email',
                       validators=[validators.DataRequired(),
@@ -150,46 +149,44 @@ class LoginForm(Form):
                                          ])
 
 
+# Route to log in page
 @app.route('/login', methods=["GET", "POST"])
 def login():
-    try:
-        form = LoginForm(request.form)
-        if "user" in session:
-            flash("You are already logged in", "success")
-            return redirect(url_for('index'))
-        else:
-            if request.method == "POST":
-                users = mongo.db.users
-                user_login = users.find_one({'email': request.form.
-                                             get('email')})
-                if user_login:
-                    if sha256_crypt.verify(request.form['password'],
-                                           user_login['password']):
-                        session['id'] = str(user_login['_id'])
-                        session['user'] = user_login['username']
-                        session['user_email'] = user_login['email']
-                        session['logged_in'] = True
-                        flash("You are now logged in", "success")
-                        return redirect(url_for("user"))
-                    else:
-                        flash("Invalid credentials, try again.", "error")
-                        return render_template("login.html", form=form)
+    form = LoginForm(request.form)
+    if "user" in session:
+        flash("You are already logged in", "success")
+        return redirect(url_for('index'))
+    else:
+        if request.method == "POST":
+            users = mongo.db.users
+            user_login = users.find_one({'email': request.form.
+                                         get('email')})
+            if user_login:
+                if sha256_crypt.verify(request.form['password'],
+                                       user_login['password']):
+                    session['id'] = str(user_login['_id'])
+                    session['user'] = user_login['username']
+                    session['user_email'] = user_login['email']
+                    flash("You are now logged in", "success")
+                    return redirect(url_for("user"))
                 else:
-                    flash("Sorry. We have no users by that email.", "warning")
+                    flash("Invalid credentials, try again.", "error")
                     return render_template("login.html", form=form)
             else:
-                print("login else else")
+                flash("Sorry. We have no users by that email.", "warning")
                 return render_template("login.html", form=form)
-    except Exception as e:
-        error = "Invalid credentials, try again."
-        return render_template("login.html", form=form, error=error)
+        else:
+            print("login else else")
+            return render_template("login.html", form=form)
 
 
+# Route to forgot password page
 @app.route("/forgot_password")
 def forgot_password():
     return render_template('forgot-password.html')
 
 
+# Route to My Account page
 @app.route("/my_account")
 def my_account():
     if "user" in session:
@@ -199,19 +196,24 @@ def my_account():
         return redirect(url_for('index'))
 
 
+# Initiate the reset password form
 class ResetPasswordForm(Form):
     password = PasswordField('Password',
                              validators=[validators.DataRequired(),
-                                         validators.EqualTo('confirm',
-                                                            message='Passwords \
-                                                                     must \
-                                                                     match'
-                                                            )
-                                         ]
-                             )
-    confirm = PasswordField('Repeat Password')
+                                         validators.Length(min=6,
+                                                           message='Passwords must have \
+                                                                    a minimum \
+                                                                    of 6 \
+                                                                    characters')
+                                         ])
+    confirm = PasswordField('Repeat Password',
+                            validators=[validators.DataRequired(),
+                                        validators.EqualTo('password',
+                                                           message='Passwords must \
+                                                                    match')])
 
 
+# Route to reset password page
 @app.route("/reset_password", methods=["POST", "GET"])
 def reset_password():
     if "user" in session:
@@ -235,6 +237,7 @@ def reset_password():
         return redirect(url_for('index'))
 
 
+# Process for adding dingbat likes
 @app.route("/like/<dingbat_id>")
 def like(dingbat_id):
     if "user" in session:
@@ -252,6 +255,7 @@ def like(dingbat_id):
     return redirect(url_for('browse', browse_category='All'))
 
 
+# Process for removing dingbat likes
 @app.route("/unlike/<dingbat_id>")
 def unlike(dingbat_id):
     if "user" in session:
@@ -265,6 +269,7 @@ def unlike(dingbat_id):
     return redirect(url_for('browse', browse_category='All'))
 
 
+# Process for adding dingbat dislikes
 @app.route("/dislike/<dingbat_id>")
 def dislike(dingbat_id):
     if "user" in session:
@@ -282,6 +287,7 @@ def dislike(dingbat_id):
     return redirect(url_for('browse', browse_category='All'))
 
 
+# Process for removing dingbat dislikes
 @app.route("/undislike/<dingbat_id>")
 def undislike(dingbat_id):
     if "user" in session:
@@ -295,6 +301,7 @@ def undislike(dingbat_id):
     return redirect(url_for('browse', browse_category='All'))
 
 
+# A Route redirect if user attempts to enter the url manually
 @app.route("/user")
 def user():
     if "user" in session:
@@ -304,6 +311,7 @@ def user():
         return redirect(url_for('login'))
 
 
+# Route to My Dingbats page
 @app.route("/my_dingbats/<id>")
 def my_dingbats(id):
     user = mongo.db.users.find_one({"_id": ObjectId(id)})
@@ -313,19 +321,20 @@ def my_dingbats(id):
             return render_template("my-dingbats.html",
                                    user=user,
                                    dingbats=list(mongo.db.dingbats
-                                                .find({"contributer_id": id})))
+                                                 .find({"contributer_id": id})))
         else:
             return render_template("my-dingbats.html",
                                    user=user,
                                    dingbats=list(mongo.db.dingbats
-                                                .find({"contributer_id": id})))
+                                                 .find({"contributer_id": id})))
     else:
         return render_template("my-dingbats.html",
                                user=user,
                                dingbats=list(mongo.db.dingbats
-                                            .find({"contributer_id": id})))
+                                             .find({"contributer_id": id})))
 
 
+# Route to upload dingbat page
 @app.route("/upload_dingbat", methods=["POST", "GET"])
 def upload_dingbat():
     if "user" in session:
@@ -337,13 +346,15 @@ def upload_dingbat():
                                    difficulty=list(mongo.db
                                                    .difficulty_categories
                                                    .find()))
-            else:                                   
+            else:
                 dingbats = mongo.db.dingbats
                 dingbats.insert_one({'contributer_id': session["id"],
-                                    'contributer_name': session["user"],
-                                    'difficulty': request.form.get('difficulty'),
-                                    'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
-                                    'answer': request.form.get('answer').lower()})
+                                     'contributer_name': session["user"],
+                                     'difficulty': request.form.get('difficulty'),
+                                     'image': 'https://res.cloudinary.com/dfboxofas/' +  request.form.get('image'),
+                                     'answer': request.form.get('answer').lower(),
+                                     'likes': [],
+                                     'dislikes': []})
                 flash('Upload Success!!', 'success')
                 return redirect(url_for('my_dingbats',  id=session['id']))
         else:
@@ -356,6 +367,7 @@ def upload_dingbat():
         return redirect(url_for('index'))
 
 
+# Route to Edit Dingbat page
 @app.route("/edit_dingbat/<dingbat_id>")
 def edit_dingbat(dingbat_id):
     the_dingbat = mongo.db.dingbats.find_one({"_id": ObjectId(dingbat_id)})
@@ -364,13 +376,14 @@ def edit_dingbat(dingbat_id):
                            dingbat=the_dingbat, difficulty=difficulty_categories)
 
 
+# Function to Edit Dingbat
 @app.route("/update_dingbat/<dingbat_id>", methods=["POST"])
 def update_dingbat(dingbat_id):
     dingbats = mongo.db.dingbats
+    the_dingbat = mongo.db.dingbats.find_one({"_id": ObjectId(dingbat_id)})
     image = request.form.get('image')
     if image is None:
         print("image is none")
-        the_dingbat = mongo.db.dingbats.find_one({"_id": ObjectId(dingbat_id)})
         image = the_dingbat['image']
         dingbats.update({'_id': ObjectId(dingbat_id)},
                        {
@@ -378,7 +391,9 @@ def update_dingbat(dingbat_id):
                         'contributer_name': session["user"],
                         'difficulty': request.form.get('difficulty'),
                         'image': image,
-                        'answer': request.form.get('answer')
+                        'answer': request.form.get('answer'),
+                        'likes': the_dingbat['likes'],
+                        'dislikes': the_dingbat["dislikes"]
                         })
     else:
         dingbats.update({'_id': ObjectId(dingbat_id)},
@@ -387,22 +402,25 @@ def update_dingbat(dingbat_id):
                         'contributer_name': session["user"],
                         'difficulty': request.form.get('difficulty'),
                         'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
-                        'answer': request.form.get('answer')
+                        'answer': request.form.get('answer'),
+                        'likes': the_dingbat['likes'],
+                        'dislikes': the_dingbat["dislikes"]
                        })
     return redirect(url_for('my_dingbats',  id=session['id']))
 
 
+# Function to delete Dingbat
 @app.route("/delete_dingbat/<dingbat_id>")
 def delete_dingbat(dingbat_id):
     mongo.db.dingbats.remove({'_id': ObjectId(dingbat_id)})
     return redirect(url_for('my_dingbats',  id=session['id']))
 
 
+# Route to Logout function - Clear session variables
 @app.route("/logout")
 def logout():
     session.pop("id", None)
     session.pop("user", None)
-    session.pop("logged_in", None)
     session.pop("user_email", None)
     print(session)
     flash("You have been logged out", "success")

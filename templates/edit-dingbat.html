@@ -87,7 +87,7 @@
         multiple: false,
         cropping: true,
         folder: "project-3a",
-        form: "#upload_puzzle",
+        form: "#upload_dingbat",
         fieldName: "image",
         thumbnails: "#thumbnail",
         autoMinimise: true,
@@ -97,7 +97,7 @@
         if (!error && result && result.event === "success") {
           console.log("Done! Here is the image info: ", result.info);
           //$("#x-icon").hide();
-          $(".puzzle_image").hide();
+          $(".dingbat_image").hide();
         }
       }
     );
