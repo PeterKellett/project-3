@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  {% extends 'base.html' %} {% block title %}Puzzles{% endblock %} {% block
+  {% extends 'base.html' %} {% block title %}Dingbats{% endblock %} {% block
   content %}
   <div class="container">
   <!--Div for letter array-->
@@ -47,19 +47,24 @@
 
     </div>
   </div>
-    <!--Dingbat puzzle cards-->
+    <!--Dingbat cards-->
   <section class="container">
+  {% for letter in letters %}
     <div class="row">
+    
+    {% if letter != 'All' %}
+    <div>{{ letter.capitalize() }}</div>
       {% for dingbat in dingbats %}
+      {% if dingbat.answer[0].capitalize() == letter.capitalize() %}
       <div class="col s6 m4 l2">
         <div class="card hoverable">
-          <div class="card-image waves-effect waves-block waves-light">
+          <div class="card-image">
             <img src="{{dingbat.image}}" alt="Dingbat image"/>
           </div>
           <div class="card-content">
             <div class="card-answer ">
               <button
-                class="answer-button text-lighten-1 btn-small btn-flat"
+                class="answer-button btn-small btn-flat"
               >
                 See Answer
               </button>
@@ -72,7 +77,7 @@
             </p>
             <p class="left-align">Contributer:</p>
             <a
-              href="{{url_for('my_dingbats', id=dingbat['contributer_id'])}}"
+              href="{{url_for('browse', browse_category=dingbat['contributer_id'])}}"
               class="left-align"
               >{{dingbat.contributer_name.title()}}</a
             >
@@ -134,13 +139,16 @@
         
         </div>
       </div>
-
+       {% endif %} 
       {% endfor %}
+      {% endif %}
+      
     </div>
+    {% endfor %}
   </section>
+  <!--Script for toggling the answer button on the dingbat cards-->
   <script>
     $(document).ready(function () {
-      console.log("Xtra Document ready!");
       $(".answer-button").click(function () {
           $(this).toggle();
         $(this).siblings(".answer").toggle();
@@ -148,7 +156,7 @@
       $(".answer").click(function() {
           $(this).toggle();
         $(this).siblings(".answer-button").toggle();
-      })
+      });
     });
   </script>
 
