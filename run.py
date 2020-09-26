@@ -330,9 +330,9 @@ def my_dingbats(contributer_id):
         contributer = mongo.db.users.find_one({"_id": ObjectId(contributer_id)})
         contributer["_id"] = str(contributer["_id"])
         return render_template("my-dingbats.html",
-                            contributer=contributer,
-                            dingbats=list(mongo.db.dingbats
-                                            .find({"contributer_id": contributer_id})))
+                               contributer=contributer,
+                               dingbats=list(mongo.db.dingbats
+                                            .find({"contributer_id": contributer_id}).sort("answer")))
     else:
         flash("You do not authorised to access that section", "error")
         return redirect(url_for('browse', browse_category='All'))
