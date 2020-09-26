@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  {% extends 'base.html' %} {% block title %}Upload{% endblock %} {% block
+  {% extends 'base.html' %} {% block title %}Edit{% endblock %} {% block
   content %}
   <div class="container form-surround center-align">
     <h2>Edit dingbat</h2>
@@ -16,7 +16,7 @@
           <div class="input-field col s12 m6 offset-m3">
             <div id="thumbnail">
             <img class="dingbat_image" src="{{ dingbat.image }}" alt="Dingbat image"/></div>
-            <div class="center-align" id="x-icon">Replace image</div>
+            <div class="center-align" id="replace-image">Replace image</div>
             
           </div>
           <div class="input-field col s12 m6 offset-m3">
@@ -58,7 +58,7 @@
         <div class="row">
           <div class="col s6 m4 offset-m2 l3 offset-l3">
             <a
-              href="{{url_for('my_dingbats', id=session['id'])}}"
+              href="{{url_for('my_dingbats', contributer_id=session['id'])}}"
               class="deep-orange btn"
               ><i class="material-icons left">chevron_left</i>Back</a
             >
@@ -80,6 +80,7 @@
 
   <!--This script configures the Cloudinary connection-->
   <script>
+  /*jshint esversion: 6 */
     var myWidget = cloudinary.createUploadWidget(
       {
         cloudName: "dfboxofas",
@@ -96,20 +97,14 @@
       (error, result) => {
         if (!error && result && result.event === "success") {
           console.log("Done! Here is the image info: ", result.info);
-          //$("#x-icon").hide();
           $(".dingbat_image").hide();
         }
       }
     );
-
-   
-    console.log("not showing");
-    document.getElementById("x-icon").addEventListener(
+    document.getElementById("replace-image").addEventListener(
     "click",
     function () {
         myWidget.open();
-        //$(this).hide();
-        //$(".puzzle_image").hide();
     },
     false
     );

@@ -1,197 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0 shrink-to-fit=no"
-    />
-    <!--Import Google Icon Font-->
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <!-- Compiled and minified CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-    />
-    <!--Font Awesome link-->
-    <script src="https://kit.fontawesome.com/5522ae6586.js"></script>
-    <!--My css link -->
-    <link
-      rel="stylesheet"
-      href="{{url_for('static', filename='css/style.css')}}"
-      type="text/css"
-    />
-    <link
-      rel="shortcut icon"
-      href="{{ url_for('static', filename='images/favicon.ico')}}"
-      type="image/x-icon"
-    />
-    <!--jQuery-->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
-      integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
-      crossorigin="anonymous"
-    ></script>
 
-    <title>{% block title %} {% endblock %}</title>
-  </head>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0 shrink-to-fit=no" />
+	<!--Import Google Icon Font-->
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+	<!-- Compiled and minified CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+	<!--Font Awesome link-->
+	<script src="https://kit.fontawesome.com/5522ae6586.js"></script>
+	<!--My css link -->
+	<link rel="stylesheet" href="{{url_for('static', filename='css/style.css')}}" type="text/css" />
+	<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico')}}" type="image/x-icon" />
+	<!--jQuery-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+		integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+		crossorigin="anonymous"></script>
 
-  <body>
-  <!--Navbar section-->
-    <div class="navbar-fixed">
-      <nav>
-        <div class="nav-wrapper">
-          <a href="{{url_for('index')}}" class="brand-logo center">
-            <img
+	<title>{% block title %} {% endblock %}</title>
+</head>
+
+<body>
+	<!--Navbar section-->
+	<div class="navbar-fixed">
+		<nav>
+			<div class="nav-wrapper">
+				<a href="{{url_for('index')}}" class="brand-logo center">
+					<img
               class="hide-on-med-and-down"
               src="https://res.cloudinary.com/dfboxofas/image/upload/v1597497835/Project-3/home-image_bqfvqk.jpg"
               alt="Navbar logo"
             />
-            Dingbat <span>Dictionary</span></a
-          >
-          <a href="#" data-target="mobile-demo" class="sidenav-trigger"
-            ><i class="material-icons">menu</i></a
-          >
-          <!--Navbar links for large screens-->
-          <ul class="right hide-on-med-and-down">
-            <li>
-              <a href="{{url_for('index')}}"
-                ><i class="material-icons left">home</i>Home</a
-              >
-            </li>
-            <li>
-              <a
-                href="{{url_for('browse', browse_category='All')}}"
-                ><i class="material-icons left">school</i>Dingbats</a
-              >
-            </li>
-            <!--User logged in links-->
-            {% if 'user' in session %}
-            <li>
-              <a href="{{url_for('my_dingbats', id=session['id'])}}"
-                ><i class="material-icons left">playlist_add</i>My Dingbats</a
-              >
-            </li>
-            <li>
-              <a href="{{url_for('my_account')}}"
-                ><i class="material-icons left">settings</i>My Account</a
-              >
-            </li>
-            <li>
-              <a href="{{url_for('logout')}}"
-                ><i class="material-icons left">exit_to_app </i>Logout</a
-              >
-            </li>
-            <!--User not logged in links-->
-            {% else %}
-            <li>
-              <a href="{{url_for('register')}}"
-                ><i class="material-icons left">person_add</i>Join</a
-              >
-            </li>
-            <li>
-              <a href="{{url_for('login')}}"
-                ><i class="material-icons left">person</i>Login</a
-              >
-            </li>
-            {% endif %}
-          </ul>
-        </div>
-      </nav>
-      </div>
-    <!--Navbar links for sidenav-->
-    <ul class="sidenav" id="mobile-demo">
-      <li>
-        <a href="{{url_for('index')}}"
-          ><i class="material-icons left">home</i>Home</a
-        >
-      </li>
-      <li>
-        <a
-          href="{{url_for('browse', browse_category='All')}}"
-          ><i class="material-icons left">school</i>Dingbats</a
-        >
-      </li>
-      <!--User logged in links-->
-      {% if 'user' in session %}
-      <li>
-        <a href="{{url_for('my_dingbats', id=session['id'])}}"
-          ><i class="material-icons left">playlist_add</i>My Dingbats</a
-        >
-      </li>
-      <li>
-        <a href="{{url_for('my_account')}}"
-          ><i class="material-icons left">settings</i>My Account</a
-        >
-      </li>
-      <li>
-        <a href="{{url_for('logout')}}"
-          ><i class="material-icons left">exit_to_app </i>Logout</a
-        >
-      </li>
-      <!--User not logged in links-->
-      {% else %}
-      <li>
-        <a href="{{url_for('register')}}"
-          ><i class="material-icons left">person_add</i>Join</a
-        >
-      </li>
-      <li>
-        <a href="{{url_for('login')}}"
-          ><i class="material-icons left">person</i>Login</a
-        >
-      </li>
-      {% endif %}
-    </ul>
-    <main>
-    <!--Flash messages-->
-      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+            Dingbat <span>Dictionary</span></a>
+				<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+				<!--Navbar links for large screens-->
+				<ul class="right hide-on-med-and-down">
+					<li>
+						<a href="{{url_for('index')}}"><i class="material-icons left">home</i>Home</a>
+					</li>
+					<li>
+						<a
+							href="{{url_for('browse', browse_category='All')}}"><i class="material-icons left">school</i>Dingbats</a>
+					</li>
+					<!--User logged in links-->
+					{% if 'user' in session %}
+					<li>
+						<a href="{{url_for('my_dingbats', contributer_id=session['id'])}}"><i class="material-icons left">playlist_add</i>My
+							Dingbats</a>
+					</li>
+					<li>
+						<a href="{{url_for('my_account')}}"><i class="material-icons left">settings</i>My Account</a>
+					</li>
+					<li>
+						<a href="{{url_for('logout')}}"><i class="material-icons left">exit_to_app </i>Logout</a>
+					</li>
+					<!--User not logged in links-->
+					{% else %}
+					<li>
+						<a href="{{url_for('register')}}"><i class="material-icons left">person_add</i>Join</a>
+					</li>
+					<li>
+						<a href="{{url_for('login')}}"><i class="material-icons left">person</i>Login</a>
+					</li>
+					{% endif %}
+				</ul>
+			</div>
+		</nav>
+	</div>
+	<!--Navbar links for sidenav-->
+	<ul class="sidenav" id="mobile-demo">
+		<li>
+			<a href="{{url_for('index')}}"><i class="material-icons left">home</i>Home</a>
+		</li>
+		<li>
+			<a href="{{url_for('browse', browse_category='All')}}"><i class="material-icons left">school</i>Dingbats</a>
+		</li>
+		<!--User logged in links-->
+		{% if 'user' in session %}
+		<li>
+			<a href="{{url_for('my_dingbats', contributer_id=session['id'])}}"><i class="material-icons left">playlist_add</i>My
+				Dingbats</a>
+		</li>
+		<li>
+			<a href="{{url_for('my_account')}}"><i class="material-icons left">settings</i>My Account</a>
+		</li>
+		<li>
+			<a href="{{url_for('logout')}}"><i class="material-icons left">exit_to_app </i>Logout</a>
+		</li>
+		<!--User not logged in links-->
+		{% else %}
+		<li>
+			<a href="{{url_for('register')}}"><i class="material-icons left">person_add</i>Join</a>
+		</li>
+		<li>
+			<a href="{{url_for('login')}}"><i class="material-icons left">person</i>Login</a>
+		</li>
+		{% endif %}
+	</ul>
+	<main>
+		<!--Flash messages-->
+		{% with messages = get_flashed_messages(with_categories=true) %} {% if
       messages %}
-      <div class="container center-align">
-        <ul class="flashes">
-          {% for category, message in messages %}
-          <li class="{{ category }}">
-            {{ message }}<i
+		<div class="container center-align">
+			<ul class="flashes">
+				{% for category, message in messages %}
+				<li class="{{ category }}">
+					{{ message }}<i
               class="material-icons right"
               onclick="delete_flash(this)"
-              >close</i
-            >
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-      {% endif %} {% endwith %} {% block content %} {% endblock %}
-    </main>
+              >close</i>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+		{% endif %} {% endwith %} {% block content %} {% endblock %}
+	</main>
 
-    <footer class="page-footer amber lighten-3">
-      <div class="footer-copyright">
-        <div class="container disclaimer black-text">
-          © 2020 Peter Kellett
-          <em>(For demonstration purposes only)</em>
-        </div>
-      </div>
-    </footer>
+	<footer class="page-footer amber lighten-3">
+		<div class="footer-copyright">
+			<div class="container disclaimer black-text">
+				© 2020 Peter Kellett
+				<em>(For demonstration purposes only)</em>
+			</div>
+		</div>
+	</footer>
 
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<!-- Compiled and minified JavaScript -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-    <!--Sidenav trigger-->
-    <script>
-      $(document).ready(function () {
+	<!--Sidenav trigger-->
+	<script>
+		$(document).ready(function () {
         console.log("Document ready!");
         $(".sidenav").sidenav();
         $("select").formSelect();
         $(".dropdown-trigger").dropdown();
       });
-    </script>
-    <!--Function to remove flash messages-->
-    <script>
-      function delete_flash(flash) {
+	</script>
+	<!--Function to remove flash messages-->
+	<script>
+		function delete_flash(flash) {
         $(flash).parent().remove();
       }
-    </script>
-  </body>
+	</script>
+</body>
+
 </html>
