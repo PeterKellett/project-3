@@ -7,24 +7,26 @@ body {
     flex-direction: column;
 }
 
+/*Materialize responsive setting*/
 main {
     flex: 1 0 auto;
-  }
+}
 
+/*Colors for navbar and footer*/
 .nav-wrapper,
 footer {
     background-color: #f1d785;
     color: #000;
 }
 
+/*Bug fix for inconsistent Materialize navbar sizing*/
 @media only screen and (max-width: 600px) {
     nav {
-        line-height: 28px;
-        
+        line-height: 28px;        
     }
 }
 
-
+/*--------------Navbar styling-----------*/
 nav ul a {
     color: #000;
 }
@@ -37,7 +39,6 @@ nav ul a {
     font-family: 'Bowlby One', cursive;
     background-color: #f1d785;
     color: #fff;
-    /*padding: 1.25rem;*/
     margin-top: 0;
 }
 
@@ -52,6 +53,7 @@ nav ul a {
     width: auto;
 }
 
+/*------Headers and Home page-----------*/
 h2 {
     font-family: 'Bowlby One', cursive;
     color: #ab8b4d;
@@ -80,44 +82,40 @@ p {
     width: 230px; 
 }
 
-p a {
-    color: #ff5722;
-}
-
-hr {
-    height: 0.2rem;
-    background-color: #3b89cf;
-    border: none;
-}
-
 .home-image {
     margin: 1rem 0;
     width: 100%;
 }
 
+/*------------Browse page-------------*/
 .letter_array {
     margin-top: 1rem;
     color: #039BE5;
 }   
 
-.btn {
-    width: 100%;
-}
-
 .letter_array a strong {
     color: #ff5722;
 }
 
+.btn {
+    width: 100%;
+}
+
+/*---------Dingbat cards----------*/
 .card {
     height: 400px;
     background-color: #f1d785;
+}
+
+.card.medium {
+    height: 435px;
 }
 
 .card .card-content {
     padding: 10px 10px 0;
 }
 
-.card-content button {
+.answer-button {
     background-color: #000000d1;
     width: 100%;
     color: #fff;
@@ -139,16 +137,12 @@ hr {
     height: 175px;
 }
 
-.card a {
-    width: 100%;
-}
-
 .card-content a {
     text-decoration: underline;
 }
 
 .thumb-icons {
-    margin: 0 15px;
+    margin: 0 1rem;
 }
 
 .thumb-icons .like {
@@ -160,9 +154,18 @@ hr {
 }
 
 .icon-large {
-    font-size: 35px;
+    font-size: 2.5rem;
 }
 
+.edit-buttons {
+    padding: 0 10px 10px;
+}
+
+.delete-button {
+    background-color: red;
+}
+
+/*---------Flash messages styling-----------*/
 .flashes .success {
     background-color: green;
     color: white;
@@ -187,6 +190,7 @@ hr {
     border-radius: 10px;
 }
 
+/*-------Forms common styling-----------*/
 .form-surround {
     border: 2px solid #ab8b4d;
     border-radius: 10px;
@@ -194,6 +198,12 @@ hr {
     margin-bottom: 1rem;
 }
 
+/*---------Forms navigation links---------*/
+p a {
+    color: #ff5722;
+}
+
+/*-----------Edit dingbat thumbnail image---------*/
 #thumbnail {
     display: inline;
     height: 100px;
@@ -206,7 +216,7 @@ img.puzzle_image {
     width: 100px;
 }
 
-#x-icon {
+#replace-image {
     background-color: red;
     color: white;
     width: 120px;
@@ -215,15 +225,7 @@ img.puzzle_image {
     border-radius: 5px;
 }
 
-.card.medium {
-    height: 425px;
-}
-
-table {
-    width: 100%;
-    margin: 10px;
-}
-
+/* For styling field error messages */
 .errors {
     background-color: red;
     color: #fafafa;
@@ -231,6 +233,7 @@ table {
     padding-top: 0.5rem;
 }
 
+/*----------Footer----------*/
 .disclaimer {
     text-align: right;
 }
