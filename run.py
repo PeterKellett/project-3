@@ -34,36 +34,47 @@ def browse(browse_category):
     alphabet_array = ['All', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
                       'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
                       'V', 'W', 'X', 'Y', 'Z']
-
+    dingbats=list(mongo.db.dingbats.find().sort("answer"))
+    for dingbat in dingbats:
+        print(dingbat['answer'])
     if browse_category == 'All':
-        print("if")
         return render_template('browse.html',
-                               dingbats=mongo.db.dingbats.find(),
+                               dingbats=list(mongo.db.dingbats.find().sort("answer")),
                                difficulty=mongo.db.
                                difficulty_categories.find(),
                                alphabet_array=alphabet_array,
-                               browse_category='All')
+                               browse_category='All',
+                               letters=alphabet_array)
     elif browse_category == 'easy' \
         or browse_category == 'medium' \
             or browse_category == 'hard':
         return render_template('browse.html',
-                               dingbats=mongo.db.
-                               dingbats.find({"difficulty": browse_category}),
-                               difficulty=mongo.db.
-                               difficulty_categories.find(),
-                               alphabet_array=alphabet_array
-                               )
-    else:
-        print("else")
-        my_letter = "^" + browse_category
-        return render_template('browse.html',
-                               dingbats=mongo.db.
-                               dingbats.find
-                               ({"answer": {"$regex": my_letter.lower()}}),
+                               dingbats=list(mongo.db.
+                               dingbats.find({"difficulty": browse_category}).sort("answer")),
                                difficulty=mongo.db.
                                difficulty_categories.find(),
                                alphabet_array=alphabet_array,
-                               browse_category=browse_category)
+                               letters=alphabet_array
+                               )
+    elif len(browse_category) < 2:
+        my_letter = "^" + browse_category
+        return render_template('browse.html',
+                               dingbats=list(mongo.db.
+                               dingbats.find
+                               ({"answer": {"$regex": my_letter.lower()}}).sort("answer")),
+                               difficulty=mongo.db.
+                               difficulty_categories.find(),
+                               alphabet_array=alphabet_array,
+                               browse_category=browse_category,
+                               letters=browse_category)
+    else:
+        return render_template('browse.html',
+                               dingbats=list(mongo.db.dingbats.find({"contributer_id": browse_category}).sort("answer")),
+                               difficulty=mongo.db.
+                               difficulty_categories.find(),
+                               alphabet_array=alphabet_array,
+                               browse_category='All',
+                               letters=alphabet_array)
 
 
 # Initiate flask registration form
@@ -124,7 +135,7 @@ def register():
                 flash('Registered Success!!', 'success')
                 session["id"] = str(id.inserted_id)
                 session["user"] = username
-                session["email"] = email
+                session["user_email"] = email
                 return redirect(url_for('user'))
         else:
             return render_template("register.html", form=form)
@@ -175,7 +186,6 @@ def login():
                 flash("Sorry. We have no users by that email.", "warning")
                 return render_template("login.html", form=form)
         else:
-            print("login else else")
             return render_template("login.html", form=form)
 
 
@@ -183,6 +193,11 @@ def login():
 @app.route("/forgot_password")
 def forgot_password():
     return render_template('forgot-password.html')
+
+
+@app.route("/password_link_requested")
+def password_link_requested():
+    return render_template('password-request-landing.html')
 
 
 # Route to My Account page
@@ -220,7 +235,6 @@ def reset_password():
         email = session['user_email']
         if request.method == "POST" and form.validate():
             email = session['user_email']
-            print(email)
             users = mongo.db.users
             user_login = users.find_one({'email': email})
             password = sha256_crypt.hash((str(form.password.data)))
@@ -229,7 +243,6 @@ def reset_password():
             flash("Changed password success!", "success")
             return redirect(url_for('my_account'))
         else:
-            print("else")
             return render_template("reset-password.html", form=form)
     else:
         flash("You are not logged in", "warning")
@@ -311,26 +324,18 @@ def user():
 
 
 # Route to My Dingbats page
-@app.route("/my_dingbats/<id>")
-def my_dingbats(id):
-    user = mongo.db.users.find_one({"_id": ObjectId(id)})
-    user["_id"] = str(user["_id"])
-    if "id" in session:
-        if id == session["id"]:
-            return render_template("my-dingbats.html",
-                                   user=user,
-                                   dingbats=list(mongo.db.dingbats
-                                                 .find({"contributer_id": id})))
-        else:
-            return render_template("my-dingbats.html",
-                                   user=user,
-                                   dingbats=list(mongo.db.dingbats
-                                                 .find({"contributer_id": id})))
-    else:
+@app.route("/my_dingbats/<contributer_id>")
+def my_dingbats(contributer_id):
+    if contributer_id == session["id"]:
+        contributer = mongo.db.users.find_one({"_id": ObjectId(contributer_id)})
+        contributer["_id"] = str(contributer["_id"])
         return render_template("my-dingbats.html",
-                               user=user,
-                               dingbats=list(mongo.db.dingbats
-                                             .find({"contributer_id": id})))
+                            contributer=contributer,
+                            dingbats=list(mongo.db.dingbats
+                                            .find({"contributer_id": contributer_id})))
+    else:
+        flash("You do not authorised to access that section", "error")
+        return redirect(url_for('browse', browse_category='All'))
 
 
 # Route to upload dingbat page
@@ -342,20 +347,20 @@ def upload_dingbat():
             if image is None:
                 flash('Please choose an image to upload', 'error')
                 return render_template("upload-dingbat.html",
-                                   difficulty=list(mongo.db
-                                                   .difficulty_categories
-                                                   .find()))
+                                       difficulty=list(mongo.db
+                                                       .difficulty_categories
+                                                       .find()))
             else:
                 dingbats = mongo.db.dingbats
                 dingbats.insert_one({'contributer_id': session["id"],
                                      'contributer_name': session["user"],
                                      'difficulty': request.form.get('difficulty'),
-                                     'image': 'https://res.cloudinary.com/dfboxofas/' +  request.form.get('image'),
+                                     'image': 'https://res.cloudinary.com/dfboxofas/' + request.form.get('image'),
                                      'answer': request.form.get('answer').lower(),
                                      'likes': [],
                                      'dislikes': []})
                 flash('Upload Success!!', 'success')
-                return redirect(url_for('my_dingbats',  id=session['id']))
+                return redirect(url_for('my_dingbats',  contributer_id=session['id']))
         else:
             return render_template("upload-dingbat.html",
                                    difficulty=list(mongo.db
@@ -382,10 +387,9 @@ def update_dingbat(dingbat_id):
     the_dingbat = mongo.db.dingbats.find_one({"_id": ObjectId(dingbat_id)})
     image = request.form.get('image')
     if image is None:
-        print("image is none")
         image = the_dingbat['image']
         dingbats.update({'_id': ObjectId(dingbat_id)},
-                       {
+                        {
                         'contributer_id': session["id"],
                         'contributer_name': session["user"],
                         'difficulty': request.form.get('difficulty'),
@@ -396,7 +400,7 @@ def update_dingbat(dingbat_id):
                         })
     else:
         dingbats.update({'_id': ObjectId(dingbat_id)},
-                       {
+                        {
                         'contributer_id': session["id"],
                         'contributer_name': session["user"],
                         'difficulty': request.form.get('difficulty'),
@@ -404,15 +408,15 @@ def update_dingbat(dingbat_id):
                         'answer': request.form.get('answer'),
                         'likes': the_dingbat['likes'],
                         'dislikes': the_dingbat["dislikes"]
-                       })
-    return redirect(url_for('my_dingbats',  id=session['id']))
+                        })
+    return redirect(url_for('my_dingbats',  contributer_id=session['id']))
 
 
 # Function to delete Dingbat
 @app.route("/delete_dingbat/<dingbat_id>")
 def delete_dingbat(dingbat_id):
     mongo.db.dingbats.remove({'_id': ObjectId(dingbat_id)})
-    return redirect(url_for('my_dingbats',  id=session['id']))
+    return redirect(url_for('my_dingbats',  contributer_id=session['id']))
 
 
 # Route to Logout function - Clear session variables
@@ -421,7 +425,6 @@ def logout():
     session.pop("id", None)
     session.pop("user", None)
     session.pop("user_email", None)
-    print(session)
     flash("You have been logged out", "success")
     return redirect(url_for("index"))
 
