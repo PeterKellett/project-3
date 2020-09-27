@@ -29,15 +29,124 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/browse/<browse_category>")
-def browse(browse_category):
+@app.route("/browse/")
+def browse():
     alphabet_array = ['All', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
                       'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
                       'V', 'W', 'X', 'Y', 'Z']
-    dingbats=list(mongo.db.dingbats.find().sort("answer"))
-    for dingbat in dingbats:
-        print(dingbat['answer'])
-    if browse_category == 'All':
+    browse_letter = request.args.get('browse_letter', None)
+    print("browse letter =", browse_letter)
+    browse_difficulty = request.args.get('browse_difficulty', None)
+    print("browse difficulty =", browse_difficulty)
+    browse_contributer = request.args.get('browse_contributer', None)
+    print("browse_contributer =", browse_contributer)
+    if browse_letter is None and browse_difficulty is None and browse_contributer is None:
+        print('All')
+        return render_template('browse.html',
+                               dingbats=list(mongo.db.dingbats.find().sort("answer")),
+                               difficulty=mongo.db.
+                               difficulty_categories.find(),
+                               alphabet_array=alphabet_array,
+                               letter_category="All",
+                               difficulty_category="All",
+                               contributer_category="All"
+                               )
+    elif browse_letter != 'All' and browse_difficulty == 'All' and browse_contributer == 'All':
+        print('elif 1')
+        return render_template('browse.html',
+                               dingbats=list(mongo.db.dingbats.find({"answer": {"$regex": "^" + browse_letter.lower()}}).sort("answer")),
+                               difficulty=mongo.db.
+                               difficulty_categories.find(),
+                               alphabet_array=alphabet_array,
+                               letter_category=browse_letter,
+                               difficulty_category=browse_difficulty,
+                               contributer_category=browse_contributer)
+    elif browse_letter != 'All' and browse_difficulty != 'All' and browse_contributer == 'All':
+        print('elif 2')
+        return render_template('browse.html',
+                               dingbats=list(mongo.db.dingbats.find({'$and': [{"answer": {"$regex": "^" + browse_letter.lower()}}, {"difficulty": browse_difficulty}]}).sort("answer")),
+                               difficulty=mongo.db.
+                               difficulty_categories.find(),
+                               alphabet_array=alphabet_array,
+                               letter_category=browse_letter,
+                               difficulty_category=browse_difficulty,
+                               contributer_category=browse_contributer)
+    elif browse_letter != 'All' and browse_difficulty == 'All' and browse_contributer != 'All':
+        print('elif 3')
+        return render_template('browse.html',
+                               dingbats = list(mongo.db.dingbats.find({'$and': [{"answer": {"$regex": "^" + browse_letter.lower()}}, {"contributer_id": browse_contributer}]}).sort("answer")),
+                               difficulty=mongo.db.
+                               difficulty_categories.find(),
+                               alphabet_array=alphabet_array,
+                               letter_category=browse_letter,
+                               difficulty_category=browse_difficulty,
+                               contributer_category=browse_contributer)
+    elif browse_letter == 'All' and browse_difficulty != 'All' and browse_contributer != 'All':
+        print('elif 4')
+        dingbats = list(mongo.db.dingbats.find({'$and': [{"difficulty": browse_difficulty}, {"contributer_id": browse_contributer}]}).sort("answer"))
+        for dingbat in dingbats:
+            print(dingbat["answer"])
+            print(dingbat["difficulty"])
+        return render_template('browse.html',
+                               dingbats = list(mongo.db.dingbats.find({'$and': [{"difficulty": browse_difficulty}, {"contributer_id": browse_contributer}]}).sort("answer")),
+                               difficulty=mongo.db.
+                               difficulty_categories.find(),
+                               alphabet_array=alphabet_array,
+                               letter_category=browse_letter,
+                               difficulty_category=browse_difficulty,
+                               contributer_category=browse_contributer)
+    elif browse_letter == 'All' and browse_difficulty != 'All' and browse_contributer == 'All':
+        print('elif 5')
+        dingbats = list(mongo.db.dingbats.find({"difficulty": browse_difficulty}).sort("answer"))
+        for dingbat in dingbats:
+            print(dingbat["answer"])
+            print(dingbat["difficulty"])
+        return render_template('browse.html',
+                               dingbats = list(mongo.db.dingbats.find({"difficulty": browse_difficulty}).sort("answer")),
+                               difficulty=mongo.db.
+                               difficulty_categories.find(),
+                               alphabet_array=alphabet_array,
+                               letter_category=browse_letter,
+                               difficulty_category=browse_difficulty,
+                               contributer_category=browse_contributer)
+    elif browse_letter == 'All' and browse_difficulty == 'All' and browse_contributer != 'All':
+        print('elif 6')
+        return render_template('browse.html',
+                               dingbats = list(mongo.db.dingbats.find({"contributer_id": browse_contributer}).sort("answer")),
+                               difficulty=mongo.db.
+                               difficulty_categories.find(),
+                               alphabet_array=alphabet_array,
+                               letter_category=browse_letter,
+                               difficulty_category=browse_difficulty,
+                               contributer_category=browse_contributer)
+    elif browse_letter != 'All' and browse_difficulty != 'All' and browse_contributer != 'All':
+        print('elif 7')
+        dingbats = list(mongo.db.dingbats.find({'$and': [{"answer": {"$regex": "^" + browse_letter.lower()}}, {"difficulty": browse_difficulty}, {"contributer_id": browse_contributer}]}).sort("answer"))
+        for dingbat in dingbats:
+            print(dingbat["answer"])
+            print(dingbat["difficulty"])
+        return render_template('browse.html',
+                               dingbats = list(mongo.db.dingbats.find({'$and': [{"answer": {"$regex": "^" + browse_letter.lower()}}, {"difficulty": browse_difficulty}, {"contributer_id": browse_contributer}]}).sort("answer")),
+                               difficulty=mongo.db.
+                               difficulty_categories.find(),
+                               alphabet_array=alphabet_array,
+                               letter_category=browse_letter,
+                               difficulty_category=browse_difficulty,
+                               contributer_category=browse_contributer)
+    else:
+        print('NONE')
+        return render_template('browse.html',
+                               dingbats=list(mongo.db.dingbats.find().sort("answer")),
+                               difficulty=mongo.db.
+                               difficulty_categories.find(),
+                               alphabet_array=alphabet_array,
+                               letter_category="All",
+                               difficulty_category="All",
+                               contributer_category="All"
+                               )
+
+"""
+    elif browse_category == 'All':
         return render_template('browse.html',
                                dingbats=list(mongo.db.dingbats.find().sort("answer")),
                                difficulty=mongo.db.
@@ -67,15 +176,7 @@ def browse(browse_category):
                                alphabet_array=alphabet_array,
                                browse_category=browse_category,
                                letters=browse_category)
-    else:
-        return render_template('browse.html',
-                               dingbats=list(mongo.db.dingbats.find({"contributer_id": browse_category}).sort("answer")),
-                               difficulty=mongo.db.
-                               difficulty_categories.find(),
-                               alphabet_array=alphabet_array,
-                               browse_category='All',
-                               letters=alphabet_array)
-
+"""
 
 # Initiate flask registration form
 class RegistrationForm(Form):
