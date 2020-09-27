@@ -7,7 +7,7 @@ body {
     flex-direction: column;
 }
 
-/*Materialize responsive setting*/
+/*Materialize footer setting*/
 main {
     flex: 1 0 auto;
 }
@@ -73,7 +73,6 @@ h6 {
 }
 
 p {
-    text-align: center;   
     font-family: 'Rubik', sans-serif;
 }
 
@@ -95,6 +94,10 @@ p {
 
 .letter_array a strong {
     color: #ff5722;
+}
+
+.reset-button {
+    display: inline;
 }
 
 .btn {
