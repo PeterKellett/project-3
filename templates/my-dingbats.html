@@ -58,38 +58,36 @@
             for item in dingbat.likes %} {% if item == session.id %} {% set
             ns.liked = True %} {% endif %} {% endfor %} {% if ns.liked == True
             %}
-            <a href="{{ url_for('unlike', dingbat_id=dingbat._id)}}">
-              <i class="material-icons left like icon-large">thumb_up</i>
-            </a>
+
+            <i class="material-icons left like icon-large">thumb_up</i>
+
             {% else %}
-            <a href="{{ url_for('like', dingbat_id=dingbat._id)}}">
-              <i class="material-icons left like">thumb_up</i>
-            </a>
+
+            <i class="material-icons left like">thumb_up</i>
+
             {% endif %}
             <p class="like left-align">{{ dingbat.likes|count }}</p>
 
             {% set ns = namespace(disliked=false) %} {% for item in
             dingbat.dislikes %} {% if item == session.id %} {% set ns.disliked =
             True %} {% endif %} {% endfor %} {% if ns.disliked == True %}
-            <a href="{{ url_for('undislike', dingbat_id=dingbat._id)}}">
-              <i class="material-icons left dislike icon-large"
-                >thumb_down</i
-              ></a
-            >
+
+            <i class="material-icons left dislike icon-large">thumb_down</i>
+
             {% else %}
-            <a href="{{ url_for('dislike', dingbat_id=dingbat._id)}}">
-              <i class="material-icons left dislike">thumb_down</i></a
-            >
+
+            <i class="material-icons left dislike">thumb_down</i>
+
             {% endif %}
             <p class="dislike left-align">{{ dingbat.dislikes|count }}</p>
             {% else %}
-            <a href="{{ url_for('like', dingbat_id=dingbat._id)}}">
-              <i class="material-icons left">thumb_up</i>
-            </a>
+
+            <i class="material-icons left">thumb_up</i>
+
             <p class="like left-align">{{ dingbat.likes|count }}</p>
-            <a href="{{ url_for('dislike', dingbat_id=dingbat._id)}}">
-              <i class="material-icons left">thumb_down</i>
-            </a>
+
+            <i class="material-icons left">thumb_down</i>
+
             <p class="dislike left-align">{{ dingbat.dislikes|count }}</p>
             {% endif %}
           </div>
@@ -100,11 +98,37 @@
               class="btn btn_small blue hoverable"
               >Edit</a
             >
-            <a
-              href="{{url_for('delete_dingbat', dingbat_id=dingbat._id)}}"
-              class="btn btn_small red hoverable"
-              >Delete</a
+            <!-- Modal Trigger -->
+            <button
+              data-target="modal1"
+              class="btn btn_small red hoverable modal-trigger"
             >
+              Delete
+            </button>
+
+            <!-- Modal Structure -->
+            <div id="modal1" class="modal">
+              <div class="modal-content center-align">
+                <h4>Delete Dingbat?</h4>
+                <p>Are you sure you wish to delete this dingbat?</p>
+              </div>
+              <div class="modal-footer center-align">
+                <button class="no">
+                  <a
+                    href="#!"
+                    class="modal-close btn-flat"
+                    >No</a
+                  >
+                </button>
+                <button class="yes">
+                  <a
+                    href="{{url_for('delete_dingbat', dingbat_id=dingbat._id)}}"
+                    class="modal-close btn-flat"
+                    >Yes</a
+                  >
+                </button>
+              </div>
+            </div>
           </div>
           {% endif %}
         </div>
@@ -122,6 +146,7 @@
         $(this).toggle();
         $(this).siblings(".answer-button").toggle();
       });
+      $(".modal").modal();
     });
   </script>
   {% endblock %}

@@ -3,27 +3,25 @@
   {% extends 'base.html' %} {% block title %}Dingbats{% endblock %} {% block
   content %}
   <div class="container">
-  <!--Div for letter array-->
-  
+    <!--Div for letter array-->
+
     <div class="row center-align letter_array">
-    <button class="reset-button">
-    <a href="{{url_for('browse', browse_letter='All', browse_difficulty='All', browse_contributer='All')}}">Reset filters</a>
-    </button>
+      <button class="reset-button">
+        <a
+          href="{{url_for('browse', browse_letter='All', browse_difficulty='All', browse_contributer='All')}}"
+          >Reset all</a
+        >
+      </button>
       | {% for letter in alphabet_array %}
-      <a href="{{url_for('browse', browse_letter=letter, browse_difficulty=difficulty_category, browse_contributer=contributer_category)}}">
+      <a
+        href="{{url_for('browse', browse_letter=letter, browse_difficulty=difficulty_category, browse_contributer=contributer_category)}}"
+      >
         {% if letter==letter_category %}
         <strong>{{letter.capitalize()}}</strong>
         {% else %} {{letter.capitalize()}} {% endif %} |
       </a>
       {% endfor %}
-      
     </div>
-    <!--
-    <h5>Search Parameters</h5>
-    <p class="align-left">Letter: {{ letter_category }}</p>
-    <p class="align-left">Difficulty: {{ difficulty_category }}</p>
-    <p class="align-left">Contributer: {{ contributer_category }}</p>
-    -->
     <!--Difficulty drop down button-->
     <div class="row center-align">
       <div class="col s6 offset-s3 l2 offset-l5">
@@ -43,8 +41,8 @@
               >All</a
             >
           </li>
-          {% for diff in difficulty %}
-          {% if diff.difficulty == difficulty_category %}
+          {% for diff in difficulty %} {% if diff.difficulty ==
+          difficulty_category %}
           <li>
             <a
               class="white-text"
@@ -62,37 +60,32 @@
               >{{diff.difficulty.capitalize()}}</a
             >
           </li>
-          {% endif %}
-          {% endfor%}
+          {% endif %} {% endfor%}
         </ul>
       </div>
-
-
     </div>
   </div>
-    <!--Dingbat cards-->
+  <!--Dingbat cards-->
   <section class="container">
-  {% for letter in alphabet_array %}
-    <div class="row">   
-    {% if letter != 'All' %}
-    <h6>{{ letter.capitalize() }}</h6>
-      {% for dingbat in dingbats %}
-      {% if dingbat.answer[0].capitalize() == letter.capitalize() %}
+    {% for letter in alphabet_array %}
+    <div class="row">
+      {% if letter != 'All' %}
+      <h6>{{ letter.capitalize() }}</h6>
+      {% for dingbat in dingbats %} {% if dingbat.answer[0].capitalize() ==
+      letter.capitalize() %}
       <div class="col s6 m4 l2">
         <div class="card hoverable">
           <div class="card-image">
-            <img src="{{dingbat.image}}" alt="Dingbat image"/>
+            <img src="{{dingbat.image}}" alt="Dingbat image" />
           </div>
           <div class="card-content">
-            <div class="card-answer ">
-              <button
-                class="answer-button btn-small btn-flat"
-              >
+            <div class="card-answer">
+              <button class="answer-button btn-small btn-flat">
                 See Answer
               </button>
               <p class="left-align answer" hidden>
-              {{dingbat.answer.capitalize()}}
-            </p>
+                {{dingbat.answer.capitalize()}}
+              </p>
             </div>
             <p class="left-align">
               Difficulty: {{dingbat.difficulty.capitalize()}}
@@ -107,15 +100,15 @@
             >
           </div>
           <div class="div thumb-icons">
-          <!--Check to see if user has previously liked the dingbat-->
-            {% if 'user' in session %} 
+            <!--Check to see if user has previously liked the dingbat-->
+            {% if 'user' in session %}
             <!--Declare a variable 'liked' and set to False-->
-            {% set ns = namespace(liked=false) %} 
+            {% set ns = namespace(liked=false) %}
             <!--Iterate through the documents liked array-->
-            {% for item in dingbat.likes %} 
+            {% for item in dingbat.likes %}
             <!--If an item in the documents liked array equals the users session["id"] then set the 'liked' variable to True-->
-            {% if item == session.id %} 
-            {% set ns.liked = True %} {% endif %} {% endfor %} 
+            {% if item == session.id %} {% set ns.liked = True %} {% endif %} {%
+            endfor %}
             <!--If the 'liked' variable equals True then indicate this by setting the thumb icon to large and setting the href to the route 'unlike'-->
             {% if ns.liked == True %}
             <a href="{{ url_for('unlike', dingbat_id=dingbat._id)}}">
@@ -131,13 +124,9 @@
             <p class="like left-align">{{ dingbat.likes|count }}</p>
 
             <!--Logic similiar as above but for declaring 'Dislikes'-->
-            {% set ns = namespace(disliked=false) %} 
-                {% for item in dingbat.dislikes %} 
-                    {% if item == session.id %} 
-                        {% set ns.disliked = True %} 
-                    {% endif %} 
-                {% endfor %} 
-            {% if ns.disliked == True %}
+            {% set ns = namespace(disliked=false) %} {% for item in
+            dingbat.dislikes %} {% if item == session.id %} {% set ns.disliked =
+            True %} {% endif %} {% endfor %} {% if ns.disliked == True %}
             <a href="{{ url_for('undislike', dingbat_id=dingbat._id)}}">
               <i class="material-icons left dislike icon-large"
                 >thumb_down</i
@@ -160,13 +149,9 @@
             <p class="dislike left-align">{{ dingbat.dislikes|count }}</p>
             {% endif %}
           </div>
-        
         </div>
       </div>
-       {% endif %} 
-      {% endfor %}
-      {% endif %}
-      
+      {% endif %} {% endfor %} {% endif %}
     </div>
     {% endfor %}
   </section>
@@ -174,11 +159,11 @@
   <script>
     $(document).ready(function () {
       $(".answer-button").click(function () {
-          $(this).toggle();
+        $(this).toggle();
         $(this).siblings(".answer").toggle();
       });
-      $(".answer").click(function() {
-          $(this).toggle();
+      $(".answer").click(function () {
+        $(this).toggle();
         $(this).siblings(".answer-button").toggle();
       });
     });
