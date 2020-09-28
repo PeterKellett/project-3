@@ -98,6 +98,15 @@ p {
 
 .reset-button {
     display: inline;
+    color: #fff;
+    background-color: #ff5722;
+    border: none;
+    padding: 3px;
+    border-radius: 5px;
+}
+
+.reset-button a {
+    color: #fff;
 }
 
 .btn {
@@ -168,7 +177,40 @@ p {
     background-color: red;
 }
 
+.modal {
+    background-color: #efe2b7;
+}
+
+.modal .modal-content {
+    padding-bottom: 0;
+    
+}
+
+.modal .modal-footer {
+    margin-bottom: 20px;
+    text-align: center;
+    background-color: #efe2b7;
+}
+
+.modal-footer .no {
+    border: none;
+    background-color: red;
+    color: red;
+}
+
+.modal-footer .yes {
+    border: none;
+    background-color: green;
+}
+
+.modal-footer a {
+    color: #fff;
+}
+
+
+
 /*---------Flash messages styling-----------*/
+
 .flashes .success {
     background-color: green;
     color: white;
