@@ -11,7 +11,7 @@ I have also incorporated a 'Likes' and 'Dislikes' functionality as a simple way 
 https://github.com/PeterKellett/project-3  
 
 ### Heroku live site  
-http://pkellett-project-3.herokuapp.com/  
+https://pkellett-project-3.herokuapp.com/  
 
 #### Sample users  
 Email: miriam@me.com  

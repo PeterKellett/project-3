@@ -41,7 +41,7 @@
 					</li>
 					<li>
 						<a
-							href="{{url_for('browse', browse_category='All')}}"><i class="material-icons left">school</i>Dingbats</a>
+							href="{{url_for('browse')}}"><i class="material-icons left">school</i>Dingbats</a>
 					</li>
 					<!--User logged in links-->
 					{% if 'user' in session %}
@@ -74,7 +74,7 @@
 			<a href="{{url_for('index')}}"><i class="material-icons left">home</i>Home</a>
 		</li>
 		<li>
-			<a href="{{url_for('browse', browse_category='All')}}"><i class="material-icons left">school</i>Dingbats</a>
+			<a href="{{url_for('browse')}}"><i class="material-icons left">school</i>Dingbats</a>
 		</li>
 		<!--User logged in links-->
 		{% if 'user' in session %}
