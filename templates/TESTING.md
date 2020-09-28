@@ -72,14 +72,16 @@ The letter array on the Dingbat page serves as an index to the user by returning
 #### Test: Verify Dingbat Contributer links
 - Click on a contributers name and verify user is brought to page showing that contributers entries.
 
-#### Test: Verify Upload/Edit/Delete buttons hidden if contributers id != the session id variable
-Clicking on the contributer name on a Dingbat card will bring a user to the Dingbat page for that contributer so a user can view all of that contributers Dingbat entries. By using logic and comparing the contributers ObjectId to the ObjectId stored in the session variables, we can use logic to prevent access to the upload/edit/delete functionality when these variables do not match thus providing read only access and stopping unauthorised access to others to prevent malicious tampering of Dingbat entries.
-- Log in as a user with Dingbats uploaded.
-- Click on the name of any other contributer. Verify the Dingbats are displayed but the Upload/Edit/Delete buttons are not rendered.
-- Repeat for many different contributers.
-- Now click on your own name on a Dingbat uploaded by the user you logged in as.
-- Verify the Upload/Edit/Delete buttons are rendered as the contributers id of the Dingbat selected will be the same as that stored in the session id variable so the Jinja logic will now permit the user access to these editors rights.
-- Repeat the above as a logged out user and verify these buttons are again not rendered for any contributer whatsoever.
+#### Test: Verify user access is denied if url id != the session id variable
+To test the redirect if a user tries to force the url address to another users My Dingbats page.
+1. Log in as a user with Dingbats uploaded.
+2. Go to My Dingbats page.
+3. Copy the url from address bar.
+4. Log out.
+5. Paste the url copied in step 2 back into address bar.
+6. Verify user is redirected to home page and the flash message "You are not authorised to access that section." 
+7. Log in as a different user and repeat step 5. 
+8. Verify user is redirected to home page and the flash message "You are not authorised to access that section." 
 
 #### Test: Register
 1. Field validation test  
@@ -186,7 +188,6 @@ Clicking on the contributer name on a Dingbat card will bring a user to the Ding
 - Verify page refreshes and the Dingbat is deleted
 
 #### Test My Account and Change Password functionality
-
 - Log in and click on My Account link in navbar
 - Verify user is brought to their My Account page with correct username and email values are displayed. These fields are uneditable.
 - To change password click on 'Change Password' button
@@ -198,4 +199,11 @@ Clicking on the contributer name on a Dingbat card will bring a user to the Ding
 - Log out and log back in using old password
 - Verify log in is denied
 - Log in using new password
-- Verify log in access is granted
+- Verify log in access is granted  
+
+#### Test: Code validation  
+The code has been validated using the following online validators:  
+- [W3C Validation Service](https://validator.w3.org/)
+- [jshint](https://jshint.com/)  
+- [pep8online](http://pep8online.com/checkresult)  
+No errors were found.
