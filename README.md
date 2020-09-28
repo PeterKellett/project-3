@@ -266,11 +266,12 @@ Deployment to Heroku Apps is done from the GitHub master branch.
 During the course of this project I encountered many, many minor issues.
 
 1. Materialize  
-   I was encouraged to use the Materialize styling library and found it to be very cumbersome to adjust the styling for my needs.
+   I was encouraged to use the Materialize styling library byv my mentor and found it to be very cumbersome to adjust the styling for my needs.
 
 - I found the resizing of the navbar header was not reflected correctly for screen sizes < 600px. I had to implement a custom media query as a workaround.
 - The sizing of cards is very limited and do not group and autofit based on content within the card. I had to overwrite the imported Materialize sizes in order to render the cards neatly.
-- On iPad landscape view is not included in the medium sized screens and as a result the col sizes are as of large screens instead. This results in the button text for the answer button being pushed beneath and overlapping the other card content. The only alternative is to reduce the column numbers on large screens but this will make the site render poorly on large screens.
+- On iPad landscape view is not included in the medium sized screens and as a result the col sizes are as of large screens instead. This results in the button text for the answer button being pushed beneath and overlapping the other card content. The only alternative is to reduce the column numbers on large screens but this will make the site render poorly on large screens. 
+- I attempted to implement a scrollspy functionality but found it very difficult to get indexed so I had to abandon the idea.
 
 2. Cloudinary and Flask Forms integration  
    As the Cloudinary upload image widget and functionality is in Javascript I had trouble integrating this within the flask form. Most of the problems were to do with editing a dingbat and displaying the new image and hiding the previous image to be replaced. There does not seem to be a straightforwrd command for dealing with this so I had to figure a workaround for this.
